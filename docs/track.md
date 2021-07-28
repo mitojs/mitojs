@@ -5,7 +5,7 @@
 ## 小程序埋点
 
 ### 小程序hooks
-[wx-mini-hooks](https://github.com/clouDr-f2e/mitojs/blob/master/docs/option.md#wx-minihook)
+[wx-mini-hooks](https://github.com/mitojs/mitojs/blob/master/docs/option.md#wx-minihook)
 ### 无痕埋点
 * 页面无痕
 
@@ -26,7 +26,7 @@ MITO.init({
 ```
 * 事件无痕
 
-由于微信小程序拿不到点击节点的`tagName`、`domPath`（从根路径到该节点的路径），所以无法对按钮做唯一性校验，也就无法做抛出比较有用的hook（如果有小伙伴有任何方法的话可以微信告诉我，不胜感激，[微信二维码](https://github.com/clouDr-f2e/mitojs#issue)）
+由于微信小程序拿不到点击节点的`tagName`、`domPath`（从根路径到该节点的路径），所以无法对按钮做唯一性校验，也就无法做抛出比较有用的hook（如果有小伙伴有任何方法的话可以微信告诉我，不胜感激，[微信二维码](https://github.com/mitojs/mitojs#issue)）
 ### 手动埋点
 每个公司的埋点业务都是不一样的，手动埋点的规范也是如此，我这边粗略的定义了我几个类型：
 

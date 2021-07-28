@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clouDr-f2e/mitojs.git"
+    "url": "git+https://github.com/mitojs/mitojs.git"
   },
   "keywords": [
     "mitojs",

@@ -9,9 +9,9 @@
 
 传统方式下一个前端项目发到正式环境后，所有报错信息只能通过用户使用时截图、口头描述发送到开发者，然后开发者来根据用户所描述的场景去模拟这个错误的产生，这效率肯定超级低，所以很多开源或收费的前端监控平台就应运而生，比如:
 
-* [sentry](https://github.com/getsentry/sentry) 
+* [sentry](https://github.com/getsentry/sentry)
 * [webfunny](https://github.com/a597873885/webfunny_monitor)
-* [fundebug](https://www.fundebug.com/) 
+* [fundebug](https://www.fundebug.com/)
 
 等等一些优秀的监控平台
 
@@ -320,7 +320,7 @@ MITO.log({
 
 <h2 style="margin-top: 25px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 20px;"><span style="display: none;" class="prefix"></span><span style="color: #2db7f5; display: inline-block;" class="content">关于开源</span><span style="display: none;" class="suffix"></span></h2>
 
-SDK开源:[mitojs](https://github.com/clouDr-f2e/mitojs)，下一篇会讲服务端的表结构设计思路、怎样在**千万**条数据中多重标签**毫秒**级查询错误事件以及更好的告警机制通知开发人员
+SDK开源:[mitojs](https://github.com/mitojs/mitojs)，下一篇会讲服务端的表结构设计思路、怎样在**千万**条数据中多重标签**毫秒**级查询错误事件以及更好的告警机制通知开发人员
 
 
 

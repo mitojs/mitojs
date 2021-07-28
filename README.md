@@ -5,10 +5,10 @@
     <p>一款轻量级的收集页面的用户点击行为、路由跳转、接口报错、代码报错、并上报服务端的SDK</p>
 
 [![npm version](https://img.shields.io/npm/v/@mitojs/web.svg?style=flat-square)](https://www.npmjs.com/package/@mitojs/web)
-[![license](https://img.shields.io/github/license/clouDr-f2e/mitojs)](https://github.com/clouDr-f2e/mitojs/blob/dev/LICENSE)
+[![license](https://img.shields.io/github/license/mitojs/mitojs)](https://github.com/mitojs/mitojs/blob/dev/LICENSE)
 [![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![GitHub last commit](https://img.shields.io/github/last-commit/clouDr-f2e/mitojs.svg?style=flat-square)](https://github.com/clouDr-f2e/mitojs/commits/master)
-[![build status](https://img.shields.io/travis/clouDr-f2e/mitojs/master.svg?style=flat-square)](https://travis-ci.com/github/clouDr-f2e/mitojs)
+[![GitHub last commit](https://img.shields.io/github/last-commit/mitojs/mitojs.svg?style=flat-square)](https://github.com/mitojs/mitojs/commits/master)
+[![build status](https://img.shields.io/travis/mitojs/mitojs/master.svg?style=flat-square)](https://travis-ci.com/github/mitojs/mitojs)
 [![codecov](https://codecov.io/gh/clouDr-f2e/mitojs/branch/master/graph/badge.svg?token=W7JP5GDOM7)](https://codecov.io/gh/clouDr-f2e/mitojs)
 
 <!-- [![npm downloads](https://img.shields.io/npm/dm/@zyf2e/mitojs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@zyf2e/mitojs) -->
@@ -27,9 +27,9 @@
 - [x] 🌝支持IE8和安卓5以上
 - [x] 👌持续迭代与更新
 - [x] 👌完善的浏览器e2e和微信小程序e2e、完善的单元测试（77%~coding）
-- [x] 👌支持原生Web [@mitojs/browser](https://github.com/clouDr-f2e/mitojs/tree/master/packages/browser)
-- [x] 👌支持Web框架（Vue3、Vue2、React@Next） [@mitojs/web](https://github.com/clouDr-f2e/mitojs/tree/master/packages/web)
-- [x] 👌支持原生微信小程序、支持uni-app等微信小程序框架 [@mitojs/wx-mini](https://github.com/clouDr-f2e/mitojs/tree/master/packages/wx-mini)
+- [x] 👌支持原生Web [@mitojs/browser](https://github.com/mitojs/mitojs/tree/master/packages/browser)
+- [x] 👌支持Web框架（Vue3、Vue2、React@Next） [@mitojs/web](https://github.com/mitojs/mitojs/tree/master/packages/web)
+- [x] 👌支持原生微信小程序、支持uni-app等微信小程序框架 [@mitojs/wx-mini](https://github.com/mitojs/mitojs/tree/master/packages/wx-mini)
 
 ## 安装
 
@@ -75,16 +75,16 @@ $ yarn add @mitojs/wx-mini
 
 ## 使用指南
 
-[使用指南](https://github.com/clouDr-f2e/mitojs/blob/master/docs/guide.md)
+[使用指南](https://github.com/mitojs/mitojs/blob/master/docs/guide.md)
 
-* [vue接入指南](https://github.com/clouDr-f2e/mitojs/blob/master/docs/guide.md#Vue)
-* [react接入指南](https://github.com/clouDr-f2e/mitojs/blob/master/docs/guide.md#react)
-* [wx-mini接入指南](https://github.com/clouDr-f2e/mitojs/blob/master/docs/guide.md#微信小程序)
+* [vue接入指南](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#Vue)
+* [react接入指南](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#react)
+* [wx-mini接入指南](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#微信小程序)
 
 
 ## hooks与配置项
 
-[hooks与配置项](https://github.com/clouDr-f2e/mitojs/blob/master/docs/option.md)
+[hooks与配置项](https://github.com/mitojs/mitojs/blob/master/docs/option.md)
 
 
 

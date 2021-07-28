@@ -244,7 +244,7 @@ MITO.init({
 
 ### options配置
 
-[详细配置](https://github.com/clouDr-f2e/mitojs/blob/master/docs/option.md)
+[详细配置](https://github.com/mitojs/mitojs/blob/master/docs/option.md)
 
 
 
@@ -272,7 +272,7 @@ $api.getPayStatus().then(res => {
   }
 })
 ```
-还可以统计每个功能的浏览次数（PV）、用户量（UV），比如下面代码中在活动页埋点，UV的统计需要依赖`trackerId`，[trackerId详细配置](https://github.com/clouDr-f2e/mitojs/blob/master/docs/option.md#backtrackerid)
+还可以统计每个功能的浏览次数（PV）、用户量（UV），比如下面代码中在活动页埋点，UV的统计需要依赖`trackerId`，[trackerId详细配置](https://github.com/mitojs/mitojs/blob/master/docs/option.md#backtrackerid)
 ```js
 import * as MITO from '@mitojs/web'
 
