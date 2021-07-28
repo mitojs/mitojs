@@ -9,7 +9,7 @@
 [![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![GitHub last commit](https://img.shields.io/github/last-commit/mitojs/mitojs.svg?style=flat-square)](https://github.com/mitojs/mitojs/commits/master)
 [![build status](https://img.shields.io/travis/mitojs/mitojs/master.svg?style=flat-square)](https://travis-ci.com/github/mitojs/mitojs)
-[![codecov](https://codecov.io/gh/clouDr-f2e/mitojs/branch/master/graph/badge.svg?token=W7JP5GDOM7)](https://codecov.io/gh/clouDr-f2e/mitojs)
+[![codecov](https://codecov.io/gh/mitojs/mitojs/branch/master/graph/badge.svg?token=W7JP5GDOM7)](https://codecov.io/gh/mitojs/mitojs)
 
 <!-- [![npm downloads](https://img.shields.io/npm/dm/@zyf2e/mitojs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@zyf2e/mitojs) -->
 
