@@ -1,0 +1,19 @@
+{
+  "name": "@mitojs/utils",
+  "version": "2.1.18",
+  "description": "@mitojs/utils",
+  "author": "cjinhuo",
+  "license": "MIT",
+  "main": "dist/utils.js",
+  "module": "dist/utils.esm.js",
+  "types": "dist/utils.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@mitojs/core": "2.1.18",
+    "@mitojs/browser": "2.1.18",
+    "@mitojs/shared": "2.1.18",
+    "@mitojs/types": "2.1.18"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "@mitojs/react",
+  "version": "2.1.18",
+  "description": "A SDK For Report React ErrorBoundary",
+  "author": "cjinhuo",
+  "license": "MIT",
+  "main": "dist/react.js",
+  "module": "dist/react.esm.js",
+  "types": "dist/react.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@mitojs/core": "2.1.18",
+    "@mitojs/utils": "2.1.18",
+    "@mitojs/shared": "2.1.18"
+  }
+}

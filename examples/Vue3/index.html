@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vue3-demo</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vue3:控制台输出信息调试</h1>
+      <div>{{testArr}}</div>
+      <error-button btn-name="点击:Vue3错误上报"></error-button>
+    </div>
+    <script src="./vue@next.x-javascript.js" crossorigin="anonymous"></script>
+    <script src="/dist/web.min.js"></script>
+    <script>
+      const demo = {
+        data() {
+          return {
+            testArr: [1, 2, 3]
+          }
+        },
+        methods: {}
+      }
+      const app = Vue.createApp(demo)
+      app.component('error-button', {
+        name: 'error-button',
+        props: {
+          btnName: String
+        },
+        data() {
+          return {}
+        },
+        methods: {
+          onClickCodeError() {
+            this.a.a = 1
+          }
+        },
+        template: `
+     <button id="vueCodeError" @click="onClickCodeError">{{btnName}}</button>`
+      })
+      const vm = app.mount('#app')
+      setTimeout(() => {
+        vm.testArr[0] = -1
+      }, 1000)
+      window.RootVue = app
+    </script>
+    <script src="./initMito.js"></script>
+  </body>
+</html>
