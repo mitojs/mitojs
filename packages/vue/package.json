@@ -10,6 +10,19 @@
   "files": [
     "dist"
   ],
+  "homepage": "https://github.com/mitojs/mitojs/blob/master/packages/vue/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mitojs/mitojs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mitojs/mitojs/issues"
+  },
+  "keywords": [
+    "mitojs",
+    "sdk",
+    "monitor"
+  ],
   "dependencies": {
     "@mitojs/core": "2.1.19",
     "@mitojs/utils": "2.1.19",
