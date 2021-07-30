@@ -80,7 +80,7 @@ $ yarn add @mitojs/wx-mini
 * [vue接入指南](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#Vue)
 * [react接入指南](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#react)
 * [wx-mini接入指南](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#微信小程序)
-
+* [wx-mini-performance接入指南](https://github.com/mitojs/mitojs/blob/master/docs/wx-mini-performance.md)
 
 ## hooks与配置项
 
