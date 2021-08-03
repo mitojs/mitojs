@@ -1,0 +1,16 @@
+{
+  "name": "@mitojs/wx-mini-performance",
+  "version": "2.1.18",
+  "description": "A SDK For Report Wx Mini Performance",
+  "main": "dist/wx-mini-performance.js",
+  "module": "dist/wx-mini-performance.js",
+  "types": "dist/wx-mini-performance.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "zty <https://github.com/zty1205>",
+  "license": "ISC",
+  "dependencies": {
+    "@types/wechat-miniprogram": "^3.3.0"
+  }
+}
