@@ -114,5 +114,8 @@ $ yarn add @mitojs/wx-mini
 
 <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gmtfid3hrfj30kw0r2wfk.jpg" width="240px" />
 
+## 内推
+字节内推请联系我~
+
 
 
