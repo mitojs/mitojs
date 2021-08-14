@@ -1,13 +1,10 @@
 **本文作者：[cjinhuo](https://github.com/cjinhuo)，未经授权禁止转载。**
 
-<h1 style="padding: 0px; font-weight: bold; color: black; font-size: 24px; text-align: center; line-height: 60px; margin-top: 10px; margin-bottom: 10px;">
-  <span style="color: #2db7f5; border-bottom: 2px solid #2db7f5;" class="content">背景</span>
-</h1>
 
 
+# 背景
 
-
-传统方式下一个前端项目发到正式环境后，所有报错信息只能通过用户使用时截图、口头描述发送到开发者，然后开发者来根据用户所描述的场景去模拟这个错误的产生，这效率肯定超级低，所以很多开源或收费的前端监控平台就应运而生，比如:
+传统模式下，一个前端项目发到正式环境后，所有报错信息只能通过用户使用时截图、口头描述发送到开发者，然后开发者来根据用户所描述的场景去模拟这个错误的产生，这效率肯定超级低，所以很多开源或收费的前端监控平台就应运而生，比如:
 
 * [sentry](https://github.com/getsentry/sentry)
 * [webfunny](https://github.com/a597873885/webfunny_monitor)
@@ -15,7 +12,7 @@
 
 等等一些优秀的监控平台
 
-<h2 style="margin-top: 25px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 20px;" data-id="heading-7"><span style="display: none;" class="prefix"></span><span style="color: #2db7f5; display: inline-block; padding-left: 10px;" class="content">国内常用的监控平台</span><span style="display: none;" class="suffix"></span></h2>
+## 国内常用的监控平台
 
 [sentry](https://github.com/getsentry/sentry) ：从监控错误、错误统计图表、多重标签过滤和标签统计到触发告警，这一整套都很完善，团队项目需要充钱，而且数据量越大钱越贵
 
@@ -23,7 +20,7 @@
 
 [webfunny](https://github.com/a597873885/webfunny_monitor)：也是含有监控错误的功能，可以支持千万级别日PV量，额外的亮点是可以远程调试、性能分析，也可以`docker`私有化部署（免费），业务代码加密过
 
-<h2 style="margin-top: 25px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 20px;" data-id="heading-7"><span style="display: none;" class="prefix"></span><span style="color: #2db7f5; display: inline-block; padding-left: 10px;" class="content">为什么不选择上面三个监控平台或者其他监控平台，为什么要自己搞？</span><span style="display: none;" class="suffix"></span></h2>
+## 为什么不选择上面三个监控平台或者其他监控平台，为什么要自己搞？
 
 1. 首先`sentry`和`fundebug`需要投入大量金钱来作为支持，而`webfunny`虽是可以用`docker`私有化部署，但由于其代码没有开源，二次开发受限
 
@@ -31,18 +28,14 @@
 
 
 
-<h1 style="padding: 0px; font-weight: bold; color: black; font-size: 24px; text-align: center; line-height: 60px; margin-top: 10px; margin-bottom: 10px;">
-  <span style="color: #2db7f5; border-bottom: 2px solid #2db7f5;" class="content">监控平台的组成</span>
-</h1>
+# 监控平台的组成
 
 
-<h2 style="margin-top: 25px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 20px;" data-id="heading-7"><span style="display: none;" class="prefix"></span><span style="color: #2db7f5; display: inline-block;" class="content">整体流程</span><span style="display: none;" class="suffix"></span></h2>
 
-![](https://i.loli.net/2020/08/17/7XRZaT5WtzLBD1n.jpg)
+## 整体流程
 
-<div style="padding: 0px; font-weight: bold; color: black; font-size: 14px; text-align: center; line-height: 30px; margin-bottom: 10px;">
-  <span style="color: #2db7f5;" class="content">整体流程</span>
-</div>
+![整体流程](https://i.loli.net/2020/08/17/7XRZaT5WtzLBD1n.jpg)
+
 
 
 
@@ -54,18 +47,18 @@
 
 
 
-<h1 style="padding: 0px; font-weight: bold; color: black; font-size: 24px; text-align: center; line-height: 60px; margin-top: 10px; margin-bottom: 10px;">
-  <span style="font-size: 24px; color: #2db7f5; border-bottom: 2px solid #2db7f5;" class="content">监控SDK</span>
-</h1>
-<h2 style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 20px;" data-id="heading-7"><span style="display: none;" class="prefix"></span><span style="font-size: 20px; color: #2db7f5; display: inline-block;" class="content">整体代码架构</span><span style="display: none;" class="suffix"></span></h2>
+# 监控SDK
+
+
+
+## 整体代码架构
 
 
 
 ![flow](https://i.loli.net/2020/08/19/XnyjRVAbYQLclJ2.png)
 
-<div style="padding: 0px; font-weight: bold; color: black; font-size: 14px; text-align: center; line-height: 30px; margin-bottom: 10px;">
-  <span style="color: #2db7f5;" class="content">代码架构</span>
-</div>
+
+
 
 
 整体代码架构使用**发布-订阅**设计模式以便后续迭代功能，处理逻辑基本都在`HandleEvents`文件中,这样设计的好处是如果想穿插`hook`或者迭代功能可以在处理事件回调多添加一个函数
@@ -77,33 +70,30 @@
 </div>
 
 
-<h2 style="margin-top: 30px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 20px;" data-id="heading-7"><span style="display: none;" class="prefix"></span><span style="font-size: 20px; color: #2db7f5; display: inline-block; padding-left: 10px;" class="content">web错误信息收集</span><span style="display: none;" class="suffix"></span></h2>
+
+## web错误信息收集
 
 一般情况下都是通过重写js原生事件然后拿到错误信息，比如`ajax请求`，通过重写`xhr`、`fetch`事件来截取接口信息，所以我们需要优先编写一个易于重写事件的函数来复用。
 
 ![replaceOld](https://i.loli.net/2020/08/15/DSz1dA3ENMkxT9U.png)
 
-<div style="padding: 0px; font-weight: bold; color: black; font-size: 14px; text-align: center; line-height: 30px; margin-bottom: 10px;">
-  <span style="color: #2db7f5;" class="content">replaceOld</span>
-</div>
 
 
-<h3 style="margin-top: 20px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 20px;" data-id="heading-7"><span style="display: none;" class="prefix"></span><span style="font-size: 16px; color: #2db7f5; display: inline-block; padding-left: 10px; border-left: 4px solid #2db7f5;" class="content">接口错误</span><span style="display: none;" class="suffix"></span></h3>
+
+
+### 接口错误
 
 所有的请求第三方库都是基于`xhr`、`fetch`二次封装的，所以只需要重写这两个事件就可以拿到所有的接口请求的信息，通过判断`status`的值来判断当前接口是否是正常的。举个例子，重写`xhr`的代码操作：
 
 ![xhrReplace](https://i.loli.net/2020/08/16/KMH6LzIo2eOrv3T.png)
 
-<div style="padding: 0px; font-weight: bold; color: black; font-size: 14px; text-align: center; line-height: 30px; margin-bottom: 10px;">
-  <span style="color: #2db7f5;" class="content">Xhr重写</span>
-</div>
 
 
-上面除了拿去接口的信息之外还做一个操作：如果是SDK发送的接口，就不用收集该接口的信息。如果需要发布事件就调用`triggerHandlers(EVENTTYPES.XHR, this.mito_xhr)`，类似的，`fetch`也是用这种方式来重写。
+上面除了拿去接口的信息之外还做一个操作：如果是SDK发送的接口，就不用收集该接口的信息。如果需要发布事件就调用`triggerHandlers(EVENTTYPES.XHR, this.mito_xhr)`，类似的，`fetch`也是用这种方式来重写
 
 
 
-**关于接口跨域、超时的问题**：这两种情况发生的时候，接口返回的响应体和响应头里面都是空的，`status`等于0，所以很难区分两者，但是正常情况下，一般项目中都的请求都是复杂请求，所以在正式请求会先进行`option`进行预请求，如果是跨域的话基本几十毫秒就会返回来，所以以此作为临界值来判断跨域与超时的问题（如果是接口不存在也会被判断成接口跨域）。
+**关于接口跨域、超时的问题**：这两种情况发生的时候，接口返回的响应体和响应头里面都是空的，`status`等于0，所以很难区分两者，但是正常情况下，一般项目中都的请求都是复杂请求，所以在正式请求会先进行`option`进行预请求，如果是跨域的话基本几十毫秒就会返回来，所以以此作为临界值来判断跨域与超时的问题（如果是接口不存在也会被判断成接口跨域）
 
 <h3 style="margin-top: 20px; margin-bottom: 15px; padding: 0px; font-weight: bold; color: black; font-size: 20px;" data-id="heading-7"><span style="display: none;" class="prefix"></span><span style="font-size: 16px; color: #2db7f5; display: inline-block; padding-left: 10px; border-left: 4px solid #2db7f5;" class="content">js代码错误&&资源错误</span><span style="display: none;" class="suffix"></span></h3>
 
