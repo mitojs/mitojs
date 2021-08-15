@@ -3,7 +3,6 @@ import { vueUrl } from '@/test/config'
 import { TransportDataType, BreadcrumbPushData, ReportDataType } from '@mitojs/types'
 import { Severity } from '@mitojs/utils'
 import puppeteer from 'puppeteer'
-import {} from '@mitojs/types'
 
 describe('Vue e2e', () => {
   const timeout = 3000
