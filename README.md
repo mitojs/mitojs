@@ -73,6 +73,13 @@ $ yarn add @mitojs/wx-mini
 <script src="https://cdn.jsdelivr.net/npm/@mitojs/wx-mini/dist/wx-mini.js"></script>
 ```
 
+## SDK在线试用Demo
+[react-sdk-demo](https://mitojs.github.io/react-sdk-demo)
+
+[vue2-sdk-demo](https://mitojs.github.io/vue2-sdk-demo)
+
+![react-sdk-demo](https://tva1.sinaimg.cn/large/008i3skNly1gtr0cdzowzg31fy0u0q4z.gif)
+
 ## 使用指南
 
 [使用指南](https://github.com/mitojs/mitojs/blob/master/docs/guide.md)
@@ -87,11 +94,6 @@ $ yarn add @mitojs/wx-mini
 [hooks与配置项](https://github.com/mitojs/mitojs/blob/master/docs/option.md)
 
 
-
-### 示例
-[vue2-sdk-demo](https://mitojs.github.io/vue2-sdk-demo)
-
-![mito-在线demo](https://tva1.sinaimg.cn/large/008eGmZEly1gmxgn4y1sag315g0m2hdt.gif)
 
 
 ## 收集信息平台展示
