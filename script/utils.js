@@ -2,6 +2,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 const execa = require('execa')
 const path = require('path')
+const consola = require('consola')
 
 const targets = (exports.targets = fs.readdirSync('packages').filter((f) => {
   if (!fs.statSync(`packages/${f}`).isDirectory()) {
@@ -31,7 +32,7 @@ exports.fuzzyMatchTarget = (partialTargets, includeAllMatching) => {
     return matched
   } else {
     console.log()
-    console.error(`  ${chalk.bgRed.white(' ERROR ')} ${chalk.red(`Target ${chalk.underline(partialTargets)} not found!`)}`)
+    consola.error(`  ${chalk.bgRed.white(' ERROR ')} ${chalk.red(`Target ${chalk.underline(partialTargets)} not found!`)}`)
     console.log()
 
     process.exit(1)
@@ -47,6 +48,6 @@ exports.binRun = (bin, args, opts = {}) => execa(bin, args, { stdio: 'inherit', 
 
 exports.getPkgRoot = (pkg) => path.resolve(__dirname, '../packages/' + pkg)
 
-exports.step = (msg) => console.log(chalk.cyan(msg))
+exports.step = (msg) => consola.info(chalk.cyan(msg))
 
-exports.errLog = (msg) => console.log(chalk.red(msg))
+exports.errLog = (msg) => consola.error(chalk.red(msg))

@@ -1,7 +1,7 @@
 const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs-extra')
-
+const consola = require('consola')
 const { targets: allTargets, fuzzyMatchTarget, getArgv, binRun } = require('./utils')
 let buildTypes = true
 // local debug
@@ -10,7 +10,7 @@ let rollupWatch = false
 run()
 async function run() {
   const argv = getArgv()
-  console.log(argv)
+  console.info(argv)
   // accept npm run build web browser...
   const paramTarget = argv._
   LOCALDIR = argv.local
@@ -72,7 +72,7 @@ async function rollupBuild(target) {
   const result = await binRun('rollup', args)
 
   if (buildTypes && pkg.types) {
-    console.log(chalk.bold(chalk.yellow(`Rolling up type definitions for ${target}...`)))
+    console.info(chalk.bold(chalk.yellow(`Rolling up type definitions for ${target}...`)))
 
     // build types
     const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor')
@@ -97,9 +97,9 @@ async function rollupBuild(target) {
       //   console.log('add', toAdd)
       //   await fs.writeFile(dtsPath, existing + '\n' + toAdd.join('\n'))
       // }
-      console.log(chalk.bold(chalk.green(`API Extractor completed successfully.`)))
+      consola.success(chalk.green(`API Extractor completed successfully.`))
     }
-    console.log('pkgDir', pkgDir)
+    consola.info('pkgDir', pkgDir)
     await fs.remove(`${pkgDir}/dist/packages`)
   }
 }

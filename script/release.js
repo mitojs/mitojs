@@ -1,5 +1,5 @@
 const chalk = require('chalk')
-
+const consola = require('consola')
 const { getArgv, targets: allTargets, binRun, getPkgRoot, step } = require('./utils')
 
 const path = require('path')
@@ -33,7 +33,7 @@ async function publicPackage(pkgName) {
   if (pkg.private) return
   fs.access(`${pkgRoot}/dist`, fs.constants.F_OK, async (err) => {
     if (err) {
-      console.log(chalk.red(`${pkgName} don't have dist folder`))
+      consola.error(chalk.red(`${pkgName} don't have dist folder`))
       return
     }
     step(`Publishing ${pkgName}...`)
@@ -42,9 +42,9 @@ async function publicPackage(pkgName) {
         cwd: pkgRoot,
         stdio: 'pipe'
       })
-      console.log(chalk.green(`Successfully published ${pkgName}@${version}`))
+      consola.success(chalk.green(`Successfully published ${pkgName}@${version}`))
     } catch (error) {
-      console.log(`failed publish ${pkgName}@${version}`, error)
+      consola.error(`failed publish ${pkgName}@${version}`, error)
     }
   })
 }

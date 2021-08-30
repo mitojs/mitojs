@@ -45,6 +45,7 @@
     "@types/wechat-miniprogram": "^3.1.0",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
+    "consola": "^2.15.3",
     "cross-env": "^7.0.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.4.0",
