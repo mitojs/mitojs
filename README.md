@@ -80,7 +80,7 @@ $ yarn add @mitojs/wx-mini
 
 [vue2-sdk-demo](https://mitojs.github.io/vue2-sdk-demo)
 
-![react-sdk-demo](https://tva1.sinaimg.cn/large/008i3skNly1gtr0cdzowzg31fy0u0q4z.gif)
+![mito-在线demo](https://tva1.sinaimg.cn/large/008eGmZEly1gmxgn4y1sag315g0m2hdt.gif)
 
 ## Manual
 
