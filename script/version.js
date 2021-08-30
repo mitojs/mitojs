@@ -11,20 +11,21 @@ function run() {
   const argv = getArgv()._
   let targetVersion = null
   if (argv.length === 0) {
-    return errLog('\nnpm run version 没有带版本号')
+    return errLog('npm/yarn run version 没有带版本号，请到CONTRIBUTING中查看开发指南')
   } else {
     targetVersion = argv.shift()
   }
   const masterVersion = require('../package.json').version
   if (masterVersion !== targetVersion) {
-    return errLog('\n传入的版本号与masterVersion🙅‍')
+    return errLog('传入的版本号与根路径的package.json不符合，请检查package.json的version')
+    // return errLog('')
   }
   beModifiedPackages = argv.length === 0 ? allTargets : argv
   modify(targetVersion)
 }
 
 async function modify(targetVersion) {
-  step(`\nstart modify packages version: ${targetVersion}`)
+  step(`start modify packages version: ${targetVersion}`)
   for (const target of beModifiedPackages) {
     await modifyMitoVersion(target, targetVersion)
   }
@@ -40,11 +41,13 @@ async function modifyMitoVersion(pkgName, version) {
   }
   const dependencies = pkg.dependencies || {}
   Object.entries(dependencies).forEach(([dependent, dependentVersion]) => {
-    if (dependent.startsWith(MITO_PREFIX)) {
+    // 拼接：前缀 + 当前包名: @mitojs/web 如果当前依赖中有被改的包，也把version修改
+    const isExist = beModifiedPackages.some((pkg) => `${MITO_PREFIX}/${pkg}` === dependent)
+    if (isExist) {
       dependencies[dependent] = version
     }
   })
   fs.writeFileSync(pkgPath, JSON.stringify(pkg))
   await binRun('prettier', ['--write', pkgPath])
-  step(`\n${pkgName} from ${oldVersion} to ${version} success`)
+  step(`${pkgName} package version from ${oldVersion} to ${version} success`)
 }
