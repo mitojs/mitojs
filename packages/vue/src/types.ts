@@ -1,6 +1,8 @@
 import { IAnyObject } from '@mitojs/types'
 
 export interface VueInstance {
+  // fix in Vue3 typescript's declaration file error
+  [key: string]: any
   config?: VueConfiguration
   mixin(hooks: { [key: string]: () => void }): void
   util: {

@@ -6,7 +6,7 @@ export class Options {
   beforeAppAjaxSend: Function = () => {}
   enableTraceId: Boolean
   filterXhrUrlRegExp: RegExp
-  includeHttpUrlTraceIdRegExp: RegExp
+  includeHttpUrlTraceIdRegExp = /.*/
   traceIdFieldName = 'Trace-Id'
   throttleDelayTime = 0
   maxDuplicateCount = 2
@@ -89,9 +89,13 @@ export function setTraceId(httpUrl: string, callback: (headerFieldName: string, 
  */
 export function initOptions(paramOptions: InitOptions = {}) {
   setSilentFlag(paramOptions)
+  // new Breadcrumb()
   breadcrumb.bindOptions(paramOptions)
+  // new Logger
   logger.bindOptions(paramOptions.debug)
+  // new transport
   transportData.bindOptions(paramOptions)
+  // new Option()
   options.bindOptions(paramOptions)
 }
 

@@ -23,7 +23,6 @@ export function handleVueError(
     time: getTimestamp()
   }
   if (variableTypeDetection.isString(version)) {
-    console.log('getBigVersion', getBigVersion(version))
     switch (getBigVersion(version)) {
       case 2:
         data = { ...data, ...vue2VmHandler(vm) }

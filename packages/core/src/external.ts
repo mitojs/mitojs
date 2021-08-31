@@ -38,6 +38,7 @@ export function log({ message = 'emptyMsg', tag = '', level = Severity.Critical,
     name: 'MITO.log',
     customTag: unknownToString(tag),
     time: getTimestamp(),
+    // todo 分开写 在browser中写一次  在wx中写一次，这样就不用判断
     url: isWxMiniEnv ? getCurrentRoute() : getLocationHref(),
     ...errorInfo
   }
