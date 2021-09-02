@@ -1,5 +1,7 @@
 import { HTTPTYPE } from '@mitojs/shared'
 
+export type voidFun = () => void
+
 export interface IAnyObject {
   [key: string]: any
 }

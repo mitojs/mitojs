@@ -1,4 +1,3 @@
-export type voidFun = () => void
 /**
  * 上报错误类型
  */

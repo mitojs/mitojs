@@ -1,0 +1,12 @@
+import { EVENTTYPES } from '@mitojs/shared'
+
+export interface BasePluginType<T> {
+  name: T
+  // 监控事件，并在该事件中通知订阅中心（notify）
+  monitor: () => void
+  // 在monitor中触发数据并将数据传入当前函数，拿到数据做数据格式转换
+  // 会将tranform放入Subscrib的handers
+  transform: (data) => any
+  // 拿到转换后的数据进行breadcrumb、report等等操作
+  consumer: (data) => void
+}
