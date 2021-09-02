@@ -32,6 +32,13 @@ export function triggerHandlers(type: EVENTTYPES | WxEvents, data: any): void {
   })
 }
 
+/**
+ *发布订阅类
+ *
+ * @export
+ * @class Subscrib
+ * @template T 事件枚举
+ */
 export default class Subscrib<T> {
   dep: Map<T, ReplaceCallback[]> = new Map()
   constructor() {}

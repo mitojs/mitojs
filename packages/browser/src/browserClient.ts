@@ -1,11 +1,11 @@
 import { Breadcrumb, options } from 'packages/core/src'
 import BaseClient from 'packages/core/src/baseClient'
-import { EVENTTYPES } from 'packages/shared/src'
+import { EventTypes } from 'packages/shared/src'
 import BrowserOptions from './browserOptions'
 import BrowserTransport from './browserTransport'
 import { BrowserOptionsFieldsTypes } from './types'
 
-export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EVENTTYPES> {
+export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTypes> {
   transport: BrowserTransport
   options: BrowserOptions
   breadcrumnb: Breadcrumb
