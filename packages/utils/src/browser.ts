@@ -86,7 +86,7 @@ export function getBreadcrumbCategoryInBrowser(type: BrowserBreadcrumbTypes) {
  * @param ex
  * @param level
  */
-export function extractErrorStack(ex: any, level: Severity): ReportDataType {
+export function extractErrorStack(ex: any, level: Severity) {
   const normal = {
     time: getTimestamp(),
     url: getLocationHref(),

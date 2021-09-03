@@ -10,12 +10,6 @@ export function setupReplace(): void {
     type: EVENTTYPES.XHR
   })
   addReplaceHandler({
-    callback: (data) => {
-      HandleEvents.handleHttp(data, BREADCRUMBTYPES.FETCH)
-    },
-    type: EVENTTYPES.FETCH
-  })
-  addReplaceHandler({
     callback: (error) => {
       HandleEvents.handleError(error)
     },

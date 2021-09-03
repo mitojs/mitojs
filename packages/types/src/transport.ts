@@ -1,13 +1,19 @@
 import { ErrorTypes } from '@mitojs/shared'
 import { BreadcrumbPushData } from './breadcrumb'
-import { DeviceInfo, EActionType } from './track'
+import { HttpTransformedType } from './http'
+import { DeviceInfo } from './wxTrack'
 
+/**
+ * SDK版本信息、apikey、trackerId
+ *
+ * @export
+ * @interface AuthInfo
+ */
 export interface AuthInfo {
   apikey?: string
-  trackKey?: string
   sdkVersion: string
   sdkName: string
-  trackerId: string
+  trackerId?: string
 }
 
 export interface TransportDataType {
@@ -20,35 +26,18 @@ export interface TransportDataType {
 
 export type FinalReportType = ReportDataType
 
-export interface BaseTranformType {
+export interface BaseTransformType {
   type?: ErrorTypes
   message?: string
-  url: string
   time?: number
-}
-
-export interface HttpTransformed extends BaseTranformType {
-  request?: {
-    httpType?: string
-    traceId?: string
-    method: string
-    url: string
-    data: any
-  }
-  response?: {
-    status: number
-    data: string
-  }
-}
-
-export interface ReportDataType extends HttpTransformed {
   name?: string
+  level?: string
+  url: string
+}
+
+export interface ReportDataType extends HttpTransformedType {
   stack?: any
   errorId?: number
-  level: string
-  // ajax
-  elapsedTime?: number
-
   // vue
   componentName?: string
   propsData?: any

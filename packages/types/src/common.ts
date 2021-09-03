@@ -1,4 +1,4 @@
-import { HTTPTYPE } from '@mitojs/shared'
+import { HttpTypes } from '@mitojs/shared'
 
 export type voidFun = () => void
 
@@ -13,7 +13,7 @@ export interface ResourceErrorTarget {
 }
 
 export interface MITOHttp {
-  type: HTTPTYPE
+  type: HttpTypes
   traceId?: string
   method?: string
   url?: string
@@ -42,7 +42,7 @@ export interface ErrorStack {
   url: string
 }
 
-export interface IntegrationError {
+export interface WxParsedErrorType {
   message: string
   name: string
   stack: ErrorStack[]

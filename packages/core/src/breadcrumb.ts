@@ -1,7 +1,14 @@
 import { ToStringTypes } from '@mitojs/shared'
-import { logger, getTimestamp, slientConsoleScope, _support, toStringValidateOption } from '@mitojs/utils'
-import { BaseOptionsFieldsIntegrationType, BreadcrumbPushData, InitOptions } from '@mitojs/types'
+import { logger, getTimestamp, slientConsoleScope, toStringValidateOption } from '@mitojs/utils'
+import { BaseOptionsFieldsIntegrationType, BreadcrumbPushData } from '@mitojs/types'
 
+/**
+ * 用户行为栈存储类
+ *
+ * @export
+ * @class Breadcrumb
+ * @template O
+ */
 export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> {
   maxBreadcrumbs = 10
   beforePushBreadcrumb: unknown = null
@@ -12,8 +19,8 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
   /**
    * 添加用户行为栈
    *
-   * ../param {BreadcrumbPushData} data
-   * ../memberof Breadcrumb
+   * @param {BreadcrumbPushData} data
+   * @memberof Breadcrumb
    */
   push(data: BreadcrumbPushData): void {
     if (typeof this.beforePushBreadcrumb === 'function') {
@@ -30,6 +37,7 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
     }
     this.immediatePush(data)
   }
+
   immediatePush(data: BreadcrumbPushData): void {
     data.time || (data.time = getTimestamp())
     if (this.stack.length >= this.maxBreadcrumbs) {
@@ -40,17 +48,20 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
     this.stack.sort((a, b) => a.time - b.time)
     logger.log(this.stack)
   }
+
   shift(): boolean {
     return this.stack.shift() !== undefined
   }
+
   clear(): void {
     this.stack = []
   }
+
   getStack(): BreadcrumbPushData[] {
     return this.stack
   }
 
-  bindOptions(options: InitOptions = {}): void {
+  bindOptions(options: Partial<O> = {}): void {
     const { maxBreadcrumbs, beforePushBreadcrumb } = options
     toStringValidateOption(maxBreadcrumbs, 'maxBreadcrumbs', ToStringTypes.Number) && (this.maxBreadcrumbs = maxBreadcrumbs)
     toStringValidateOption(beforePushBreadcrumb, 'beforePushBreadcrumb', ToStringTypes.Function) &&

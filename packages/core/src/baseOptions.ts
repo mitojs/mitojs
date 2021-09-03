@@ -10,9 +10,7 @@ export class BaseOptions<O extends BaseOptionsFieldsIntegrationType = BaseOption
   throttleDelayTime = 0
   maxDuplicateCount = 5
   beforeAppAjaxSend = null
-  constructor(options: O) {
-    this.bindOptions(options)
-  }
+  constructor() {}
   bindOptions(options: O) {
     const { enableTraceId, filterXhrUrlRegExp, traceIdFieldName, throttleDelayTime, includeHttpUrlTraceIdRegExp, beforeAppAjaxSend } =
       options

@@ -1,4 +1,3 @@
-/** The status of an Span. */
 export const enum SpanStatus {
   /** The operation completed successfully. */
   Ok = 'ok',

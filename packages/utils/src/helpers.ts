@@ -1,13 +1,5 @@
-import { IAnyObject, IntegrationError, MITOHttp } from '@mitojs/types'
-import {
-  globalVar,
-  HTTP_CODE,
-  ErrorTypes,
-  BreadcrumbTypes,
-  BREADCRUMBCATEGORYS,
-  ToStringTypes,
-  BrowserBreadcrumbTypes
-} from '@mitojs/shared'
+import { HttpCollectedType, HttpTransformedType, IAnyObject } from '@mitojs/types'
+import { globalVar, HTTP_CODE, ErrorTypes, ToStringTypes } from '@mitojs/shared'
 import { logger } from './logger'
 import { nativeToString, variableTypeDetection } from './is'
 import { fromHttpStatus, SpanStatus } from './httpStatus'
@@ -112,14 +104,15 @@ export function getFunctionName(fn: unknown): string {
 //   }
 // }
 
-// 函数节流
 /**
+ * 函数节流
  *
- * ../param fn 需要节流的函数
- * ../param delay 节流的时间间隔
- * ../returns 返回一个包含节流功能的函数
+ * @export
+ * @param {Function} fn 需要节流的函数
+ * @param {number} delay 节流的时间间隔
+ * @return {*}  {Function} 返回一个包含节流功能的函数
  */
-export const throttle = (fn: Function, delay: number): Function => {
+export function throttle(fn: Function, delay: number): Function {
   let canRun = true
   return function (...args: any) {
     if (!canRun) return
@@ -131,27 +124,27 @@ export const throttle = (fn: Function, delay: number): Function => {
   }
 }
 
+/**
+ * 原子字符中是否包含目标字符
+ *
+ * @export
+ * @param {string} origin 原字符
+ * @param {string} target 目标字符
+ * @return {*}  {boolean}
+ */
 export function isInclude(origin: string, target: string): boolean {
   return !!~origin.indexOf(target)
 }
 
 /**
  * 获取当前的时间戳
- * ../returns 返回当前时间戳
+ *
+ * @export
+ * @return {*}  {number}
  */
 export function getTimestamp(): number {
   return Date.now()
 }
-
-export function typeofAny(target: any, type: string): boolean {
-  return typeof target === type
-}
-
-// export function validateOption(target: any, targetName: string, expectType: string): boolean {
-//   if (typeofAny(target, expectType)) return true
-//   typeof target !== 'undefined' && logger.error(`${targetName}期望传入${expectType}类型，目前是${typeof target}类型`)
-//   return false
-// }
 
 export function toStringAny(target: any, type: ToStringTypes): boolean {
   return nativeToString.call(target) === `[object ${type}]`
@@ -239,53 +232,14 @@ export function getCurrentRoute() {
   return setUrlQuery(currentPage.route, currentPage.options)
 }
 
-/**
- * 解析字符串错误信息，返回message、name、stack
- * @param str error string
- */
-export function parseErrorString(str: string): IntegrationError {
-  const splitLine: string[] = str.split('\n')
-  if (splitLine.length < 2) return null
-  if (splitLine[0].indexOf('MiniProgramError') !== -1) {
-    splitLine.splice(0, 1)
-  }
-  const message = splitLine.splice(0, 1)[0]
-  const name = splitLine.splice(0, 1)[0].split(':')[0]
-  const stack = []
-  splitLine.forEach((errorLine: string) => {
-    const regexpGetFun = /at\s+([\S]+)\s+\(/ // 获取 [ 函数名 ]
-    const regexGetFile = /\(([^)]+)\)/ // 获取 [ 有括号的文件 , 没括号的文件 ]
-    const regexGetFileNoParenthese = /\s+at\s+(\S+)/ // 获取 [ 有括号的文件 , 没括号的文件 ]
-
-    const funcExec = regexpGetFun.exec(errorLine)
-    let fileURLExec = regexGetFile.exec(errorLine)
-    if (!fileURLExec) {
-      // 假如为空尝试解析无括号的URL
-      fileURLExec = regexGetFileNoParenthese.exec(errorLine)
-    }
-
-    const funcNameMatch = Array.isArray(funcExec) && funcExec.length > 0 ? funcExec[1].trim() : ''
-    const fileURLMatch = Array.isArray(fileURLExec) && fileURLExec.length > 0 ? fileURLExec[1] : ''
-    const lineInfo = fileURLMatch.split(':')
-    stack.push({
-      args: [], // 请求参数
-      func: funcNameMatch || ErrorTypes.UNKNOWN_FUNCTION, // 前端分解后的报错
-      column: Number(lineInfo.pop()), // 前端分解后的列
-      line: Number(lineInfo.pop()), // 前端分解后的行
-      url: lineInfo.join(':') // 前端分解后的URL
-    })
-  })
-  return {
-    message,
-    name,
-    stack
-  }
-}
-
-export function httpTransform(httpCollectedData: MITOHttp) {
+export function httpTransform(httpCollectedData: HttpCollectedType): HttpTransformedType {
   let message = ''
-  const { elapsedTime, time, method, traceId, type, status, url } = httpCollectedData
-  const name = `${type}--${httpCollectedData.method}`
+  const {
+    request: { httpType, method, url },
+    response: { status },
+    elapsedTime
+  } = httpCollectedData
+  const name = `${httpType}--${method}`
   if (status === 0) {
     message =
       elapsedTime <= globalVar.crossOriginThreshold ? 'http请求失败，失败原因：跨域限制或域名不存在' : 'http请求失败，失败原因：超时'
@@ -294,23 +248,11 @@ export function httpTransform(httpCollectedData: MITOHttp) {
   }
   message = message === SpanStatus.Ok ? message : `${message} ${getRealPath(url)}`
   return {
+    ...httpCollectedData,
     type: ErrorTypes.HTTP,
     url: getLocationHref(),
-    time,
-    elapsedTime,
     level: Severity.Low,
     message,
-    name,
-    request: {
-      httpType: type,
-      traceId,
-      method,
-      url: url,
-      data: httpCollectedData.reqData || ''
-    },
-    response: {
-      status,
-      data: httpCollectedData.responseText
-    }
+    name
   }
 }

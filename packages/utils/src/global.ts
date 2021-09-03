@@ -1,5 +1,4 @@
-import { EventTypes, WxEvents } from '@mitojs/shared'
-import { Breadcrumb } from '@mitojs/core'
+import { EventTypes } from '@mitojs/shared'
 import { Logger } from './logger'
 import { variableTypeDetection } from './is'
 import { DeviceInfo } from '@mitojs/types'
@@ -23,26 +22,37 @@ interface MITOGlobal {
   __MITO__?: MitoSupport
 }
 
-export const isNodeEnv = variableTypeDetection.isProcess(typeof process !== 'undefined' ? process : 0)
+// export const isNodeEnv = variableTypeDetection.isProcess(typeof process !== 'undefined' ? process : 0)
 
-export const isWxMiniEnv =
-  variableTypeDetection.isObject(typeof wx !== 'undefined' ? wx : 0) &&
-  variableTypeDetection.isFunction(typeof App !== 'undefined' ? App : 0)
+// export const isWxMiniEnv =
+//   variableTypeDetection.isObject(typeof wx !== 'undefined' ? wx : 0) &&
+//   variableTypeDetection.isFunction(typeof App !== 'undefined' ? App : 0)
 
-export const isBrowserEnv = variableTypeDetection.isWindow(typeof window !== 'undefined' ? window : 0)
+// export const isBrowserEnv = variableTypeDetection.isWindow(typeof window !== 'undefined' ? window : 0)
 /**
  * 获取全局变量
  *
  * ../returns Global scope object
  */
-export function getGlobal<T>() {
-  if (isBrowserEnv) return window as unknown as MITOGlobal & T
-  if (isWxMiniEnv) return wx as unknown as MITOGlobal & T
-  if (isNodeEnv) return process as unknown as MITOGlobal & T
-}
+// export function getGlobal<T>() {
+//   if (isBrowserEnv) return window as unknown as MITOGlobal & T
+//   if (isWxMiniEnv) return wx as unknown as MITOGlobal & T
+//   if (isNodeEnv) return process as unknown as MITOGlobal & T
+// }
 
-const _global = getGlobal<Window>()
+const _global = window as unknown as MITOGlobal & Window
+// const _wx = getGlobal<>()
 const _support = getGlobalMitoSupport()
+
+/**
+ * 获取全部变量__MITO__的引用地址
+ *
+ * @return {*}  {MitoSupport}
+ */
+function getGlobalMitoSupport(): MitoSupport {
+  _global.__MITO__ = _global.__MITO__ || ({} as MitoSupport)
+  return _global.__MITO__
+}
 
 export { _global, _support }
 
@@ -55,16 +65,6 @@ export function setFlag(replaceType: EventTypes, isSet: boolean): void {
 
 export function getFlag(replaceType: EventTypes): boolean {
   return replaceFlag[replaceType] ? true : false
-}
-
-/**
- * 获取全部变量__MITO__的引用地址
- *
- * ../returns global variable of MITO
- */
-export function getGlobalMitoSupport(): MitoSupport {
-  _global.__MITO__ = _global.__MITO__ || ({} as MitoSupport)
-  return _global.__MITO__
 }
 
 export function supportsHistory(): boolean {
