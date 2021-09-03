@@ -1,4 +1,4 @@
-export enum WxAppEvents {
+export const enum WxAppEvents {
   AppOnLaunch = 'AppOnLaunch',
   AppOnShow = 'AppOnShow',
   AppOnHide = 'AppOnHide',
@@ -7,7 +7,7 @@ export enum WxAppEvents {
   AppOnUnhandledRejection = 'AppOnUnhandledRejection'
 }
 
-export enum WxPageEvents {
+export const enum WxPageEvents {
   PageOnLoad = 'PageOnLoad',
   PageOnShow = 'PageOnShow',
   PageOnHide = 'PageOnHide',
@@ -18,7 +18,7 @@ export enum WxPageEvents {
   PageOnTabItemTap = 'PageOnTabItemTap'
 }
 
-export enum WxRouteEvents {
+export const enum WxRouteEvents {
   SwitchTab = 'switchTab',
   ReLaunch = 'reLaunch',
   RedirectTo = 'redirectTo',
@@ -28,7 +28,7 @@ export enum WxRouteEvents {
   RouteFail = 'routeFail'
 }
 
-export enum WxBreadcrumbTypes {
+export const enum WxBreadcrumbTypes {
   // wx life cycle
   APP_ON_SHOW = 'App On Show',
   APP_ON_LAUNCH = 'App On Launch',
@@ -47,9 +47,9 @@ export enum WxBreadcrumbTypes {
  *微信小程序需要监听的事件类型
  *
  * @export
- * @enum {number}
+ *  const@enum {number}
  */
-export enum WxEventTypes {
+export const enum WxEventTypes {
   XHR = 'xhr',
   CONSOLE = 'console',
   UNHANDLEDREJECTION = 'unhandledrejection',

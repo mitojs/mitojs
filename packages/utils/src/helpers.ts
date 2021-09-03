@@ -1,5 +1,5 @@
 import { IAnyObject, IntegrationError } from '@mitojs/types'
-import { globalVar, HTTP_CODE, ErrorTypes, BreadcrumbTypes, BREADCRUMBCATEGORYS, ToStringTypes } from '@mitojs/shared'
+import { globalVar, HTTP_CODE, ErrorTypes, BreadcrumbTypes, BREADCRUMBCATEGORYS, ToStringTypes, BrowserBreadcrumbTypes } from '@mitojs/shared'
 import { logger } from './logger'
 import { nativeToString, variableTypeDetection } from './is'
 
@@ -228,37 +228,8 @@ export function getCurrentRoute() {
   return setUrlQuery(currentPage.route, currentPage.options)
 }
 
-export function getBreadcrumbCategory(type: BreadcrumbTypes) {
-  switch (type) {
-    case BreadcrumbTypes.XHR:
-    case BreadcrumbTypes.FETCH:
-      return BREADCRUMBCATEGORYS.HTTP
-    case BreadcrumbTypes.CLICK:
-    case BreadcrumbTypes.ROUTE:
-    case BreadcrumbTypes.TAP:
-    case BreadcrumbTypes.TOUCHMOVE:
-      return BREADCRUMBCATEGORYS.USER
-    case BreadcrumbTypes.CUSTOMER:
-    case BreadcrumbTypes.CONSOLE:
-      return BREADCRUMBCATEGORYS.DEBUG
-    case BreadcrumbTypes.APP_ON_LAUNCH:
-    case BreadcrumbTypes.APP_ON_SHOW:
-    case BreadcrumbTypes.APP_ON_HIDE:
-    case BreadcrumbTypes.PAGE_ON_SHOW:
-    case BreadcrumbTypes.PAGE_ON_HIDE:
-    case BreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
-    case BreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
-    case BreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP:
-      return BREADCRUMBCATEGORYS.LIFECYCLE
-    case BreadcrumbTypes.UNHANDLEDREJECTION:
-    case BreadcrumbTypes.CODE_ERROR:
-    case BreadcrumbTypes.RESOURCE:
-    case BreadcrumbTypes.VUE:
-    case BreadcrumbTypes.REACT:
-    default:
-      return BREADCRUMBCATEGORYS.EXCEPTION
-  }
-}
+
+
 
 /**
  * 解析字符串错误信息，返回message、name、stack

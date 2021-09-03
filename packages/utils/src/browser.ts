@@ -1,4 +1,4 @@
-import { ErrorTypes } from '@mitojs/shared'
+import { BREADCRUMBCATEGORYS, BreadcrumbTypes, BrowserBreadcrumbTypes, ErrorTypes } from '@mitojs/shared'
 import { getLocationHref, getTimestamp } from './helpers'
 import { ReportDataType } from '@mitojs/types'
 import { Severity } from './Severity'
@@ -46,6 +46,38 @@ export function parseUrlToObj(url: string): {
     path: match[5],
     protocol: match[2],
     relative: match[5] + query + fragment // everything minus origin
+  }
+}
+
+export function getBreadcrumbCategoryInBrowser(type: BreadcrumbTypes) {
+  switch (type) {
+    case BrowserBreadcrumbTypes.XHR:
+    case BrowserBreadcrumbTypes.FETCH:
+      return BREADCRUMBCATEGORYS.HTTP
+    case BrowserBreadcrumbTypes.CLICK:
+    case BrowserBreadcrumbTypes.ROUTE:
+      // case BreadcrumbTypes.TAP:
+      // case BreadcrumbTypes.TOUCHMOVE:
+      return BREADCRUMBCATEGORYS.USER
+    case BrowserBreadcrumbTypes.CUSTOMER:
+    case BrowserBreadcrumbTypes.CONSOLE:
+      return BREADCRUMBCATEGORYS.DEBUG
+      // case BreadcrumbTypes.APP_ON_LAUNCH:
+      // case BreadcrumbTypes.APP_ON_SHOW:
+      // case BreadcrumbTypes.APP_ON_HIDE:
+      // case BreadcrumbTypes.PAGE_ON_SHOW:
+      // case BreadcrumbTypes.PAGE_ON_HIDE:
+      // case BreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
+      // case BreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
+      // case BreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP:
+      return BREADCRUMBCATEGORYS.LIFECYCLE
+    case BrowserBreadcrumbTypes.UNHANDLEDREJECTION:
+    case BrowserBreadcrumbTypes.CODE_ERROR:
+    case BrowserBreadcrumbTypes.RESOURCE:
+    case BrowserBreadcrumbTypes.VUE:
+    case BrowserBreadcrumbTypes.REACT:
+    default:
+      return BREADCRUMBCATEGORYS.EXCEPTION
   }
 }
 

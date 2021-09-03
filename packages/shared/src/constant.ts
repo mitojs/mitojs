@@ -4,7 +4,7 @@ import { WxAppEvents, WxBreadcrumbTypes, WxEventTypes, WxPageEvents, WxRouteEven
 /**
  * 上报错误类型
  */
-export enum ErrorTypes {
+export const enum ErrorTypes {
   UNKNOWN = 'UNKNOWN',
   UNKNOWN_FUNCTION = 'UNKNOWN_FUNCTION',
   JAVASCRIPT_ERROR = 'JAVASCRIPT_ERROR',
@@ -25,17 +25,17 @@ export type WxEvents = WxAppEvents | WxPageEvents | WxRouteEvents
 /**
  * 用户行为栈事件类型
  */
-export type BreadcrumbTypes = BrowserBreadcrumbTypes | WxBreadcrumbTypes
+export type BreadcrumbTypes = BrowserBreadcrumbTypes & WxBreadcrumbTypes
 
-export const BreadcrumbTypes = {
-  ...BrowserBreadcrumbTypes,
-  ...WxBreadcrumbTypes
-}
+// export const BreadcrumbTypes = {
+//   ...BrowserBreadcrumbTypes,
+//   ...WxBreadcrumbTypes
+// }
 
 /**
  * 用户行为类型
  */
-export enum BREADCRUMBCATEGORYS {
+export const enum BREADCRUMBCATEGORYS {
   HTTP = 'http',
   USER = 'user',
   DEBUG = 'debug',
@@ -48,25 +48,25 @@ export enum BREADCRUMBCATEGORYS {
  */
 export type EventTypes = BrowserEventTypes | WxEventTypes
 
-export enum HttpTypes {
+export const enum HttpTypes {
   XHR = 'xhr',
   FETCH = 'fetch'
 }
 
-export enum MethodTypes {
+export const enum MethodTypes {
   Get = 'GET',
   Post = 'POST',
   Put = 'PUT',
   Delete = 'DELETE'
 }
 
-export enum HTTP_CODE {
+export const enum HTTP_CODE {
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
   INTERNAL_EXCEPTION = 500
 }
 
-export enum ToStringTypes {
+export const enum ToStringTypes {
   String = 'String',
   Number = 'Number',
   Boolean = 'Boolean',

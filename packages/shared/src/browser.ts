@@ -4,7 +4,7 @@
  * @export
  * @enum {number}
  */
-export enum BrowserEventTypes {
+export const enum BrowserEventTypes {
   XHR = 'xhr',
   FETCH = 'fetch',
   CONSOLE = 'console',
@@ -17,7 +17,7 @@ export enum BrowserEventTypes {
   VUE = 'Vue'
 }
 
-export enum BrowserBreadcrumbTypes {
+export const enum BrowserBreadcrumbTypes {
   ROUTE = 'Route',
   CLICK = 'UI.Click',
   CONSOLE = 'Console',
