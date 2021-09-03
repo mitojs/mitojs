@@ -1,5 +1,7 @@
+import { ToStringTypes } from '@mitojs/shared'
+
 export const nativeToString = Object.prototype.toString
-function isType(type: string) {
+export function isType(type: string) {
   return function (value: any): boolean {
     return nativeToString.call(value) === `[object ${type}]`
   }
@@ -10,17 +12,17 @@ function isType(type: string) {
  * @param type
  */
 export const variableTypeDetection = {
-  isNumber: isType('Number'),
-  isString: isType('String'),
-  isBoolean: isType('Boolean'),
-  isNull: isType('Null'),
-  isUndefined: isType('Undefined'),
-  isSymbol: isType('Symbol'),
-  isFunction: isType('Function'),
-  isObject: isType('Object'),
-  isArray: isType('Array'),
-  isProcess: isType('process'),
-  isWindow: isType('Window')
+  isNumber: isType(ToStringTypes.Number),
+  isString: isType(ToStringTypes.String),
+  isBoolean: isType(ToStringTypes.Boolean),
+  isNull: isType(ToStringTypes.Null),
+  isUndefined: isType(ToStringTypes.Undefined),
+  isSymbol: isType(ToStringTypes.Symbol),
+  isFunction: isType(ToStringTypes.Function),
+  isObject: isType(ToStringTypes.Object),
+  isArray: isType(ToStringTypes.Array),
+  isProcess: isType(ToStringTypes.process),
+  isWindow: isType(ToStringTypes.Window)
 }
 
 /**

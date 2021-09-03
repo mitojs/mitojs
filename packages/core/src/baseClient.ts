@@ -2,7 +2,7 @@ import { EventTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
 import { BaseClientType, BaseOptionsFieldsIntegrationType, BasePluginType } from '@mitojs/types'
 import Subscrib from './subscribe'
 
-export default class BaseClient<O extends BaseOptionsFieldsIntegrationType, E extends EventTypes> implements BaseClientType {
+export class BaseClient<O extends BaseOptionsFieldsIntegrationType, E extends EventTypes> implements BaseClientType {
   SDK_NAME = SDK_NAME
   SDK_VERSION = SDK_VERSION
   options: BaseOptionsFieldsIntegrationType

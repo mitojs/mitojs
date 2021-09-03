@@ -42,10 +42,14 @@ export class Logger {
     }
     this._console.warn(`${PREFIX}[Warn]:`, ...args)
   }
+
+  /**
+   * error不需要开启enable也要打印出来，提示用户错误信息
+   *
+   * @param {...any[]} args
+   * @memberof Logger
+   */
   error(...args: any[]): void {
-    if (!this.enabled) {
-      return
-    }
     this._console.error(`${PREFIX}[Error]:`, ...args)
   }
 }

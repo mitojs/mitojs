@@ -1,5 +1,5 @@
-import { BREADCRUMBTYPES, BREADCRUMBCATEGORYS } from '@mitojs/shared'
-import { logger, validateOption, getTimestamp, slientConsoleScope, _support } from '@mitojs/utils'
+import { ToStringTypes } from '@mitojs/shared'
+import { logger, getTimestamp, slientConsoleScope, _support, toStringValidateOption } from '@mitojs/utils'
 import { BreadcrumbPushData, InitOptions } from '@mitojs/types'
 
 export class Breadcrumb {
@@ -47,41 +47,12 @@ export class Breadcrumb {
   getStack(): BreadcrumbPushData[] {
     return this.stack
   }
-  getCategory(type: BREADCRUMBTYPES) {
-    switch (type) {
-      case BREADCRUMBTYPES.XHR:
-      case BREADCRUMBTYPES.FETCH:
-        return BREADCRUMBCATEGORYS.HTTP
-      case BREADCRUMBTYPES.CLICK:
-      case BREADCRUMBTYPES.ROUTE:
-      case BREADCRUMBTYPES.TAP:
-      case BREADCRUMBTYPES.TOUCHMOVE:
-        return BREADCRUMBCATEGORYS.USER
-      case BREADCRUMBTYPES.CUSTOMER:
-      case BREADCRUMBTYPES.CONSOLE:
-        return BREADCRUMBCATEGORYS.DEBUG
-      case BREADCRUMBTYPES.APP_ON_LAUNCH:
-      case BREADCRUMBTYPES.APP_ON_SHOW:
-      case BREADCRUMBTYPES.APP_ON_HIDE:
-      case BREADCRUMBTYPES.PAGE_ON_SHOW:
-      case BREADCRUMBTYPES.PAGE_ON_HIDE:
-      case BREADCRUMBTYPES.PAGE_ON_SHARE_APP_MESSAGE:
-      case BREADCRUMBTYPES.PAGE_ON_SHARE_TIMELINE:
-      case BREADCRUMBTYPES.PAGE_ON_TAB_ITEM_TAP:
-        return BREADCRUMBCATEGORYS.LIFECYCLE
-      case BREADCRUMBTYPES.UNHANDLEDREJECTION:
-      case BREADCRUMBTYPES.CODE_ERROR:
-      case BREADCRUMBTYPES.RESOURCE:
-      case BREADCRUMBTYPES.VUE:
-      case BREADCRUMBTYPES.REACT:
-      default:
-        return BREADCRUMBCATEGORYS.EXCEPTION
-    }
-  }
+
   bindOptions(options: InitOptions = {}): void {
     const { maxBreadcrumbs, beforePushBreadcrumb } = options
-    validateOption(maxBreadcrumbs, 'maxBreadcrumbs', 'number') && (this.maxBreadcrumbs = maxBreadcrumbs)
-    validateOption(beforePushBreadcrumb, 'beforePushBreadcrumb', 'function') && (this.beforePushBreadcrumb = beforePushBreadcrumb)
+    toStringValidateOption(maxBreadcrumbs, 'maxBreadcrumbs', ToStringTypes.Number) && (this.maxBreadcrumbs = maxBreadcrumbs)
+    toStringValidateOption(beforePushBreadcrumb, 'beforePushBreadcrumb', ToStringTypes.Function) &&
+      (this.beforePushBreadcrumb = beforePushBreadcrumb)
   }
 }
 const breadcrumb = _support.breadcrumb || (_support.breadcrumb = new Breadcrumb())

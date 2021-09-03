@@ -1,5 +1,5 @@
 /** The status of an Span. */
-export enum SpanStatus {
+export const enum SpanStatus {
   /** The operation completed successfully. */
   Ok = 'ok',
   /** Deadline expired before operation could complete. */
@@ -36,7 +36,7 @@ export enum SpanStatus {
   DataLoss = 'data_loss'
 }
 
-export function fromHttpStatus(httpStatus: number): SpanStatus {
+export function fromHttpStatus(httpStatus: number) {
   if (httpStatus < 400) {
     return SpanStatus.Ok
   }

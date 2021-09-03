@@ -1,4 +1,4 @@
-import { ERRORTYPES } from '@mitojs/shared'
+import { EventTypes } from 'packages/shared/src'
 import { BreadcrumbPushData } from './breadcrumb'
 import { DeviceInfo, EActionType } from './track'
 
@@ -26,7 +26,7 @@ interface ICommonDataType {
 }
 
 export interface ReportDataType extends ICommonDataType {
-  type?: ERRORTYPES
+  type?: EventTypes
   message?: string
   url: string
   name?: string

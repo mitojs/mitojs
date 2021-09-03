@@ -1,6 +1,6 @@
 import { BaseOptionsFieldsIntegrationType } from 'packages/types/src'
 
-export interface BrowserOptionsFieldsTypes extends BaseOptionsFieldsIntegrationType {
+export interface BrowserOptionsFieldsTypes extends BaseOptionsFieldsIntegrationType, BrowserOptionsHooksType {
   /**
    * 静默监控Xhr事件
    */
@@ -23,7 +23,7 @@ export interface BrowserOptionsFieldsTypes extends BaseOptionsFieldsIntegrationT
   silentHistory?: boolean
   /**
    * 静默监控error事件
-   */
+
   silentError?: boolean
   /**
    * 静默监控unhandledrejection事件
@@ -34,7 +34,18 @@ export interface BrowserOptionsFieldsTypes extends BaseOptionsFieldsIntegrationT
    */
   silentHashchange?: boolean
   /**
-   * 静默监控Vue.warn函数
+   * 使用img上报的方式，默认为false，默认是xhr的上报方式
    */
-  silentVue?: boolean
+  useImgUpload?: boolean
+}
+
+export interface BrowserOptionsHooksType {
+  /**
+   * 钩子函数，配置发送到服务端的xhr
+   * 可以对当前xhr实例做一些配置：xhr.setRequestHeader()、xhr.withCredentials
+   * 会在xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8')、
+   * xhr.withCredentials = true,后面调用该函数
+   * ../param xhr XMLHttpRequest的实例
+   */
+  configReportXhr?(xhr: XMLHttpRequest, reportData: any): void
 }

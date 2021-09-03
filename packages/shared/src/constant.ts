@@ -27,6 +27,11 @@ export type WxEvents = WxAppEvents | WxPageEvents | WxRouteEvents
  */
 export type BreadcrumbTypes = BrowserBreadcrumbTypes | WxBreadcrumbTypes
 
+export const BreadcrumbTypes = {
+  ...BrowserBreadcrumbTypes,
+  ...WxBreadcrumbTypes
+}
+
 /**
  * 用户行为类型
  */
@@ -59,6 +64,21 @@ export enum HTTP_CODE {
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
   INTERNAL_EXCEPTION = 500
+}
+
+export enum ToStringTypes {
+  String = 'String',
+  Number = 'Number',
+  Boolean = 'Boolean',
+  RegExp = 'RegExp',
+  Null = 'Null',
+  Undefined = 'Undefined',
+  Symbol = 'Symbol',
+  Object = 'Object',
+  Array = 'Array',
+  process = 'process',
+  Window = 'Window',
+  Function = 'Function'
 }
 
 export const ERROR_TYPE_RE = /^(?:[Uu]ncaught (?:exception: )?)?(?:((?:Eval|Internal|Range|Reference|Syntax|Type|URI|)Error): )?(.*)$/

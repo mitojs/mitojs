@@ -1,5 +1,5 @@
 import { IAnyObject, IntegrationError } from '@mitojs/types'
-import { globalVar, HTTP_CODE, ERRORTYPES } from '@mitojs/shared'
+import { globalVar, HTTP_CODE, ErrorTypes, BreadcrumbTypes, BREADCRUMBCATEGORYS, ToStringTypes } from '@mitojs/shared'
 import { logger } from './logger'
 import { nativeToString, variableTypeDetection } from './is'
 
@@ -120,6 +120,10 @@ export const throttle = (fn: Function, delay: number): Function => {
   }
 }
 
+export function isInclude(origin: string, target: string): boolean {
+  return !!~origin.indexOf(target)
+}
+
 /**
  * 获取当前的时间戳
  * ../returns 返回当前时间戳
@@ -132,17 +136,17 @@ export function typeofAny(target: any, type: string): boolean {
   return typeof target === type
 }
 
-export function toStringAny(target: any, type: string): boolean {
-  return nativeToString.call(target) === type
+// export function validateOption(target: any, targetName: string, expectType: string): boolean {
+//   if (typeofAny(target, expectType)) return true
+//   typeof target !== 'undefined' && logger.error(`${targetName}期望传入${expectType}类型，目前是${typeof target}类型`)
+//   return false
+// }
+
+export function toStringAny(target: any, type: ToStringTypes): boolean {
+  return nativeToString.call(target) === `[object ${type}]`
 }
 
-export function validateOption(target: any, targetName: string, expectType: string): boolean {
-  if (typeofAny(target, expectType)) return true
-  typeof target !== 'undefined' && logger.error(`${targetName}期望传入${expectType}类型，目前是${typeof target}类型`)
-  return false
-}
-
-export function toStringValidateOption(target: any, targetName: string, expectType: string): boolean {
+export function toStringValidateOption(target: any, targetName: string, expectType: ToStringTypes): boolean {
   if (toStringAny(target, expectType)) return true
   typeof target !== 'undefined' && logger.error(`${targetName}期望传入${expectType}类型，目前是${nativeToString.call(target)}类型`)
   return false
@@ -224,6 +228,38 @@ export function getCurrentRoute() {
   return setUrlQuery(currentPage.route, currentPage.options)
 }
 
+export function getBreadcrumbCategory(type: BreadcrumbTypes) {
+  switch (type) {
+    case BreadcrumbTypes.XHR:
+    case BreadcrumbTypes.FETCH:
+      return BREADCRUMBCATEGORYS.HTTP
+    case BreadcrumbTypes.CLICK:
+    case BreadcrumbTypes.ROUTE:
+    case BreadcrumbTypes.TAP:
+    case BreadcrumbTypes.TOUCHMOVE:
+      return BREADCRUMBCATEGORYS.USER
+    case BreadcrumbTypes.CUSTOMER:
+    case BreadcrumbTypes.CONSOLE:
+      return BREADCRUMBCATEGORYS.DEBUG
+    case BreadcrumbTypes.APP_ON_LAUNCH:
+    case BreadcrumbTypes.APP_ON_SHOW:
+    case BreadcrumbTypes.APP_ON_HIDE:
+    case BreadcrumbTypes.PAGE_ON_SHOW:
+    case BreadcrumbTypes.PAGE_ON_HIDE:
+    case BreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
+    case BreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
+    case BreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP:
+      return BREADCRUMBCATEGORYS.LIFECYCLE
+    case BreadcrumbTypes.UNHANDLEDREJECTION:
+    case BreadcrumbTypes.CODE_ERROR:
+    case BreadcrumbTypes.RESOURCE:
+    case BreadcrumbTypes.VUE:
+    case BreadcrumbTypes.REACT:
+    default:
+      return BREADCRUMBCATEGORYS.EXCEPTION
+  }
+}
+
 /**
  * 解析字符串错误信息，返回message、name、stack
  * @param str error string
@@ -254,7 +290,7 @@ export function parseErrorString(str: string): IntegrationError {
     const lineInfo = fileURLMatch.split(':')
     stack.push({
       args: [], // 请求参数
-      func: funcNameMatch || ERRORTYPES.UNKNOWN_FUNCTION, // 前端分解后的报错
+      func: funcNameMatch || ErrorTypes.UNKNOWN_FUNCTION, // 前端分解后的报错
       column: Number(lineInfo.pop()), // 前端分解后的列
       line: Number(lineInfo.pop()), // 前端分解后的行
       url: lineInfo.join(':') // 前端分解后的URL

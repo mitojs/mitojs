@@ -1,7 +1,6 @@
-import { EVENTTYPES, ERRORTYPES, WxAppEvents, WxPageEvents } from '@mitojs/shared'
+import { ErrorTypes } from '@mitojs/shared'
 import { getLocationHref, getTimestamp } from './helpers'
-import { setFlag } from './global'
-import { ReportDataType, InitOptions } from '@mitojs/types'
+import { ReportDataType } from '@mitojs/types'
 import { Severity } from './Severity'
 
 /**
@@ -50,26 +49,6 @@ export function parseUrlToObj(url: string): {
   }
 }
 
-export function setSilentFlag(paramOptions: InitOptions = {}): void {
-  setFlag(EVENTTYPES.XHR, !!paramOptions.silentXhr)
-  setFlag(EVENTTYPES.FETCH, !!paramOptions.silentFetch)
-  setFlag(EVENTTYPES.CONSOLE, !!paramOptions.silentConsole)
-  setFlag(EVENTTYPES.DOM, !!paramOptions.silentDom)
-  setFlag(EVENTTYPES.HISTORY, !!paramOptions.silentHistory)
-  setFlag(EVENTTYPES.ERROR, !!paramOptions.silentError)
-  setFlag(EVENTTYPES.HASHCHANGE, !!paramOptions.silentHashchange)
-  setFlag(EVENTTYPES.UNHANDLEDREJECTION, !!paramOptions.silentUnhandledrejection)
-  setFlag(EVENTTYPES.VUE, !!paramOptions.silentVue)
-  // wx App
-  setFlag(WxAppEvents.AppOnError, !!paramOptions.silentWxOnError)
-  setFlag(WxAppEvents.AppOnUnhandledRejection, !!paramOptions.silentUnhandledrejection)
-  setFlag(WxAppEvents.AppOnPageNotFound, !!paramOptions.silentWxOnPageNotFound)
-  // wx Page
-  setFlag(WxPageEvents.PageOnShareAppMessage, !!paramOptions.silentWxOnShareAppMessage)
-  // mini Route
-  setFlag(EVENTTYPES.MINI_ROUTE, !!paramOptions.silentMiniRoute)
-}
-
 /**
  * 解析error的stack，并返回args、column、line、func、url:
  * @param ex
@@ -113,7 +92,7 @@ export function extractErrorStack(ex: any, level: Severity): ReportDataType {
       }
       element = {
         url: !isNative ? parts[2] : null,
-        func: parts[1] || ERRORTYPES.UNKNOWN_FUNCTION,
+        func: parts[1] || ErrorTypes.UNKNOWN_FUNCTION,
         args: isNative ? [parts[2]] : [],
         line: parts[3] ? +parts[3] : null,
         column: parts[4] ? +parts[4] : null
@@ -121,7 +100,7 @@ export function extractErrorStack(ex: any, level: Severity): ReportDataType {
     } else if ((parts = winjs.exec(lines[i]))) {
       element = {
         url: parts[2],
-        func: parts[1] || ERRORTYPES.UNKNOWN_FUNCTION,
+        func: parts[1] || ErrorTypes.UNKNOWN_FUNCTION,
         args: [],
         line: +parts[3],
         column: parts[4] ? +parts[4] : null
@@ -142,7 +121,7 @@ export function extractErrorStack(ex: any, level: Severity): ReportDataType {
       }
       element = {
         url: parts[3],
-        func: parts[1] || ERRORTYPES.UNKNOWN_FUNCTION,
+        func: parts[1] || ErrorTypes.UNKNOWN_FUNCTION,
         args: parts[2] ? parts[2].split(',') : [],
         line: parts[4] ? +parts[4] : null,
         column: parts[5] ? +parts[5] : null
@@ -152,7 +131,7 @@ export function extractErrorStack(ex: any, level: Severity): ReportDataType {
     }
 
     if (!element.func && element.line) {
-      element.func = ERRORTYPES.UNKNOWN_FUNCTION
+      element.func = ErrorTypes.UNKNOWN_FUNCTION
     }
 
     stack.push(element)

@@ -1,19 +1,23 @@
-import { BreadcrumbTypes, BrowserEventTypes, HttpTypes, HTTP_CODE, MethodTypes } from '@mitojs/shared'
+import { BrowserEventTypes, HttpTypes, HTTP_CODE, MethodTypes } from '@mitojs/shared'
 import { getTimestamp, replaceOld, _global } from '@mitojs/utils'
-import { BasePluginType, EMethods, MITOHttp, voidFun } from '@mitojs/types'
+import { BasePluginType, MITOHttp, voidFun } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
 
 const fetchPlugins: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.FETCH,
   monitor(notify) {
-    fetchReplace.call(this, notify)
+    monitorFetch.call(this, notify)
   },
-  transform(collectedData) {},
-  consumer(transformedData) {}
+  transform(collectedData) {
+    console.log('transform', collectedData)
+  },
+  consumer(transformedData) {
+    console.log('transformedData', transformedData)
+  }
 }
 
-function fetchReplace(this: BrowserClient, notify: (eventName: BrowserEventTypes, data: any) => void) {
-  const { options } = this
+function monitorFetch(this: BrowserClient, notify: (eventName: BrowserEventTypes, data: any) => void) {
+  const { options, transport } = this
   if (!('fetch' in _global)) {
     return
   }
@@ -31,7 +35,7 @@ function fetchReplace(this: BrowserClient, notify: (eventName: BrowserEventTypes
       Object.assign(headers, {
         setRequestHeader: headers.set
       })
-      setTraceId(url, (headerFieldName: string, traceId: string) => {
+      options.setTraceId(url, (headerFieldName: string, traceId: string) => {
         handlerData.traceId = traceId
         headers.set(headerFieldName, traceId)
       })
@@ -42,27 +46,27 @@ function fetchReplace(this: BrowserClient, notify: (eventName: BrowserEventTypes
       }
       return originalFetch.apply(_global, [url, config]).then(
         (res: Response) => {
-          const tempRes = res.clone()
+          const resClone = res.clone()
           const eTime = getTimestamp()
           handlerData = {
             ...handlerData,
             elapsedTime: eTime - sTime,
-            status: tempRes.status,
-            // statusText: tempRes.statusText,
+            status: resClone.status,
+            // statusText: resClone.statusText,
             time: sTime
           }
-          tempRes.text().then((data) => {
-            if (method === MethodTypes.Post && transportData.isSdkTransportUrl(url)) return
-            if (isFilterHttpUrl(url)) return
-            handlerData.responseText = tempRes.status > HTTP_CODE.UNAUTHORIZED && data
+          resClone.text().then((data) => {
+            if (method === MethodTypes.Post && transport.isSelfDsn(url)) return
+            if (options.isFilterHttpUrl(url)) return
+            handlerData.responseText = resClone.status > HTTP_CODE.UNAUTHORIZED && data
             notify(BrowserEventTypes.FETCH, handlerData)
           })
           return res
         },
         (err: Error) => {
           const eTime = getTimestamp()
-          if (method === MethodTypes.Post && transportData.isSdkTransportUrl(url)) return
-          if (isFilterHttpUrl(url)) return
+          if (method === MethodTypes.Post && transport.isSelfDsn(url)) return
+          if (options.isFilterHttpUrl(url)) return
           handlerData = {
             ...handlerData,
             elapsedTime: eTime - sTime,
@@ -76,7 +80,6 @@ function fetchReplace(this: BrowserClient, notify: (eventName: BrowserEventTypes
       )
     }
   })
-  notify(BrowserEventTypes.FETCH, [])
 }
 
 export default fetchPlugins

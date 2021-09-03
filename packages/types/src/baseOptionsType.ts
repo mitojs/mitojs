@@ -19,10 +19,6 @@ export interface BaseOptionsFieldsType {
    */
   apikey?: string
   /**
-   * for browser使用img上报的方式，默认为false，默认是xhr的上报方式
-   */
-  useImgUpload?: boolean
-  /**
    * 默认为关闭，为true是会打印一些信息：breadcrumb
    */
   debug?: boolean
@@ -58,49 +54,41 @@ export interface BaseOptionsFieldsType {
 }
 
 export interface BaseOptionsHooksType {
-  // /**
-  //  * 钩子函数，配置发送到服务端的xhr
-  //  * 可以对当前xhr实例做一些配置：xhr.setRequestHeader()、xhr.withCredentials
-  //  * 会在xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8')、
-  //  * xhr.withCredentials = true,后面调用该函数
-  //  * ../param xhr XMLHttpRequest的实例
-  //  */
-  // configReportXhr?(xhr: XMLHttpRequest, reportData: TransportDataType | any): void
-  // /**
-  //  * 钩子函数，在每次发送事件前会调用
-  //  *
-  //  * ../param event 有SDK生成的错误事件
-  //  * ../returns 如果返回 null | undefined | boolean 时，将忽略本次上传
-  //  */
-  // beforeDataReport?(event: TransportDataType): Promise<TransportDataType | null | CANCEL> | TransportDataType | any | CANCEL | null
-  // /**
-  //  *
-  //  * 钩子函数，每次发送前都会调用
-  //  * @param {TransportDataType} event 上报的数据格式
-  //  * @param {string} url 上报到服务端的地址
-  //  * @returns {string} 返回空时不上报
-  //  * @memberof HooksTypes
-  //  */
-  // configReportUrl?(event: TransportDataType, url: string): string
-  // /**
-  //  * 钩子函数，在每次添加用户行为事件前都会调用
-  //  *
-  //  * ../param breadcrumb 由SDK生成的breacrumb事件栈
-  //  * ../param hint 当次的生成的breadcrumb数据
-  //  * ../returns 如果返回 null | undefined | boolean 时，将忽略本次的push
-  //  */
-  // beforePushBreadcrumb?(breadcrumb: Breadcrumb, hint: BreadcrumbPushData): BreadcrumbPushData | CANCEL
-  // /**
-  //  * 在状态小于400并且不等于0的时候回调用当前hook
-  //  * ../param data 请求状态为200时返回的响应体
-  //  * ../returns 如果返回 null | undefined | boolean 时，将忽略本次的上传
-  //  */
-  // // afterSuccessHttp?<T>(data: T): string | CANCEL
-  // /**
-  //  * 钩子函数，拦截用户页面的ajax请求，并在ajax请求发送前执行该hook，可以对用户发送的ajax请求做xhr.setRequestHeader
-  //  * ../param config 当前请求的
-  //  */
-  // beforeAppAjaxSend?(config: IRequestHeaderConfig, setRequestHeader: IBeforeAppAjaxSendConfig): void
+  /**
+   * 钩子函数，在每次发送事件前会调用
+   *
+   * ../param event 有SDK生成的错误事件
+   * ../returns 如果返回 null | undefined | boolean 时，将忽略本次上传
+   */
+  beforeDataReport?(event: TransportDataType): Promise<TransportDataType | null | CANCEL> | TransportDataType | any | CANCEL | null
+  /**
+   *
+   * 钩子函数，每次发送前都会调用
+   * @param {TransportDataType} event 上报的数据格式
+   * @param {string} url 上报到服务端的地址
+   * @returns {string} 返回空时不上报
+   * @memberof HooksTypes
+   */
+  configReportUrl?(event: TransportDataType, url: string): string
+  /**
+   * 钩子函数，在每次添加用户行为事件前都会调用
+   *
+   * ../param breadcrumb 由SDK生成的breacrumb事件栈
+   * ../param hint 当次的生成的breadcrumb数据
+   * ../returns 如果返回 null | undefined | boolean 时，将忽略本次的push
+   */
+  beforePushBreadcrumb?(breadcrumb: Breadcrumb, hint: BreadcrumbPushData): BreadcrumbPushData | CANCEL
+  /**
+   * 在状态小于400并且不等于0的时候回调用当前hook
+   * ../param data 请求状态为200时返回的响应体
+   * ../returns 如果返回 null | undefined | boolean 时，将忽略本次的上传
+   */
+  // afterSuccessHttp?<T>(data: T): string | CANCEL
+  /**
+   * 钩子函数，拦截用户页面的ajax请求，并在ajax请求发送前执行该hook，可以对用户发送的ajax请求做xhr.setRequestHeader
+   * ../param config 当前请求的
+   */
+  beforeAppAjaxSend?(config: IRequestHeaderConfig, setRequestHeader: IBeforeAppAjaxSendConfig): void
 
   /**
    * 钩子函数，在beforeDataReport后面调用，在整合上报数据和本身SDK信息数据前调用，当前函数执行完后立即将数据错误信息上报至服务端

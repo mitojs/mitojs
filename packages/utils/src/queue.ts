@@ -1,4 +1,3 @@
-import { voidFun } from '@mitojs/shared'
 import { _global } from './global'
 export class Queue {
   private micro: Promise<void>
@@ -8,7 +7,7 @@ export class Queue {
     if (!('Promise' in _global)) return
     this.micro = Promise.resolve()
   }
-  addFn(fn: voidFun): void {
+  addTask(fn: () => void): void {
     if (typeof fn !== 'function') return
     if (!('Promise' in _global)) {
       fn()
@@ -34,4 +33,5 @@ export class Queue {
       temp[i]()
     }
   }
+  // rollup queue
 }

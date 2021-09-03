@@ -1,18 +1,21 @@
-import { EVENTTYPES, WxEvents } from '@mitojs/shared'
-import { Breadcrumb, TransportData, Options } from '@mitojs/core'
+import { EventTypes, WxEvents } from '@mitojs/shared'
+import { Breadcrumb } from '@mitojs/core'
 import { Logger } from './logger'
 import { variableTypeDetection } from './is'
 import { DeviceInfo } from '@mitojs/types'
 
-// MITO的全局变量
+/**
+ *MITO的全局变量
+ *
+ * @export
+ * @interface MitoSupport
+ */
 export interface MitoSupport {
   logger: Logger
   breadcrumb: Breadcrumb
-  transportData: TransportData
-  replaceFlag: { [key in EVENTTYPES]?: boolean }
+  replaceFlag: { [key in EventTypes]?: boolean }
   record?: any[]
   deviceInfo?: DeviceInfo
-  options?: Options
   track?: any
 }
 
@@ -46,12 +49,12 @@ export { _global, _support }
 
 _support.replaceFlag = _support.replaceFlag || {}
 const replaceFlag = _support.replaceFlag
-export function setFlag(replaceType: EVENTTYPES | WxEvents, isSet: boolean): void {
+export function setFlag(replaceType: EventTypes, isSet: boolean): void {
   if (replaceFlag[replaceType]) return
   replaceFlag[replaceType] = isSet
 }
 
-export function getFlag(replaceType: EVENTTYPES | WxEvents): boolean {
+export function getFlag(replaceType: EventTypes): boolean {
   return replaceFlag[replaceType] ? true : false
 }
 

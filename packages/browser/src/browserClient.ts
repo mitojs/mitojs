@@ -1,6 +1,5 @@
-import { Breadcrumb, options } from 'packages/core/src'
-import BaseClient from 'packages/core/src/baseClient'
-import { EventTypes } from 'packages/shared/src'
+import { Breadcrumb, BaseClient } from '@mitojs/core'
+import { EventTypes } from '@mitojs/shared'
 import BrowserOptions from './browserOptions'
 import BrowserTransport from './browserTransport'
 import { BrowserOptionsFieldsTypes } from './types'
@@ -12,7 +11,7 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
   constructor(options: BrowserOptionsFieldsTypes) {
     super(options)
     this.options = new BrowserOptions(options)
+    this.transport = new BrowserTransport(options)
     this.breadcrumnb = new Breadcrumb()
-    this.transport = new BrowserTransport()
   }
 }

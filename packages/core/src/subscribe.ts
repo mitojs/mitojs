@@ -1,37 +1,6 @@
-import { EVENTTYPES, WxEvents } from '@mitojs/shared'
-import { getFlag, getFunctionName, logger, nativeTryCatch, setFlag } from '@mitojs/utils'
-export interface ReplaceHandler {
-  type: EVENTTYPES | WxEvents
-  callback: ReplaceCallback
-}
+import { getFunctionName, logger, nativeTryCatch } from '@mitojs/utils'
 
-type ReplaceCallback = (data: any) => void
-
-const handlers: { [key in EVENTTYPES]?: ReplaceCallback[] } = {}
-
-export function subscribeEvent(handler: ReplaceHandler): boolean {
-  // remove this
-  if (!handler || getFlag(handler.type)) return false
-  setFlag(handler.type, true)
-  handlers[handler.type] = handlers[handler.type] || []
-  handlers[handler.type].push(handler.callback)
-  return true
-}
-
-export function triggerHandlers(type: EVENTTYPES | WxEvents, data: any): void {
-  if (!type || !handlers[type]) return
-  handlers[type].forEach((callback) => {
-    nativeTryCatch(
-      () => {
-        callback(data)
-      },
-      (e: Error) => {
-        logger.error(`重写事件triggerHandlers的回调函数发生错误\nType:${type}\nName: ${getFunctionName(callback)}\nError: ${e}`)
-      }
-    )
-  })
-}
-
+type MonitorCallback = (data: any) => void
 /**
  *发布订阅类
  *
@@ -40,7 +9,7 @@ export function triggerHandlers(type: EVENTTYPES | WxEvents, data: any): void {
  * @template T 事件枚举
  */
 export default class Subscrib<T> {
-  dep: Map<T, ReplaceCallback[]> = new Map()
+  dep: Map<T, MonitorCallback[]> = new Map()
   constructor() {}
   watch(eventName: T, callBack: (data: any) => any) {
     const fns = this.dep.get(eventName)
