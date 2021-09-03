@@ -1,6 +1,6 @@
-import { _support, logger, Queue, isInclude, toStringValidateOption } from '@mitojs/utils'
+import { _support, logger, Queue, isInclude, toStringValidateOption, createErrorId, isEmpty } from '@mitojs/utils'
 import { SDK_NAME, SDK_VERSION, ToStringTypes } from '@mitojs/shared'
-import { AuthInfo, BaseOptionsFieldsIntegrationType } from '@mitojs/types'
+import { AuthInfo, BaseOptionsFieldsIntegrationType, BreadcrumbPushData, ReportDataType, TransportDataType } from '@mitojs/types'
 /**
  * 用来传输数据类，包含img标签、xhr请求
  * 功能：支持img请求和xhr请求、可以断点续存（保存在localstorage），
@@ -8,17 +8,16 @@ import { AuthInfo, BaseOptionsFieldsIntegrationType } from '@mitojs/types'
  *
  * ../class Transport
  */
-export default abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> {
+export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> {
   apikey = ''
   dsn = ''
   queue: Queue
-  beforeDataReport: unknown = null
+  beforeDataReport: Promise<TransportDataType | null | undefined | boolean> | TransportDataType | any | null | undefined | boolean = null
   backTrackerId: unknown = null
   configReportUrl: unknown = null
-
-  constructor(options: O) {
+  maxDuplicateCount = 3
+  constructor() {
     this.queue = new Queue()
-    this.bindOptions(options)
   }
   getAuthInfo(): AuthInfo {
     const trackerId = this.getTrackerId()
@@ -45,12 +44,62 @@ export default abstract class BaseTransport<O extends BaseOptionsFieldsIntegrati
     return this.dsn && isInclude(targetUrl, this.dsn)
   }
   bindOptions(options: Partial<O> = {}): void {
-    const { dsn, beforeDataReport, apikey, backTrackerId, configReportUrl } = options
+    const { dsn, beforeDataReport, apikey, maxDuplicateCount, backTrackerId, configReportUrl } = options
     toStringValidateOption(apikey, 'apikey', ToStringTypes.String) && (this.apikey = apikey)
     toStringValidateOption(dsn, 'dsn', ToStringTypes.String) && (this.dsn = dsn)
+    toStringValidateOption(maxDuplicateCount, 'maxDuplicateCount', ToStringTypes.Number) && (this.maxDuplicateCount = maxDuplicateCount)
     toStringValidateOption(beforeDataReport, 'beforeDataReport', ToStringTypes.Function) && (this.beforeDataReport = beforeDataReport)
     toStringValidateOption(backTrackerId, 'backTrackerId', ToStringTypes.Function) && (this.backTrackerId = backTrackerId)
     toStringValidateOption(configReportUrl, 'configReportUrl', ToStringTypes.Function) && (this.configReportUrl = configReportUrl)
   }
-  abstract post(data: any, url: string): void
+  async send(data: any, breadcrumb: BreadcrumbPushData[]) {
+    const errorId = createErrorId(data, this.apikey, this.maxDuplicateCount)
+    if (!errorId) return false
+    data.errorId = errorId
+    let transportData = {
+      ...this.getTransportData(data),
+      breadcrumb
+    }
+    if (typeof this.beforeDataReport === 'function') {
+      transportData = await this.beforeDataReport(transportData)
+      if (!transportData) return false
+    }
+    let dsn = this.dsn
+    if (isEmpty(dsn)) {
+      logger.error('dsn为空，没有传入监控错误上报的dsn地址，请在init中传入')
+      return
+    }
+    if (typeof this.configReportUrl === 'function') {
+      dsn = this.configReportUrl(transportData, dsn)
+      if (!dsn) return
+    }
+    this.sendToServer(data, dsn)
+  }
+  /**
+   * post方式，子类需要重写
+   *
+   * @abstract
+   * @param {(TransportDataType | any)} data
+   * @param {string} url
+   * @memberof BaseTransport
+   */
+  abstract post(data: TransportDataType | any, url: string): void
+  /**
+   * 最终上报到服务器的方法
+   *
+   * @abstract
+   * @param {(TransportDataType | any)} data
+   * @param {string} url
+   * @memberof BaseTransport
+   */
+  abstract sendToServer(data: TransportDataType | any, url: string): void
+  /**
+   * 获取上报的格式
+   *
+   * @abstract
+   * @param {ReportDataType} data
+   * @return {TransportDataType}  {TransportDataType}
+   * @memberof BaseTransport
+   */
+  abstract getTransportData(data: ReportDataType): TransportDataType
 }

@@ -1,3 +1,18 @@
+import { BreadcrumbPushData, TransportDataType } from '@mitojs/types'
+import { Breadcrumb } from '@mitojs/core'
+type CANCEL = null | undefined | boolean
+
+type TSetRequestHeader = (key: string, value: string) => {}
+export interface IBeforeAppAjaxSendConfig {
+  setRequestHeader: TSetRequestHeader
+}
+
+export type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE' | 'OPTIONS'
+
+interface IRequestHeaderConfig {
+  url: HttpMethod
+  method: string
+}
 export interface BaseOptionsType<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType>
   extends BaseOptionsFieldsIntegrationType {
   bindOptions(options: O): void

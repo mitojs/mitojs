@@ -27,13 +27,13 @@
         a.split('/')
       }
       function promiseError() {
-        const promiseWrap = () => new Promise((resolve, reject) => {
-          reject('promise reject')
-        })
-        promiseWrap().then(res => {
+        const promiseWrap = () =>
+          new Promise((resolve, reject) => {
+            reject('promise reject')
+          })
+        promiseWrap().then((res) => {
           console.log('res', res)
         })
-
       }
       function mitoLog() {
         MITO.log({ message: { one: 111 }, tag: '测试' })

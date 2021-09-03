@@ -112,7 +112,8 @@ const iifePackage = {
     name: 'MITO',
     ...common.output
   },
-  plugins: [...common.plugins, terser()]
+  // , terser()
+  plugins: [...common.plugins]
 }
 const total = {
   esmPackage,

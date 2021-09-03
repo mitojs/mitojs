@@ -7,14 +7,14 @@ import { WxAppEvents, WxBreadcrumbTypes, WxEventTypes, WxPageEvents, WxRouteEven
 export const enum ErrorTypes {
   UNKNOWN = 'UNKNOWN',
   UNKNOWN_FUNCTION = 'UNKNOWN_FUNCTION',
-  JAVASCRIPT_ERROR = 'JAVASCRIPT_ERROR',
-  LOG_ERROR = 'LOG_ERROR',
-  FETCH_ERROR = 'HTTP_ERROR',
-  VUE_ERROR = 'VUE_ERROR',
-  REACT_ERROR = 'REACT_ERROR',
-  RESOURCE_ERROR = 'RESOURCE_ERROR',
-  PROMISE_ERROR = 'PROMISE_ERROR',
-  ROUTE_ERROR = 'ROUTE_ERROR'
+  JAVASCRIPT = 'JAVASCRIPT',
+  LOG = 'LOG',
+  HTTP = 'HTTP',
+  VUE = 'VUE',
+  REACT = 'REACT',
+  RESOURCE = 'RESOURCE',
+  PROMISE = 'PROMISE',
+  ROUTE = 'ROUTE'
 }
 
 /**
@@ -25,7 +25,7 @@ export type WxEvents = WxAppEvents | WxPageEvents | WxRouteEvents
 /**
  * 用户行为栈事件类型
  */
-export type BreadcrumbTypes = BrowserBreadcrumbTypes & WxBreadcrumbTypes
+export type BreadcrumbTypes = BrowserBreadcrumbTypes | WxBreadcrumbTypes
 
 // export const BreadcrumbTypes = {
 //   ...BrowserBreadcrumbTypes,

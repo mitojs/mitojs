@@ -1,12 +1,14 @@
 import { ToStringTypes } from '@mitojs/shared'
 import { logger, getTimestamp, slientConsoleScope, _support, toStringValidateOption } from '@mitojs/utils'
-import { BreadcrumbPushData, InitOptions } from '@mitojs/types'
+import { BaseOptionsFieldsIntegrationType, BreadcrumbPushData, InitOptions } from '@mitojs/types'
 
-export class Breadcrumb {
+export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> {
   maxBreadcrumbs = 10
   beforePushBreadcrumb: unknown = null
   stack: BreadcrumbPushData[] = []
-  constructor() {}
+  constructor(options: O) {
+    this.bindOptions(options)
+  }
   /**
    * 添加用户行为栈
    *
@@ -55,5 +57,3 @@ export class Breadcrumb {
       (this.beforePushBreadcrumb = beforePushBreadcrumb)
   }
 }
-const breadcrumb = _support.breadcrumb || (_support.breadcrumb = new Breadcrumb())
-export { breadcrumb }

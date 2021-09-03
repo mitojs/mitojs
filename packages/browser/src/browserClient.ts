@@ -7,11 +7,11 @@ import { BrowserOptionsFieldsTypes } from './types'
 export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTypes> {
   transport: BrowserTransport
   options: BrowserOptions
-  breadcrumnb: Breadcrumb
+  breadcrumb: Breadcrumb<BrowserOptionsFieldsTypes>
   constructor(options: BrowserOptionsFieldsTypes) {
     super(options)
     this.options = new BrowserOptions(options)
     this.transport = new BrowserTransport(options)
-    this.breadcrumnb = new Breadcrumb()
+    this.breadcrumb = new Breadcrumb(options)
   }
 }

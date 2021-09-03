@@ -1,6 +1,6 @@
-import { BrowserEventTypes, HttpTypes, HTTP_CODE, MethodTypes } from '@mitojs/shared'
-import { getTimestamp, replaceOld, _global } from '@mitojs/utils'
-import { BasePluginType, MITOHttp, voidFun } from '@mitojs/types'
+import { BrowserBreadcrumbTypes, BrowserEventTypes, HttpTypes, HTTP_CODE, MethodTypes } from '@mitojs/shared'
+import { getTimestamp, httpTransform, replaceOld, Severity, _global, getBreadcrumbCategoryInBrowser } from '@mitojs/utils'
+import { BasePluginType, HttpTransformed, MITOHttp, ReportDataType, voidFun } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
 
 const fetchPlugins: BasePluginType<BrowserEventTypes, BrowserClient> = {
@@ -9,10 +9,31 @@ const fetchPlugins: BasePluginType<BrowserEventTypes, BrowserClient> = {
     monitorFetch.call(this, notify)
   },
   transform(collectedData) {
-    console.log('transform', collectedData)
+    return httpTransform(collectedData)
   },
-  consumer(transformedData) {
-    console.log('transformedData', transformedData)
+  consumer(transformedData: HttpTransformed) {
+    const type = BrowserBreadcrumbTypes.FETCH
+    const isError =
+      transformedData.response.status === 0 ||
+      transformedData.response.status === HTTP_CODE.BAD_REQUEST ||
+      transformedData.response.status > HTTP_CODE.UNAUTHORIZED
+    this.breadcrumb.push({
+      type,
+      category: getBreadcrumbCategoryInBrowser(type),
+      data: { ...transformedData },
+      level: Severity.Info,
+      time: transformedData.time
+    })
+    if (isError) {
+      this.breadcrumb.push({
+        type,
+        category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CODE_ERROR),
+        data: { ...transformedData },
+        level: Severity.Error,
+        time: transformedData.time
+      })
+      this.transport.send(transformedData, this.breadcrumb.getStack())
+    }
   }
 }
 
@@ -58,7 +79,7 @@ function monitorFetch(this: BrowserClient, notify: (eventName: BrowserEventTypes
           resClone.text().then((data) => {
             if (method === MethodTypes.Post && transport.isSelfDsn(url)) return
             if (options.isFilterHttpUrl(url)) return
-            handlerData.responseText = resClone.status > HTTP_CODE.UNAUTHORIZED && data
+            handlerData.responseText = data
             notify(BrowserEventTypes.FETCH, handlerData)
           })
           return res

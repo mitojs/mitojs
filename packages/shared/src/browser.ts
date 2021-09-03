@@ -13,7 +13,6 @@ export const enum BrowserEventTypes {
   ERROR = 'error',
   HASHCHANGE = 'hashchange',
   UNHANDLEDREJECTION = 'unhandledrejection',
-  MITO = 'mito',
   VUE = 'Vue'
 }
 

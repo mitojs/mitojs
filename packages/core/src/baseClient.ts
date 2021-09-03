@@ -12,6 +12,7 @@ export class BaseClient<O extends BaseOptionsFieldsIntegrationType, E extends Ev
   use(plugins: BasePluginType<E>[]) {
     const subscrib = new Subscrib<E>()
     plugins.forEach((item) => {
+      item.monitor.call(this, subscrib.notify.bind(subscrib))
       const wrapperTranform = (...args: any[]) => {
         const res = item.transform.apply(this, args)
         item.consumer.call(this, res)

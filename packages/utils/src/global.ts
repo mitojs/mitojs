@@ -12,7 +12,6 @@ import { DeviceInfo } from '@mitojs/types'
  */
 export interface MitoSupport {
   logger: Logger
-  breadcrumb: Breadcrumb
   replaceFlag: { [key in EventTypes]?: boolean }
   record?: any[]
   deviceInfo?: DeviceInfo

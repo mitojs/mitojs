@@ -1,7 +1,18 @@
-import { IAnyObject, IntegrationError } from '@mitojs/types'
-import { globalVar, HTTP_CODE, ErrorTypes, BreadcrumbTypes, BREADCRUMBCATEGORYS, ToStringTypes, BrowserBreadcrumbTypes } from '@mitojs/shared'
+import { IAnyObject, IntegrationError, MITOHttp } from '@mitojs/types'
+import {
+  globalVar,
+  HTTP_CODE,
+  ErrorTypes,
+  BreadcrumbTypes,
+  BREADCRUMBCATEGORYS,
+  ToStringTypes,
+  BrowserBreadcrumbTypes
+} from '@mitojs/shared'
 import { logger } from './logger'
 import { nativeToString, variableTypeDetection } from './is'
+import { fromHttpStatus, SpanStatus } from './httpStatus'
+import { Severity } from './Severity'
+import { getRealPath } from './errorId'
 
 export function getLocationHref(): string {
   if (typeof document === 'undefined' || document.location == null) return ''
@@ -228,9 +239,6 @@ export function getCurrentRoute() {
   return setUrlQuery(currentPage.route, currentPage.options)
 }
 
-
-
-
 /**
  * 解析字符串错误信息，返回message、name、stack
  * @param str error string
@@ -271,5 +279,38 @@ export function parseErrorString(str: string): IntegrationError {
     message,
     name,
     stack
+  }
+}
+
+export function httpTransform(httpCollectedData: MITOHttp) {
+  let message = ''
+  const { elapsedTime, time, method, traceId, type, status, url } = httpCollectedData
+  const name = `${type}--${httpCollectedData.method}`
+  if (status === 0) {
+    message =
+      elapsedTime <= globalVar.crossOriginThreshold ? 'http请求失败，失败原因：跨域限制或域名不存在' : 'http请求失败，失败原因：超时'
+  } else {
+    message = fromHttpStatus(status)
+  }
+  message = message === SpanStatus.Ok ? message : `${message} ${getRealPath(url)}`
+  return {
+    type: ErrorTypes.HTTP,
+    url: getLocationHref(),
+    time,
+    elapsedTime,
+    level: Severity.Low,
+    message,
+    name,
+    request: {
+      httpType: type,
+      traceId,
+      method,
+      url: url,
+      data: httpCollectedData.reqData || ''
+    },
+    response: {
+      status,
+      data: httpCollectedData.responseText
+    }
   }
 }

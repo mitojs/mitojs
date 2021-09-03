@@ -14,19 +14,11 @@ export class BaseOptions<O extends BaseOptionsFieldsIntegrationType = BaseOption
     this.bindOptions(options)
   }
   bindOptions(options: O) {
-    const {
-      enableTraceId,
-      filterXhrUrlRegExp,
-      traceIdFieldName,
-      throttleDelayTime,
-      includeHttpUrlTraceIdRegExp,
-      maxDuplicateCount,
-      beforeAppAjaxSend
-    } = options
+    const { enableTraceId, filterXhrUrlRegExp, traceIdFieldName, throttleDelayTime, includeHttpUrlTraceIdRegExp, beforeAppAjaxSend } =
+      options
     toStringValidateOption(enableTraceId, 'enableTraceId', ToStringTypes.Boolean) && (this.enableTraceId = enableTraceId)
     toStringValidateOption(traceIdFieldName, 'traceIdFieldName', ToStringTypes.String) && (this.traceIdFieldName = traceIdFieldName)
     toStringValidateOption(throttleDelayTime, 'throttleDelayTime', ToStringTypes.Number) && (this.throttleDelayTime = throttleDelayTime)
-    toStringValidateOption(maxDuplicateCount, 'maxDuplicateCount', ToStringTypes.Number) && (this.maxDuplicateCount = maxDuplicateCount)
     toStringValidateOption(filterXhrUrlRegExp, 'filterXhrUrlRegExp', ToStringTypes.RegExp) && (this.filterXhrUrlRegExp = filterXhrUrlRegExp)
     toStringValidateOption(includeHttpUrlTraceIdRegExp, 'includeHttpUrlTraceIdRegExp', ToStringTypes.RegExp) &&
       (this.includeHttpUrlTraceIdRegExp = includeHttpUrlTraceIdRegExp)

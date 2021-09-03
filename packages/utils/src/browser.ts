@@ -49,7 +49,7 @@ export function parseUrlToObj(url: string): {
   }
 }
 
-export function getBreadcrumbCategoryInBrowser(type: BreadcrumbTypes) {
+export function getBreadcrumbCategoryInBrowser(type: BrowserBreadcrumbTypes) {
   switch (type) {
     case BrowserBreadcrumbTypes.XHR:
     case BrowserBreadcrumbTypes.FETCH:

@@ -12,6 +12,7 @@ export default class Subscrib<T> {
   dep: Map<T, MonitorCallback[]> = new Map()
   constructor() {}
   watch(eventName: T, callBack: (data: any) => any) {
+    console.log(this)
     const fns = this.dep.get(eventName)
     if (fns) {
       this.dep.set(eventName, fns.concat(callBack))
@@ -19,7 +20,8 @@ export default class Subscrib<T> {
     }
     this.dep.set(eventName, [callBack])
   }
-  notify<D>(eventName: T, data: D) {
+  notify<D = any>(eventName: T, data: D) {
+    console.log(this)
     const fns = this.dep.get(eventName)
     if (!eventName || !fns) return
     fns.forEach((fn) => {
