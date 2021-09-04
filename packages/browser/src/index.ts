@@ -3,10 +3,11 @@ import { BrowserClient } from './browserClient'
 import { BrowserOptionsFieldsTypes } from './types'
 import fetchPlugins from './plugins/fetch'
 import xhrPlugin from './plugins/xhr'
+import domPlugins from './plugins/dom'
 
 function createInstance(options: BrowserOptionsFieldsTypes = {}) {
   const browserClient = new BrowserClient(options)
-  const finalPlugins = [fetchPlugins, xhrPlugin]
+  const finalPlugins = [fetchPlugins, xhrPlugin, domPlugins]
   browserClient.use(finalPlugins)
   return browserClient
 }
