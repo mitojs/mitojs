@@ -1,4 +1,5 @@
 import { HttpTypes } from '@mitojs/shared'
+import { HttpCollectedType } from './http'
 
 export type voidFun = () => void
 
@@ -12,26 +13,9 @@ export interface ResourceErrorTarget {
   localName?: string
 }
 
-export interface MITOHttp {
-  type: HttpTypes
-  traceId?: string
-  method?: string
-  url?: string
-  status?: number
-  reqData?: any
-  // statusText?: string
-  sTime?: number
-  elapsedTime?: number
-  responseText?: any
-  time?: number
-  isSdkUrl?: boolean
-  // for wx
-  errMsg?: string
-}
-
 export interface MITOXMLHttpRequest extends XMLHttpRequest {
   [key: string]: any
-  mito_xhr?: MITOHttp
+  httpCollect?: HttpCollectedType
 }
 
 export interface ErrorStack {

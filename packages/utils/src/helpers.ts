@@ -231,28 +231,3 @@ export function getCurrentRoute() {
   const currentPage = pages.pop()
   return setUrlQuery(currentPage.route, currentPage.options)
 }
-
-export function httpTransform(httpCollectedData: HttpCollectedType): HttpTransformedType {
-  let message = ''
-  const {
-    request: { httpType, method, url },
-    response: { status },
-    elapsedTime
-  } = httpCollectedData
-  const name = `${httpType}--${method}`
-  if (status === 0) {
-    message =
-      elapsedTime <= globalVar.crossOriginThreshold ? 'http请求失败，失败原因：跨域限制或域名不存在' : 'http请求失败，失败原因：超时'
-  } else {
-    message = fromHttpStatus(status)
-  }
-  message = message === SpanStatus.Ok ? message : `${message} ${getRealPath(url)}`
-  return {
-    ...httpCollectedData,
-    type: ErrorTypes.HTTP,
-    url: getLocationHref(),
-    level: Severity.Low,
-    message,
-    name
-  }
-}

@@ -66,20 +66,6 @@ function xhrReplace(): void {
         sTime: getTimestamp(),
         type: HTTPTYPE.XHR
       }
-      // this.ontimeout = function () {
-      //   console.log('超时', this)
-      // }
-      // this.timeout = 10000
-      // on(this, EVENTTYPES.ERROR, function (this: MITOXMLHttpRequest) {
-      //   if (this.mito_xhr.isSdkUrl) return
-      //   this.mito_xhr.isError = true
-      //   const eTime = getTimestamp()
-      //   this.mito_xhr.time = eTime
-      //   this.mito_xhr.status = this.status
-      //   this.mito_xhr.elapsedTime = eTime - this.mito_xhr.sTime
-      //   triggerHandlers(EVENTTYPES.XHR, this.mito_xhr)
-      //   logger.error(`接口错误,接口信息:${JSON.stringify(this.mito_xhr)}`)
-      // })
       originalOpen.apply(this, args)
     }
   })

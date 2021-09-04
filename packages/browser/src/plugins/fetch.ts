@@ -1,7 +1,8 @@
-import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes, HttpTypes, HTTP_CODE } from '@mitojs/shared'
-import { getTimestamp, httpTransform, replaceOld, Severity, _global, getBreadcrumbCategoryInBrowser } from '@mitojs/utils'
+import { BrowserEventTypes, HttpTypes } from '@mitojs/shared'
+import { getTimestamp, replaceOld, _global } from '@mitojs/utils'
 import { BasePluginType, HttpCollectedType, HttpTransformedType, voidFun } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
+import { httpTransform, httpTransformedDataConsumer } from './xhr'
 
 const fetchPlugins: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.FETCH,
@@ -12,29 +13,7 @@ const fetchPlugins: BasePluginType<BrowserEventTypes, BrowserClient> = {
     return httpTransform(collectedData)
   },
   consumer(transformedData: HttpTransformedType) {
-    const type = BrowserBreadcrumbTypes.FETCH
-    const {
-      response: { status },
-      time
-    } = transformedData
-    const isError = status === 0 || status === HTTP_CODE.BAD_REQUEST || status > HTTP_CODE.UNAUTHORIZED
-    this.breadcrumb.push({
-      type,
-      category: getBreadcrumbCategoryInBrowser(type),
-      data: { ...transformedData },
-      level: Severity.Info,
-      time
-    })
-    if (isError) {
-      this.breadcrumb.push({
-        type,
-        category: BREADCRUMBCATEGORYS.EXCEPTION,
-        data: { ...transformedData },
-        level: Severity.Error,
-        time
-      })
-      this.transport.send(transformedData, this.breadcrumb.getStack())
-    }
+    httpTransformedDataConsumer.call(this, transformedData)
   }
 }
 
