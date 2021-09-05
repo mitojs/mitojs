@@ -14,4 +14,7 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
     this.transport = new BrowserTransport(options)
     this.breadcrumb = new Breadcrumb(options)
   }
+  isPluginEnable(name: BrowserOptionsFieldsTypes) {
+    // 拼接slient前缀字段 判断是否为true silentXhr
+  }
 }

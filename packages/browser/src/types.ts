@@ -1,5 +1,7 @@
 import { BaseOptionsFieldsIntegrationType } from 'packages/types/src'
 
+type SlientBrowserEventTypes = 'silentXhr' | 'silentFetch'
+
 export interface BrowserOptionsFieldsTypes extends BaseOptionsFieldsIntegrationType, BrowserOptionsHooksType {
   /**
    * 静默监控Xhr事件
