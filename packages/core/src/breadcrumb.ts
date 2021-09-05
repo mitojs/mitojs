@@ -22,23 +22,22 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
    * @param {BreadcrumbPushData} data
    * @memberof Breadcrumb
    */
-  push(data: BreadcrumbPushData): void {
+  push(data: BreadcrumbPushData): BreadcrumbPushData[] {
     if (typeof this.beforePushBreadcrumb === 'function') {
       let result: BreadcrumbPushData = null
       // 如果用户输入console，并且logger是打开的会造成无限递归，
       // 应该加入一个开关，执行这个函数前，把监听console的行为关掉
       const beforePushBreadcrumb = this.beforePushBreadcrumb
       slientConsoleScope(() => {
-        result = beforePushBreadcrumb(this, data)
+        result = beforePushBreadcrumb.call(this, data)
       })
-      if (!result) return
-      this.immediatePush(result)
-      return
+      if (!result) return this.stack
+      return this.immediatePush(result)
     }
-    this.immediatePush(data)
+    return this.immediatePush(data)
   }
 
-  immediatePush(data: BreadcrumbPushData): void {
+  immediatePush(data: BreadcrumbPushData): BreadcrumbPushData[] {
     data.time || (data.time = getTimestamp())
     if (this.stack.length >= this.maxBreadcrumbs) {
       this.shift()
@@ -47,6 +46,7 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
     // make sure xhr fetch is behind button click
     this.stack.sort((a, b) => a.time - b.time)
     logger.log(this.stack)
+    return this.stack
   }
 
   shift(): boolean {

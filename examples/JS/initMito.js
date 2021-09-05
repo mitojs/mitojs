@@ -8,5 +8,3 @@ const instance = MITO.init({
   enableTraceId: true
 })
 window._MITO_ = instance
-
-console.log(instance)

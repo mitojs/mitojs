@@ -13,7 +13,6 @@ export default class BrowserTransport extends BaseTransport<BrowserOptionsFields
   }
   post(data: any, url: string) {
     const requestFun = (): void => {
-      console.log('post')
       const xhr = new XMLHttpRequest()
       xhr.open(MethodTypes.Post, url)
       xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')

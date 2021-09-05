@@ -1,11 +1,11 @@
 import { BrowserEventTypes } from '@mitojs/shared'
 import { getLocationHref, replaceOld, supportsHistory, _global } from '@mitojs/utils'
-import { BasePluginType, RouteChangeType, voidFun } from '@mitojs/types'
+import { BasePluginType, RouteChangeCollectType, voidFun } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
 import { routeTransform, routeTransformedConsumer } from './hashRoute'
 
 const historyRoutePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
-  name: BrowserEventTypes.HASHCHANGE,
+  name: BrowserEventTypes.HISTORY,
   monitor(notify) {
     let lastHref: string
     if (!supportsHistory()) return
@@ -35,14 +35,14 @@ const historyRoutePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
         return originalHistoryFn.apply(this, args)
       }
     }
-    // 下面这两个事件是人为调用，但是不触发onpopstate
+    // 以下两个事件是人为调用，但是不触发onpopstate
     replaceOld(_global.history, 'pushState', historyReplaceFn)
     replaceOld(_global.history, 'replaceState', historyReplaceFn)
   },
-  transform(collectedData: RouteChangeType) {
+  transform(collectedData: RouteChangeCollectType) {
     return routeTransform(collectedData)
   },
-  consumer(transformedData: RouteChangeType) {
+  consumer(transformedData: RouteChangeCollectType) {
     routeTransformedConsumer.call(this, transformedData)
   }
 }

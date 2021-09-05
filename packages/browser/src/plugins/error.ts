@@ -32,13 +32,13 @@ const errorPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   },
   consumer(transformedData: ReportDataType) {
     const type = transformedData.type === ErrorTypes.RESOURCE ? BrowserBreadcrumbTypes.RESOURCE : BrowserBreadcrumbTypes.CODE_ERROR
-    this.breadcrumb.push({
+    const breadcrumbStack = this.breadcrumb.push({
       type,
       category: BREADCRUMBCATEGORYS.EXCEPTION,
       data: transformedData,
       level: Severity.Error
     })
-    this.transport.send(transformedData, this.breadcrumb.getStack())
+    this.transport.send(transformedData, breadcrumbStack)
   }
 }
 

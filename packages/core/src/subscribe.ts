@@ -21,7 +21,6 @@ export default class Subscrib<T> {
     this.dep.set(eventName, [callBack])
   }
   notify<D = any>(eventName: T, data: D) {
-    console.log(this)
     const fns = this.dep.get(eventName)
     if (!eventName || !fns) return
     fns.forEach((fn) => {

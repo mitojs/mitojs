@@ -13,7 +13,12 @@ export interface BasePluginType<T extends EventTypes, C extends BaseClientType =
   consumer: (this: C, transformedData: any) => void
 }
 
-export interface RouteChangeType {
+export interface RouteChangeCollectType {
   from: string
   to: string
+}
+
+export interface ConsoleCollectType {
+  args: any[]
+  level: string
 }

@@ -7,11 +7,22 @@ import domPlugins from './plugins/dom'
 import errorPlugins from './plugins/error'
 import hashRoutePlugin from './plugins/hashRoute'
 import historyRoutePlugin from './plugins/historyRoute'
+import consolePlugin from './plugins/console'
+import unhandlerejectionPlugin from './plugins/unhandlerejecttion'
 
 function createInstance(options: BrowserOptionsFieldsTypes = {}) {
   const browserClient = new BrowserClient(options)
-  const finalPlugins = [fetchPlugins, xhrPlugin, domPlugins, errorPlugins, hashRoutePlugin, historyRoutePlugin]
-  browserClient.use(finalPlugins)
+  const plugins = [
+    fetchPlugins,
+    xhrPlugin,
+    domPlugins,
+    errorPlugins,
+    hashRoutePlugin,
+    historyRoutePlugin,
+    consolePlugin,
+    unhandlerejectionPlugin
+  ]
+  browserClient.use(plugins)
   return browserClient
 }
 
