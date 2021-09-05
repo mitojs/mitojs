@@ -35,7 +35,7 @@ export interface BaseTransformType {
   url: string
 }
 
-export interface ReportDataType extends HttpTransformedType {
+export interface ReportDataType extends Partial<HttpTransformedType> {
   stack?: any
   errorId?: number
   // vue

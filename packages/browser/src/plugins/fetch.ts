@@ -4,7 +4,7 @@ import { BasePluginType, HttpCollectedType, HttpTransformedType, voidFun } from 
 import { BrowserClient } from '../browserClient'
 import { httpTransform, httpTransformedDataConsumer } from './xhr'
 
-const fetchPlugins: BasePluginType<BrowserEventTypes, BrowserClient> = {
+const fetchPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.FETCH,
   monitor(notify) {
     monitorFetch.call(this, notify)
@@ -76,4 +76,4 @@ function monitorFetch(this: BrowserClient, notify: (eventName: BrowserEventTypes
   })
 }
 
-export default fetchPlugins
+export default fetchPlugin

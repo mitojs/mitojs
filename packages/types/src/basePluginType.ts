@@ -12,3 +12,8 @@ export interface BasePluginType<T extends EventTypes, C extends BaseClientType =
   // 拿到转换后的数据进行breadcrumb、report等等操作
   consumer: (this: C, transformedData: any) => void
 }
+
+export interface RouteChangeType {
+  from: string
+  to: string
+}

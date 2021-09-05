@@ -111,26 +111,3 @@ export interface BaseOptionsHooksType {
    */
   backTrackerId?(): string | number
 }
-
-// export interface WxSilentEventTypes {
-//   /**
-//    * 静默监控AppOnError
-//    */
-//   silentWxOnError?: boolean
-//   /**
-//    * 静默监控AppOnUnhandledRejection
-//    */
-//   silentWxOnUnhandledRejection?: boolean
-//   /**
-//    * 静默监控AppOnPageNotFound
-//    */
-//   silentWxOnPageNotFound?: boolean
-//   /**
-//    * 静默监控PageOnShareAppMessage
-//    */
-//   silentWxOnShareAppMessage?: boolean
-//   /**
-//    * 静默监控小程序路由
-//    */
-//   silentMiniRoute?: boolean
-// }
