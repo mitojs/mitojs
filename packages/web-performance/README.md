@@ -3,11 +3,11 @@
 ## 安装
 使用npm
 ```bash
-npm i @zyf2e/monitor-web-performance
+npm i @mitojs/web-performance
 ```
 使用yarn
 ```bash
-yarn add @zyf2e/monitor-web-performance
+yarn add @mitojs/web-performance
 ```
 使用cdn
 ```bash
