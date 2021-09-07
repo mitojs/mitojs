@@ -13,8 +13,7 @@ interface IRequestHeaderConfig {
   url: HttpMethod
   method: string
 }
-export interface BaseOptionsType<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType>
-  extends BaseOptionsFieldsIntegrationType {
+export interface BaseOptionsType<O extends BaseOptionsFieldsIntegrationType> extends BaseOptionsFieldsIntegrationType {
   bindOptions(options: O): void
 }
 

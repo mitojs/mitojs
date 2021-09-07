@@ -1,49 +1,6 @@
-import { getBigVersion, getLocationHref, getTimestamp, variableTypeDetection, Severity } from '@mitojs/utils'
-import { ERRORTYPES, BREADCRUMBTYPES } from '@mitojs/shared'
-import { ViewModel, VueInstance } from './types'
-import { breadcrumb, transportData } from '@mitojs/core'
-import { ReportDataType } from '@mitojs/types'
+import { ViewModel } from '@mitojs/types'
 
-export function handleVueError(
-  err: Error,
-  vm: ViewModel,
-  info: string,
-  level: Severity,
-  breadcrumbLevel: Severity,
-  Vue: VueInstance
-): void {
-  const version = Vue?.version
-  let data: ReportDataType = {
-    type: ERRORTYPES.VUE_ERROR,
-    message: `${err.message}(${info})`,
-    level,
-    url: getLocationHref(),
-    name: err.name,
-    stack: err.stack || [],
-    time: getTimestamp()
-  }
-  if (variableTypeDetection.isString(version)) {
-    switch (getBigVersion(version)) {
-      case 2:
-        data = { ...data, ...vue2VmHandler(vm) }
-        break
-      case 3:
-        data = { ...data, ...vue3VmHandler(vm) }
-        break
-      default:
-        return
-        break
-    }
-  }
-  breadcrumb.push({
-    type: BREADCRUMBTYPES.VUE,
-    category: breadcrumb.getCategory(BREADCRUMBTYPES.VUE),
-    data,
-    level: breadcrumbLevel
-  })
-  transportData.send(data)
-}
-function vue2VmHandler(vm: ViewModel) {
+export function vue2VmHandler(vm: ViewModel) {
   let componentName = ''
   if (vm.$root === vm) {
     componentName = 'root'
@@ -58,7 +15,7 @@ function vue2VmHandler(vm: ViewModel) {
     propsData: vm.$options && vm.$options.propsData
   }
 }
-function vue3VmHandler(vm: ViewModel) {
+export function vue3VmHandler(vm: ViewModel) {
   let componentName = ''
   if (vm.$root === vm) {
     componentName = 'root'

@@ -9,10 +9,11 @@ import hashRoutePlugin from './plugins/hashRoute'
 import historyRoutePlugin from './plugins/historyRoute'
 import consolePlugin from './plugins/console'
 import unhandlerejectionPlugin from './plugins/unhandlerejecttion'
+import { BasePluginType } from '@mitojs/types'
 
-function createInstance(options: BrowserOptionsFieldsTypes = {}) {
+function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins: BasePluginType[] = []) {
   const browserClient = new BrowserClient(options)
-  const plugins = [
+  const browserPlugins = [
     fetchPlugins,
     xhrPlugin,
     domPlugins,
@@ -22,10 +23,10 @@ function createInstance(options: BrowserOptionsFieldsTypes = {}) {
     consolePlugin,
     unhandlerejectionPlugin
   ]
-  browserClient.use(plugins)
+  browserClient.use([...browserPlugins, ...plugins])
   return browserClient
 }
 
-const init = createInstance
+const init = createBrowserInstance
 
-export { SDK_VERSION, SDK_NAME, createInstance, init }
+export { SDK_VERSION, SDK_NAME, createBrowserInstance, init, BrowserClient }

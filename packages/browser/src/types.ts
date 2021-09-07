@@ -1,5 +1,5 @@
 import { BrowserEventTypes } from '@mitojs/shared'
-import { BaseOptionsFieldsIntegrationType } from '@mitojs/types'
+import { BaseOptionsFieldsIntegrationType, VueInstance } from '@mitojs/types'
 
 // silentOption 对应  browserEventType
 export type silentMapToBrowserEventType = Record<silentBrowserEventType, BrowserEventTypes>
@@ -10,6 +10,14 @@ export interface BrowserOptionsFieldsTypes extends BrowsersilentOptionsType, Bas
    * 使用img上报的方式，默认为false，默认是xhr的上报方式
    */
   useImgUpload?: boolean
+
+  /**
+   *
+   * Vue根实例
+   * @type {VueInstance}
+   * @memberof BrowserOptionsFieldsTypes
+   */
+  vue?: VueInstance
 }
 
 /**

@@ -1,7 +1,7 @@
 import { EventTypes } from '@mitojs/shared'
 import { BaseClientType } from './baseClientType'
 
-export interface BasePluginType<T extends EventTypes, C extends BaseClientType = BaseClientType> {
+export interface BasePluginType<T extends EventTypes = EventTypes, C extends BaseClientType = BaseClientType> {
   // 事件枚举
   name: T
   // 监控事件，并在该事件中通知订阅中心（notify）

@@ -1,11 +1,12 @@
 import { BaseOptions } from '@mitojs/core'
 import { ToStringTypes } from '@mitojs/shared'
 import { toStringValidateOption } from '@mitojs/utils'
+import { VueInstance } from 'packages/types/src'
 import { BrowserOptionsFieldsTypes } from './types'
 
 export default class BrowserOptions extends BaseOptions<BrowserOptionsFieldsTypes> {
   /**
-   * 静默监控Xhr事件
+   * 静默监控xhr事件
    */
   silentXhr: boolean
   /**
@@ -36,6 +37,14 @@ export default class BrowserOptions extends BaseOptions<BrowserOptionsFieldsType
    * 静默监控hashchange事件
    */
   silentHashchange: boolean
+
+  /**
+   * 传入Vue根实例
+   *
+   * @type {VueInstance}
+   * @memberof BrowserOptions
+   */
+  vue: VueInstance = null
   useImgUpload: boolean
   configReportXhr: unknown = null
   constructor(options: BrowserOptionsFieldsTypes) {
@@ -54,7 +63,8 @@ export default class BrowserOptions extends BaseOptions<BrowserOptionsFieldsType
       silentHashchange,
       silentUnhandledrejection,
       useImgUpload,
-      configReportXhr
+      configReportXhr,
+      vue
     } = options
     toStringValidateOption(silentXhr, 'silentXhr', ToStringTypes.Boolean) && (this.silentXhr = silentXhr)
     toStringValidateOption(silentFetch, 'silentFetch', ToStringTypes.Boolean) && (this.silentFetch = silentFetch)
@@ -65,7 +75,8 @@ export default class BrowserOptions extends BaseOptions<BrowserOptionsFieldsType
     toStringValidateOption(silentHashchange, 'silentHashchange', ToStringTypes.Boolean) && (this.silentHashchange = silentXhr)
     toStringValidateOption(silentUnhandledrejection, 'silentUnhandledrejection', ToStringTypes.Boolean) &&
       (this.silentUnhandledrejection = silentUnhandledrejection)
-    toStringValidateOption(useImgUpload, 'useImgUpload', ToStringTypes.Boolean) && (this.useImgUpload = silentXhr)
-    toStringValidateOption(configReportXhr, 'configReportXhr', ToStringTypes.Function) && (this.configReportXhr = silentXhr)
+    toStringValidateOption(useImgUpload, 'useImgUpload', ToStringTypes.Boolean) && (this.useImgUpload = useImgUpload)
+    this.vue = vue
+    toStringValidateOption(configReportXhr, 'configReportXhr', ToStringTypes.Function) && (this.configReportXhr = configReportXhr)
   }
 }

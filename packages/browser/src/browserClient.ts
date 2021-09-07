@@ -3,7 +3,7 @@ import { BrowserEventTypes, EventTypes } from '@mitojs/shared'
 import { firstStrtoUppercase } from '@mitojs/utils'
 import BrowserOptions from './browserOptions'
 import BrowserTransport from './browserTransport'
-import { BrowserOptionsFieldsTypes, BrowsersilentOptionsType } from './types'
+import { BrowserOptionsFieldsTypes } from './types'
 
 export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTypes> {
   transport: BrowserTransport

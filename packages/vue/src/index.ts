@@ -1,25 +1,64 @@
-import { getFlag, setFlag, silentConsoleScope, Severity } from '@mitojs/utils'
-import { EVENTTYPES } from '@mitojs/shared'
-import { VueInstance, ViewModel } from './types'
-import { handleVueError } from './helper'
+import {
+  silentConsoleScope,
+  Severity,
+  getLocationHref,
+  getTimestamp,
+  variableTypeDetection,
+  getBigVersion,
+  getBreadcrumbCategoryInBrowser
+} from '@mitojs/utils'
+import { vue2VmHandler, vue3VmHandler } from './helper'
+import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes } from '@mitojs/shared'
+import { BasePluginType, ReportDataType, ViewModel } from '@mitojs/types'
+import { BrowserClient } from '@mitojs/browser'
 
-const hasConsole = typeof console !== 'undefined'
-
-const MitoVue = {
-  install(Vue: VueInstance): void {
-    if (getFlag(EVENTTYPES.VUE) || !Vue || !Vue.config) return
-    setFlag(EVENTTYPES.VUE, true)
-    // vue 提供 warnHandler errorHandler报错信息
+const vuePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
+  name: BrowserEventTypes.VUE,
+  monitor(notify) {
+    const Vue = this.options.vue
+    const originErrorHandle = Vue.config.errorHandler
     Vue.config.errorHandler = function (err: Error, vm: ViewModel, info: string): void {
-      handleVueError.apply(null, [err, vm, info, Severity.Normal, Severity.Error, Vue])
+      const data: ReportDataType = {
+        type: ErrorTypes.VUE,
+        message: `${err.message}(${info})`,
+        level: Severity.Normal,
+        url: getLocationHref(),
+        name: err.name,
+        stack: err.stack || [],
+        time: getTimestamp()
+      }
+      notify(BrowserEventTypes.VUE, { data, vm })
+      const hasConsole = typeof console !== 'undefined'
       if (hasConsole && !Vue.config.silent) {
         silentConsoleScope(() => {
           console.error('Error in ' + info + ': "' + err.toString() + '"', vm)
           console.error(err)
         })
       }
+      return originErrorHandle(err, vm, info)
     }
+  },
+  transform({ data: collectedData, vm }: { data: ReportDataType; vm: ViewModel }) {
+    const Vue = this.options.vue
+    if (variableTypeDetection.isString(Vue?.version)) {
+      switch (getBigVersion(Vue?.version)) {
+        case 2:
+          return { ...collectedData, ...vue2VmHandler(vm) }
+        case 3:
+          return { ...collectedData, ...vue3VmHandler(vm) }
+        default:
+          return collectedData
+      }
+    }
+  },
+  consumer(data: ReportDataType) {
+    const breadcrumbStack = this.breadcrumb.push({
+      type: BrowserBreadcrumbTypes.VUE,
+      category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.VUE),
+      data,
+      level: Severity.Error
+    })
+    this.transport.send(data, breadcrumbStack)
   }
 }
-
-export { MitoVue }
+export default vuePlugin
