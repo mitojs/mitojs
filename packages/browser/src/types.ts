@@ -1,8 +1,23 @@
-import { BaseOptionsFieldsIntegrationType } from 'packages/types/src'
+import { BrowserEventTypes } from '@mitojs/shared'
+import { BaseOptionsFieldsIntegrationType } from '@mitojs/types'
 
-type SlientBrowserEventTypes = 'silentXhr' | 'silentFetch'
+// silentOption 对应  browserEventType
+export type silentMapToBrowserEventType = Record<silentBrowserEventType, BrowserEventTypes>
 
-export interface BrowserOptionsFieldsTypes extends BaseOptionsFieldsIntegrationType, BrowserOptionsHooksType {
+type silentBrowserEventType = keyof BrowsersilentOptionsType
+export interface BrowserOptionsFieldsTypes extends BrowsersilentOptionsType, BaseOptionsFieldsIntegrationType, BrowserOptionsHooksType {
+  /**
+   * 使用img上报的方式，默认为false，默认是xhr的上报方式
+   */
+  useImgUpload?: boolean
+}
+
+/**
+ *browser silent event types
+ *
+ * @interface BrowsersilentOptionsType
+ */
+export interface BrowsersilentOptionsType {
   /**
    * 静默监控Xhr事件
    */
@@ -25,7 +40,7 @@ export interface BrowserOptionsFieldsTypes extends BaseOptionsFieldsIntegrationT
   silentHistory?: boolean
   /**
    * 静默监控error事件
-
+   */
   silentError?: boolean
   /**
    * 静默监控unhandledrejection事件
@@ -35,10 +50,6 @@ export interface BrowserOptionsFieldsTypes extends BaseOptionsFieldsIntegrationT
    * 静默监控hashchange事件
    */
   silentHashchange?: boolean
-  /**
-   * 使用img上报的方式，默认为false，默认是xhr的上报方式
-   */
-  useImgUpload?: boolean
 }
 
 export interface BrowserOptionsHooksType {

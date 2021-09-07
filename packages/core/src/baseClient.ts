@@ -9,6 +9,13 @@ export abstract class BaseClient<O extends BaseOptionsFieldsIntegrationType, E e
   constructor(options: O) {
     this.options = options
   }
+
+  /**
+   * 引用插件
+   *
+   * @param {BasePluginType<E>[]} plugins
+   * @memberof BaseClient
+   */
   use(plugins: BasePluginType<E>[]) {
     const subscrib = new Subscrib<E>()
     plugins.forEach((item) => {
@@ -24,5 +31,14 @@ export abstract class BaseClient<O extends BaseOptionsFieldsIntegrationType, E e
   getOptions() {
     return this.options
   }
+
+  /**
+   * 判断当前插件是否启用，每个端的可选字段不同，需要子类实现
+   *
+   * @abstract
+   * @param {EventTypes} name
+   * @return {*}  {boolean}
+   * @memberof BaseClient
+   */
   abstract isPluginEnable(name: EventTypes): boolean
 }

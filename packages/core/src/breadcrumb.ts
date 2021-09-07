@@ -1,5 +1,5 @@
 import { ToStringTypes } from '@mitojs/shared'
-import { logger, getTimestamp, slientConsoleScope, toStringValidateOption } from '@mitojs/utils'
+import { logger, getTimestamp, silentConsoleScope, toStringValidateOption } from '@mitojs/utils'
 import { BaseOptionsFieldsIntegrationType, BreadcrumbPushData } from '@mitojs/types'
 
 /**
@@ -28,7 +28,7 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
       // 如果用户输入console，并且logger是打开的会造成无限递归，
       // 应该加入一个开关，执行这个函数前，把监听console的行为关掉
       const beforePushBreadcrumb = this.beforePushBreadcrumb
-      slientConsoleScope(() => {
+      silentConsoleScope(() => {
         result = beforePushBreadcrumb.call(this, data)
       })
       if (!result) return this.stack

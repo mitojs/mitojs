@@ -1,8 +1,9 @@
 import { Breadcrumb, BaseClient } from '@mitojs/core'
-import { EventTypes } from '@mitojs/shared'
+import { BrowserEventTypes, EventTypes } from '@mitojs/shared'
+import { firstStrtoUppercase } from '@mitojs/utils'
 import BrowserOptions from './browserOptions'
 import BrowserTransport from './browserTransport'
-import { BrowserOptionsFieldsTypes } from './types'
+import { BrowserOptionsFieldsTypes, BrowsersilentOptionsType } from './types'
 
 export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTypes> {
   transport: BrowserTransport
@@ -14,7 +15,15 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
     this.transport = new BrowserTransport(options)
     this.breadcrumb = new Breadcrumb(options)
   }
-  isPluginEnable(name: BrowserOptionsFieldsTypes) {
-    // 拼接slient前缀字段 判断是否为true silentXhr
+  /**
+   * 判断当前插件是否启用，用于browser的option
+   *
+   * @param {BrowserEventTypes} name
+   * @return {*}
+   * @memberof BrowserClient
+   */
+  isPluginEnable(name: BrowserEventTypes): boolean {
+    const silentField = `silent${firstStrtoUppercase(name)}`
+    return !this.options[silentField]
   }
 }

@@ -152,11 +152,11 @@ export function toStringAny(target: any, type: ToStringTypes): boolean {
 
 export function toStringValidateOption(target: any, targetName: string, expectType: ToStringTypes): boolean {
   if (toStringAny(target, expectType)) return true
-  typeof target !== 'undefined' && logger.error(`${targetName}期望传入${expectType}类型，目前是${nativeToString.call(target)}类型`)
+  typeof target !== 'undefined' && logger.error(`${targetName}期望传入${expectType}类型，当前是${nativeToString.call(target)}类型`)
   return false
 }
 
-export function slientConsoleScope(callback: Function) {
+export function silentConsoleScope(callback: Function) {
   globalVar.isLogAddBreadcrumb = false
   callback()
   globalVar.isLogAddBreadcrumb = true
@@ -230,4 +230,17 @@ export function getCurrentRoute() {
   }
   const currentPage = pages.pop()
   return setUrlQuery(currentPage.route, currentPage.options)
+}
+
+/**
+ *将传入的字符串的首字母改为大写，其他不变
+ *
+ * @export
+ * @param {string} str 原字符
+ * @return {*}  {string}
+ */
+export function firstStrtoUppercase(str: string): string {
+  return str.replace(/\b(\w)(\w*)/g, function ($0: string, $1: string, $2: string) {
+    return `${$1.toUpperCase()}${$2}`
+  })
 }

@@ -9,7 +9,7 @@ import {
   on,
   parseErrorString,
   replaceOld,
-  slientConsoleScope,
+  silentConsoleScope,
   throttle,
   toStringAny,
   toStringValidateOption,
@@ -104,12 +104,12 @@ describe('helper.ts', () => {
     expect(toStringValidateOption({}, 'key3', '[object String]')).toBeFalsy()
   })
 
-  it('should slientConsoleScope func work', () => {
+  it('should silentConsoleScope func work', () => {
     expect(globalVar.isLogAddBreadcrumb).toBeTruthy()
     function validate() {
       expect(globalVar.isLogAddBreadcrumb).toBeFalsy()
     }
-    slientConsoleScope(validate)
+    silentConsoleScope(validate)
   })
 
   it('should generateUUID func work', () => {

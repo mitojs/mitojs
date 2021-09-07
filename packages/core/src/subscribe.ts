@@ -29,7 +29,7 @@ export default class Subscrib<T> {
           fn(data)
         },
         (e: Error) => {
-          logger.error(`重写事件triggerHandlers的回调函数发生错误\neventName:${eventName}\nName: ${getFunctionName(fn)}\nError: ${e}`)
+          logger.error(`Subscrib.notify：重写事件的回调函数发生错误\neventName:${eventName}\nName: ${getFunctionName(fn)}\nError: ${e}`)
         }
       )
     })

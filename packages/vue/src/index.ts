@@ -1,4 +1,4 @@
-import { getFlag, setFlag, slientConsoleScope, Severity } from '@mitojs/utils'
+import { getFlag, setFlag, silentConsoleScope, Severity } from '@mitojs/utils'
 import { EVENTTYPES } from '@mitojs/shared'
 import { VueInstance, ViewModel } from './types'
 import { handleVueError } from './helper'
@@ -13,7 +13,7 @@ const MitoVue = {
     Vue.config.errorHandler = function (err: Error, vm: ViewModel, info: string): void {
       handleVueError.apply(null, [err, vm, info, Severity.Normal, Severity.Error, Vue])
       if (hasConsole && !Vue.config.silent) {
-        slientConsoleScope(() => {
+        silentConsoleScope(() => {
           console.error('Error in ' + info + ': "' + err.toString() + '"', vm)
           console.error(err)
         })
