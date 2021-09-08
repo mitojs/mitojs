@@ -26,7 +26,7 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
     if (typeof this.beforePushBreadcrumb === 'function') {
       let result: BreadcrumbPushData = null
       // 如果用户输入console，并且logger是打开的会造成无限递归，
-      // 应该加入一个开关，执行这个函数前，把监听console的行为关掉
+      // 加入一个开关，执行这个函数前，把监听console的行为关掉
       const beforePushBreadcrumb = this.beforePushBreadcrumb
       silentConsoleScope(() => {
         result = beforePushBreadcrumb.call(this, data)

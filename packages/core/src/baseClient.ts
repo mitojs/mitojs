@@ -1,5 +1,5 @@
 import { EventTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
-import { BaseClientType, BaseOptionsFieldsIntegrationType, BasePluginType } from '@mitojs/types'
+import { BaseClientType, BaseOptionsFieldsIntegrationType, BasePluginType, LogTypes } from '@mitojs/types'
 import Subscrib from './subscribe'
 
 export abstract class BaseClient<O extends BaseOptionsFieldsIntegrationType, E extends EventTypes> implements BaseClientType {
@@ -41,4 +41,13 @@ export abstract class BaseClient<O extends BaseOptionsFieldsIntegrationType, E e
    * @memberof BaseClient
    */
   abstract isPluginEnable(name: EventTypes): boolean
+
+  /**
+   * 手动上报方法，每个端需要自己实现
+   *
+   * @abstract
+   * @param {LogTypes} data
+   * @memberof BaseClient
+   */
+  abstract log(data: LogTypes): void
 }

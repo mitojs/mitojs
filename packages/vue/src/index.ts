@@ -16,26 +16,28 @@ const vuePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.VUE,
   monitor(notify) {
     const Vue = this.options.vue
-    const originErrorHandle = Vue.config.errorHandler
-    Vue.config.errorHandler = function (err: Error, vm: ViewModel, info: string): void {
-      const data: ReportDataType = {
-        type: ErrorTypes.VUE,
-        message: `${err.message}(${info})`,
-        level: Severity.Normal,
-        url: getLocationHref(),
-        name: err.name,
-        stack: err.stack || [],
-        time: getTimestamp()
+    if (Vue && Vue.config && Vue.config.errorHandler) {
+      const originErrorHandle = Vue.config.errorHandler
+      Vue.config.errorHandler = function (err: Error, vm: ViewModel, info: string): void {
+        const data: ReportDataType = {
+          type: ErrorTypes.VUE,
+          message: `${err.message}(${info})`,
+          level: Severity.Normal,
+          url: getLocationHref(),
+          name: err.name,
+          stack: err.stack || [],
+          time: getTimestamp()
+        }
+        notify(BrowserEventTypes.VUE, { data, vm })
+        const hasConsole = typeof console !== 'undefined'
+        if (hasConsole && !Vue.config.silent) {
+          silentConsoleScope(() => {
+            console.error('Error in ' + info + ': "' + err.toString() + '"', vm)
+            console.error(err)
+          })
+        }
+        return originErrorHandle(err, vm, info)
       }
-      notify(BrowserEventTypes.VUE, { data, vm })
-      const hasConsole = typeof console !== 'undefined'
-      if (hasConsole && !Vue.config.silent) {
-        silentConsoleScope(() => {
-          console.error('Error in ' + info + ': "' + err.toString() + '"', vm)
-          console.error(err)
-        })
-      }
-      return originErrorHandle(err, vm, info)
     }
   },
   transform({ data: collectedData, vm }: { data: ReportDataType; vm: ViewModel }) {

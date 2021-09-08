@@ -36,7 +36,7 @@
         })
       }
       function mitoLog() {
-        MITO.log({ message: { one: 111 }, tag: '测试' })
+        window._MITO_.log({ message: { one: 111 }, tag: '测试' })
       }
       function onClickNativeFetch() {
         fetch('/normal/post', {

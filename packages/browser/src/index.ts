@@ -1,10 +1,10 @@
 import { SDK_VERSION, SDK_NAME } from '@mitojs/shared'
 import { BrowserClient } from './browserClient'
 import { BrowserOptionsFieldsTypes } from './types'
-import fetchPlugins from './plugins/fetch'
+import fetchPlugin from './plugins/fetch'
 import xhrPlugin from './plugins/xhr'
-import domPlugins from './plugins/dom'
-import errorPlugins from './plugins/error'
+import domPlugin from './plugins/dom'
+import errorPlugin from './plugins/error'
 import hashRoutePlugin from './plugins/hashRoute'
 import historyRoutePlugin from './plugins/historyRoute'
 import consolePlugin from './plugins/console'
@@ -14,10 +14,10 @@ import { BasePluginType } from '@mitojs/types'
 function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins: BasePluginType[] = []) {
   const browserClient = new BrowserClient(options)
   const browserPlugins = [
-    fetchPlugins,
+    fetchPlugin,
     xhrPlugin,
-    domPlugins,
-    errorPlugins,
+    domPlugin,
+    errorPlugin,
     hashRoutePlugin,
     historyRoutePlugin,
     consolePlugin,

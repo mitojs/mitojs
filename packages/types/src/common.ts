@@ -1,4 +1,4 @@
-import { HttpTypes } from '@mitojs/shared'
+import { Severity } from '@mitojs/utils'
 import { HttpCollectedType } from './http'
 
 export type voidFun = () => void
@@ -37,4 +37,11 @@ export type TNumStrObj = number | string | object
 export interface LocalStorageValue<T = any> {
   expireTime?: number
   value: T | string
+}
+
+export interface LogTypes {
+  message: TNumStrObj
+  tag?: TNumStrObj
+  level?: Severity
+  ex?: Error | any
 }

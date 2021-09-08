@@ -1,6 +1,16 @@
 import { Breadcrumb, BaseClient } from '@mitojs/core'
-import { BrowserEventTypes, EventTypes } from '@mitojs/shared'
-import { firstStrtoUppercase } from '@mitojs/utils'
+import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes, EventTypes } from '@mitojs/shared'
+import {
+  extractErrorStack,
+  firstStrtoUppercase,
+  getBreadcrumbCategoryInBrowser,
+  getLocationHref,
+  getTimestamp,
+  isError,
+  Severity,
+  unknownToString
+} from '@mitojs/utils'
+import { LogTypes } from '@mitojs/types'
 import BrowserOptions from './browserOptions'
 import BrowserTransport from './browserTransport'
 import { BrowserOptionsFieldsTypes } from './types'
@@ -25,5 +35,29 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
   isPluginEnable(name: BrowserEventTypes): boolean {
     const silentField = `silent${firstStrtoUppercase(name)}`
     return !this.options[silentField]
+  }
+  log(data: LogTypes) {
+    const { message = 'emptyMsg', tag = '', level = Severity.Critical, ex = '' } = data
+    let errorInfo = {}
+    if (isError(ex)) {
+      errorInfo = extractErrorStack(ex, level)
+    }
+    const error = {
+      type: ErrorTypes.LOG,
+      level,
+      message: unknownToString(message),
+      name: 'MITO.log',
+      customTag: unknownToString(tag),
+      time: getTimestamp(),
+      url: getLocationHref(),
+      ...errorInfo
+    }
+    const breadcrumbStack = this.breadcrumb.push({
+      type: BrowserBreadcrumbTypes.CUSTOMER,
+      category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CUSTOMER),
+      data: message,
+      level: Severity.fromString(level.toString())
+    })
+    this.transport.send(error, breadcrumbStack)
   }
 }
