@@ -1,4 +1,3 @@
-import { SDK_VERSION, SDK_NAME } from '@mitojs/shared'
 import { BrowserClient } from './browserClient'
 import { BrowserOptionsFieldsTypes } from './types'
 import fetchPlugin from './plugins/fetch'
@@ -29,4 +28,4 @@ function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins:
 
 const init = createBrowserInstance
 
-export { SDK_VERSION, SDK_NAME, createBrowserInstance, init, BrowserClient }
+export { createBrowserInstance, init, BrowserClient }

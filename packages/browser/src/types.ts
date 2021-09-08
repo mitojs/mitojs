@@ -13,7 +13,7 @@ export interface BrowserOptionsFieldsTypes extends BrowsersilentOptionsType, Bas
 
   /**
    *
-   * Vue根实例
+   * Vue根实例（写在 ）
    * @type {VueInstance}
    * @memberof BrowserOptionsFieldsTypes
    */
