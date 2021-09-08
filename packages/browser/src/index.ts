@@ -27,5 +27,4 @@ function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins:
 }
 
 const init = createBrowserInstance
-
 export { createBrowserInstance, init, BrowserClient }

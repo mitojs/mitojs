@@ -7,7 +7,7 @@ export function nativeTryCatch(fn: () => void, errorFn?: (err: any) => void): vo
   try {
     fn()
   } catch (err) {
-    console.log('err', err)
+    console.error('err', err)
     if (errorFn) {
       errorFn(err)
     }

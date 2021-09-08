@@ -7,6 +7,7 @@ import clear from 'rollup-plugin-clear'
 import cleanup from 'rollup-plugin-cleanup'
 import size from 'rollup-plugin-sizes'
 import { visualizer } from 'rollup-plugin-visualizer'
+import strip from '@rollup/plugin-strip'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
@@ -70,6 +71,11 @@ const common = {
         }
       },
       include: ['*.ts+(|x)', '**/*.ts+(|x)', '../**/*.ts+(|x)']
+    }),
+    // remove console.log
+    strip({
+      include: ['**/*.(js|ts)'],
+      functions: ['console.log']
     })
   ]
 }
