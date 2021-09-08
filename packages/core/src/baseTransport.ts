@@ -1,12 +1,14 @@
-import { _support, logger, Queue, isInclude, toStringValidateOption, createErrorId, isEmpty } from '@mitojs/utils'
+import { logger, Queue, isInclude, toStringValidateOption, createErrorId, isEmpty } from '@mitojs/utils'
 import { SDK_NAME, SDK_VERSION, ToStringTypes } from '@mitojs/shared'
 import { AuthInfo, BaseOptionsFieldsIntegrationType, BreadcrumbPushData, ReportDataType, TransportDataType } from '@mitojs/types'
+
 /**
- * 用来传输数据类，包含img标签、xhr请求
- * 功能：支持img请求和xhr请求、可以断点续存（保存在localstorage），
- * 待开发：目前不需要断点续存，因为接口不是很多，只有错误时才触发，如果接口太多可以考虑合并接口、
+ * 传输数据基础类
  *
- * ../class Transport
+ * @export
+ * @abstract
+ * @class BaseTransport
+ * @template O
  */
 export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> {
   apikey = ''
@@ -19,6 +21,13 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
   constructor() {
     this.queue = new Queue()
   }
+
+  /**
+   * 获取当前SDK信息
+   *
+   * @return {*}  {AuthInfo}
+   * @memberof BaseTransport
+   */
   getAuthInfo(): AuthInfo {
     const trackerId = this.getTrackerId()
     const result: AuthInfo = {
@@ -29,6 +38,13 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
     }
     return result
   }
+
+  /**
+   * 获取hooks中返回的trackId，没有就返回''
+   *
+   * @return {*}  {(string | number)}
+   * @memberof BaseTransport
+   */
   getTrackerId(): string | number {
     if (typeof this.backTrackerId === 'function') {
       const trackerId = this.backTrackerId()
@@ -40,9 +56,24 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
     }
     return ''
   }
+
+  /**
+   * 判断当前url是不是你配置的dsn
+   *
+   * @param {string} targetUrl
+   * @return {*}  {boolean}
+   * @memberof BaseTransport
+   */
   isSelfDsn(targetUrl: string): boolean {
     return this.dsn && isInclude(targetUrl, this.dsn)
   }
+
+  /**
+   * 绑定配置项
+   *
+   * @param {Partial<O>} [options={}]
+   * @memberof BaseTransport
+   */
   bindOptions(options: Partial<O> = {}): void {
     const { dsn, beforeDataReport, apikey, maxDuplicateCount, backTrackerId, configReportUrl } = options
     toStringValidateOption(apikey, 'apikey', ToStringTypes.String) && (this.apikey = apikey)
@@ -52,9 +83,18 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
     toStringValidateOption(backTrackerId, 'backTrackerId', ToStringTypes.Function) && (this.backTrackerId = backTrackerId)
     toStringValidateOption(configReportUrl, 'configReportUrl', ToStringTypes.Function) && (this.configReportUrl = configReportUrl)
   }
-  async send(data: any, breadcrumb: BreadcrumbPushData[]) {
+
+  /**
+   * 发送数据到服务端
+   *
+   * @param {*} data
+   * @param {BreadcrumbPushData[]} breadcrumb
+   * @return {*}
+   * @memberof BaseTransport
+   */
+  async send(data: any, breadcrumb: BreadcrumbPushData[]): Promise<void> {
     const errorId = createErrorId(data, this.apikey, this.maxDuplicateCount)
-    if (!errorId) return false
+    if (!errorId) return
     data.errorId = errorId
     let transportData = {
       ...this.getTransportData(data),
@@ -62,7 +102,7 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
     }
     if (typeof this.beforeDataReport === 'function') {
       transportData = await this.beforeDataReport(transportData)
-      if (!transportData) return false
+      if (!transportData) return
     }
     let dsn = this.dsn
     if (isEmpty(dsn)) {
@@ -85,7 +125,7 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
    */
   abstract post(data: TransportDataType | any, url: string): void
   /**
-   * 最终上报到服务器的方法
+   * 最终上报到服务器的方法，需要子类重写
    *
    * @abstract
    * @param {(TransportDataType | any)} data

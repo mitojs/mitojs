@@ -1,5 +1,4 @@
-import { createBrowserInstance } from '@mitojs/browser'
-import { BrowserOptionsFieldsTypes } from 'packages/browser/src/types'
+import { BrowserOptionsFieldsTypes, createBrowserInstance } from '@mitojs/browser'
 import vuePlugin from './vuePlugin'
 
 function init(options: BrowserOptionsFieldsTypes = {}) {

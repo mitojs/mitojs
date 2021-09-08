@@ -1,3 +1,4 @@
+export * from './types'
 import { BrowserClient } from './browserClient'
 import { BrowserOptionsFieldsTypes } from './types'
 import fetchPlugin from './plugins/fetch'
@@ -9,7 +10,6 @@ import historyRoutePlugin from './plugins/historyRoute'
 import consolePlugin from './plugins/console'
 import unhandlerejectionPlugin from './plugins/unhandlerejecttion'
 import { BasePluginType } from '@mitojs/types'
-
 function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins: BasePluginType[] = []) {
   const browserClient = new BrowserClient(options)
   const browserPlugins = [

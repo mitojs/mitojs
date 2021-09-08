@@ -8,7 +8,7 @@ export interface BaseClientType<O extends BaseOptionsFieldsIntegrationType = Bas
    * @memberof BaseClientType
    * @static
    */
-  SDK_NAME: string
+  SDK_NAME?: string
   /**
    *SDK版本
    *
