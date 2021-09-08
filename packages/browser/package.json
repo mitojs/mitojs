@@ -21,6 +21,7 @@
   "keywords": [
     "mitojs",
     "sdk",
+    "browser",
     "monitor"
   ],
   "dependencies": {
