@@ -19,7 +19,7 @@ async function release() {
   if (beReleasedPackages.length === 0) {
     beReleasedPackages = allTargets
   }
-  step(`\nbeReleasedPackages: ${beReleasedPackages.join('\n')}`)
+  step(`\nbeReleasedPackages:\n ${beReleasedPackages.join('\n')}`)
   beReleasedPackages.forEach((target) => {
     publicPackage(target)
   })
