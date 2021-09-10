@@ -24,6 +24,9 @@
     "react",
     "monitor"
   ],
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
   "dependencies": {
     "@mitojs/core": "2.1.19",
     "@mitojs/utils": "2.1.19",

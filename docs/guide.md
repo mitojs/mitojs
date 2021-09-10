@@ -153,8 +153,6 @@ MITO.init({
   // 项目对应apikey
   apikey: '123-2223-123-123',
 });
-
-
 ```
 
 **如果你想要使用ErrorBoundary**

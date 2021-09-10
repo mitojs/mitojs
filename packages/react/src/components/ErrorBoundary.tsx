@@ -7,7 +7,6 @@ import { MitoContext } from './provider'
 
 export interface ErrorBoundaryProps {
   fallback?: ReactNode
-  beforeCapture?: (error: Error, componentStack: string) => Record<string, string> | void
   onError?: (error: Error, componentStack: string) => void
   MitoInstance?: BrowserClient
 }
@@ -25,13 +24,10 @@ export class ErrorBoundaryWrapped extends PureComponent<ErrorBoundaryProps, Erro
     }
   }
   componentDidCatch(error: Error, { componentStack }: ErrorInfo) {
-    const { onError, beforeCapture, MitoInstance } = this.props
+    const { onError, MitoInstance } = this.props
     const reactError = extractErrorStack(error, Severity.Normal) as ReportDataType
     reactError.type = ErrorTypes.REACT
-    // if (typeof beforeCapture === 'function') {
-    //   reactError = beforeCapture(reactError)
-    // }
-    // upload error
+    // mito handler
     const breadcrumbStack = MitoInstance.breadcrumb.push({
       type: BrowserBreadcrumbTypes.REACT,
       data: reactError,

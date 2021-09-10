@@ -1,3 +1,3 @@
 export * from './components/ErrorBoundary'
 export * from './components/provider'
-export { createBrowserInstance } from '@mitojs/browser'
+export { createBrowserInstance as init } from '@mitojs/browser'
