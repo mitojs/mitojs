@@ -37,13 +37,17 @@ packageDirs.forEach((dir) => {
   paths[`${M}/${dir}`] = [`${packagesDir}/${dir}/src`]
 })
 
+console.log('Object.keys(paths)', Object.keys(paths))
 const common = {
   input: `${packageDir}/src/index.ts`,
   output: {
     banner: `/* ${M}/${name} version ' + ${masterVersion} */`,
-    footer: '/* follow me on Github! @cjinhuo */'
+    footer: '/* follow me on Github! @cjinhuo */',
+    globals: {
+      react: 'React'
+    }
   },
-  external: [...Object.keys(paths)],
+  external: [...Object.keys(paths), 'react', 'jsxRuntime'],
   plugins: [
     resolve(),
     size(),
