@@ -10,7 +10,6 @@ export interface ErrorBoundaryProps {
   beforeCapture?: (error: Error, componentStack: string) => Record<string, string> | void
   onError?: (error: Error, componentStack: string) => void
   MitoInstance?: BrowserClient
-  children?: any
 }
 
 export interface ErrorBoundaryState {
@@ -50,7 +49,7 @@ export class ErrorBoundaryWrapped extends PureComponent<ErrorBoundaryProps, Erro
   }
 }
 
-export const ErrorBoundary: FC = (props: ErrorBoundaryProps) => (
+export const ErrorBoundary: FC = (props: ErrorBoundaryProps & { children: ReactNode }) => (
   <MitoContext.Consumer>
     {({ MitoInstance }) => (
       <ErrorBoundaryWrapped {...props} MitoInstance={props.MitoInstance || MitoInstance}>
