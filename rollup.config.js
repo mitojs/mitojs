@@ -16,7 +16,7 @@ const fs = require('fs')
 if (!process.env.TARGET) {
   throw new Error('TARGET package must be specified')
 }
-// 是否生成声明文件
+// generate *.d.ts file
 const isDeclaration = process.env.TYPES !== 'false'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const masterVersion = require('./package.json').version
@@ -37,14 +37,14 @@ packageDirs.forEach((dir) => {
   paths[`${M}/${dir}`] = [`${packagesDir}/${dir}/src`]
 })
 
-console.log('Object.keys(paths)', Object.keys(paths))
 const common = {
   input: `${packageDir}/src/index.ts`,
   output: {
     banner: `/* ${M}/${name} version ' + ${masterVersion} */`,
     footer: '/* follow me on Github! @cjinhuo */',
     globals: {
-      react: 'React'
+      react: 'React',
+      jsxRuntime: 'jsxRuntime'
     }
   },
   external: [...Object.keys(paths), 'react', 'jsxRuntime'],
@@ -78,7 +78,7 @@ const common = {
     }),
     // remove console.log
     strip({
-      include: ['**/*.(js|ts)'],
+      include: ['**/*.(js|ts|tsx)'],
       functions: ['console.log']
     })
   ]
@@ -88,7 +88,6 @@ const esmPackage = {
   output: {
     file: `${packageDirDist}/${name}.esm.js`,
     format: 'es',
-    name: 'MITO',
     sourcemap: true,
     ...common.output
   },
@@ -105,7 +104,6 @@ const cjsPackage = {
   output: {
     file: `${packageDirDist}/${name}.js`,
     format: 'cjs',
-    name: 'MITO',
     sourcemap: true,
     minifyInternalExports: true,
     ...common.output
