@@ -1,5 +1,2 @@
-import { init } from '@mitojs/vue'
-
-// for vue
-export { init }
-// for react
+export * from '@mitojs/vue'
+export { ErrorBoundary, WithErrorBoundary, MitoProvider, MitoContext } from '@mitojs/react'

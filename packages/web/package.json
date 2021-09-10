@@ -1,6 +1,6 @@
 {
   "name": "@mitojs/web",
-  "version": "2.1.20",
+  "version": "2.1.21",
   "description": "A SDK For Monitoring Web(React、Vue) Errors",
   "author": "cjinhuo(https://github.com/cjinhuo)",
   "license": "MIT",
@@ -25,8 +25,8 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/browser": "2.1.20",
-    "@mitojs/react": "2.1.20",
-    "@mitojs/vue": "2.1.20"
+    "@mitojs/browser": "2.1.21",
+    "@mitojs/react": "2.1.21",
+    "@mitojs/vue": "2.1.21"
   }
 }

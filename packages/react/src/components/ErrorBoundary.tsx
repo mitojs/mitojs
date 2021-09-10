@@ -5,19 +5,19 @@ import { BrowserClient } from '@mitojs/browser'
 import { PureComponent, ReactNode, ErrorInfo, ComponentType, FC } from 'react'
 import { MitoContext } from './provider'
 
-export interface ErrorBoundaryProps {
+interface ErrorBoundaryProps {
   fallback?: ReactNode
   onError?: (error: Error, componentStack: string) => void
   MitoInstance?: BrowserClient
 }
 
-export interface ErrorBoundaryState {
+interface ErrorBoundaryState {
   hasError?: boolean
 }
 
-export class ErrorBoundaryWrapped extends PureComponent<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundaryWrapped extends PureComponent<ErrorBoundaryProps, ErrorBoundaryState> {
   readonly state: ErrorBoundaryState
-  constructor(props) {
+  constructor(props: any) {
     super(props)
     this.state = {
       hasError: false
@@ -45,7 +45,7 @@ export class ErrorBoundaryWrapped extends PureComponent<ErrorBoundaryProps, Erro
   }
 }
 
-export const ErrorBoundary: FC = (props: ErrorBoundaryProps & { children: ReactNode }) => (
+export const ErrorBoundary: FC<ErrorBoundaryProps & { children: ReactNode }> = (props: ErrorBoundaryProps & { children: ReactNode }) => (
   <MitoContext.Consumer>
     {({ MitoInstance }) => (
       <ErrorBoundaryWrapped {...props} MitoInstance={props.MitoInstance || MitoInstance}>
