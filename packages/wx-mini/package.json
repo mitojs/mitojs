@@ -1,6 +1,6 @@
 {
   "name": "@mitojs/wx-mini",
-  "version": "2.1.21",
+  "version": "2.1.22",
   "description": "A SDK For Monitoring wx-mini Errors",
   "author": "cjinhuo",
   "license": "MIT",
@@ -25,10 +25,10 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/core": "2.1.21",
-    "@mitojs/utils": "2.1.21",
-    "@mitojs/shared": "2.1.21",
-    "@mitojs/types": "2.1.21",
+    "@mitojs/core": "2.1.22",
+    "@mitojs/utils": "2.1.22",
+    "@mitojs/shared": "2.1.22",
+    "@mitojs/types": "2.1.22",
     "@types/wechat-miniprogram": "^3.1.0"
   }
 }

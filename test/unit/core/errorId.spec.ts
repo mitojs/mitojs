@@ -1,4 +1,3 @@
-import { ERRORTYPES } from '@mitojs/shared'
 import { createErrorId, getFlutterRealOrigin, getFlutterRealPath, getRealPageOrigin, getRealPath } from '@mitojs/core'
 import { ReportDataType } from '@mitojs/types'
 import { isWxMiniEnv, Severity } from '@mitojs/utils'
