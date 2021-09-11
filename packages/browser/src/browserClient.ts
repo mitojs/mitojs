@@ -37,7 +37,7 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
     return !this.options[silentField]
   }
   log(data: LogTypes) {
-    const { message = 'emptyMsg', tag = '', level = Severity.Critical, ex = '' } = data
+    const { message = 'empty', tag = '', level = Severity.Critical, ex = '' } = data
     let errorInfo = {}
     if (isError(ex)) {
       errorInfo = extractErrorStack(ex, level)

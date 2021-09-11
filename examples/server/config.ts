@@ -9,6 +9,7 @@ const Vue3FilePath = resolveDirname('../Vue3')
 const WebPerformancePath = resolveDirname('../WebPerformance')
 const browserDistFilePath = resolve('./packages/browser/dist')
 const vueDistFilePath = resolve('./packages/vue/dist')
+const reactDistFilePath = resolve('./packages/react/dist')
 const wxDistFilePath = resolve('./packages/wx-mini/dist')
 const webPerfFilePath = resolve('./packages/web-performance/dist')
 console.log(webPerfFilePath, 'webPerfFilePath')
@@ -20,6 +21,7 @@ export const FilePaths = {
   '/WebPerformance': WebPerformancePath,
   '/browserDist': browserDistFilePath,
   '/vueDist': vueDistFilePath,
+  '/reactDist': reactDistFilePath,
   '/wxDist': wxDistFilePath,
   '/wpDist': webPerfFilePath
 }

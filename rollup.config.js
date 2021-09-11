@@ -37,10 +37,21 @@ packageDirs.forEach((dir) => {
   paths[`${M}/${dir}`] = [`${packagesDir}/${dir}/src`]
 })
 
+const mitoAnnotation = `/* ${M}/${name} version ' + ${masterVersion} */`
+// for react
+const processEnvBanner = `
+  var process = {
+    env: {
+      NODE_ENV: 'production'
+    }
+  }
+`
+const banner = `${mitoAnnotation}${name === 'react' && '\n' + processEnvBanner}`
+
 const common = {
   input: `${packageDir}/src/index.ts`,
   output: {
-    banner: `/* ${M}/${name} version ' + ${masterVersion} */`,
+    banner,
     footer: '/* follow me on Github! @cjinhuo */',
     globals: {
       react: 'React',

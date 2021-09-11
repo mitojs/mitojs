@@ -1,5 +1,5 @@
 const instance = MITO.init({
-  // debug: true,
+  debug: true,
   apikey: 'sdasda',
   silentConsole: true,
   silentXhr: false,

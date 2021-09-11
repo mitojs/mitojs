@@ -53,5 +53,6 @@ export class Logger {
     this._console.error(`${PREFIX}[Error]:`, ...args)
   }
 }
+
 const logger = _support.logger || (_support.logger = new Logger())
 export { logger }

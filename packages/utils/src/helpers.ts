@@ -1,10 +1,7 @@
-import { HttpCollectedType, HttpTransformedType, IAnyObject } from '@mitojs/types'
-import { globalVar, HTTP_CODE, ErrorTypes, ToStringTypes } from '@mitojs/shared'
+import { IAnyObject } from '@mitojs/types'
+import { globalVar, HTTP_CODE, ToStringTypes } from '@mitojs/shared'
 import { logger } from './logger'
 import { nativeToString, variableTypeDetection } from './is'
-import { fromHttpStatus, SpanStatus } from './httpStatus'
-import { Severity } from './Severity'
-import { getRealPath } from './errorId'
 
 export function getLocationHref(): string {
   if (typeof document === 'undefined' || document.location == null) return ''

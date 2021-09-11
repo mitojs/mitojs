@@ -1,26 +1,15 @@
 const h = React.createElement
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { hasError: false }
-  }
+const MitoInstance = MITO.init({
+  debug: true,
+  silentConsole: true,
+  maxBreadcrumbs: 10,
+  dsn: 'http://localhost:2021/errors/upload'
+})
 
-  componentDidCatch(error, errorInfo) {
-    MITO.errorBoundaryReport(error)
-    if (error) {
-      this.setState({
-        hasError: true
-      })
-    }
-  }
+window._MITO_ = MitoInstance
 
-  render() {
-    if (this.state.hasError) {
-      return h('div', null, '子组件抛出异常')
-    }
-    return this.props.children
-  }
-}
+console.log(MitoInstance)
+
 class BuggyCounter extends React.Component {
   constructor(props) {
     super(props)
@@ -41,4 +30,4 @@ class BuggyCounter extends React.Component {
     return h('h1', { onClick: this.handleClick, id: 'numException' }, this.state.counter)
   }
 }
-ReactDOM.render(h(ErrorBoundary, { children: h(BuggyCounter) }), document.getElementById('root'))
+ReactDOM.render(h(MITO.ErrorBoundary, { children: h(BuggyCounter), MitoInstance }), document.getElementById('root'))

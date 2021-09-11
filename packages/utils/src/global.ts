@@ -1,6 +1,5 @@
 import { EventTypes } from '@mitojs/shared'
 import { Logger } from './logger'
-import { variableTypeDetection } from './is'
 import { DeviceInfo } from '@mitojs/types'
 
 /**
@@ -14,7 +13,6 @@ export interface MitoSupport {
   replaceFlag: { [key in EventTypes]?: boolean }
   record?: any[]
   deviceInfo?: DeviceInfo
-  track?: any
 }
 
 interface MITOGlobal {
