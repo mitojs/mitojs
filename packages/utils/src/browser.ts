@@ -1,6 +1,5 @@
-import { BREADCRUMBCATEGORYS, BreadcrumbTypes, BrowserBreadcrumbTypes, ErrorTypes } from '@mitojs/shared'
+import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes } from '@mitojs/shared'
 import { getLocationHref, getTimestamp } from './helpers'
-import { ReportDataType } from '@mitojs/types'
 import { Severity } from './Severity'
 
 /**
@@ -62,15 +61,15 @@ export function getBreadcrumbCategoryInBrowser(type: BrowserBreadcrumbTypes) {
     case BrowserBreadcrumbTypes.CUSTOMER:
     case BrowserBreadcrumbTypes.CONSOLE:
       return BREADCRUMBCATEGORYS.DEBUG
-      // case BreadcrumbTypes.APP_ON_LAUNCH:
-      // case BreadcrumbTypes.APP_ON_SHOW:
-      // case BreadcrumbTypes.APP_ON_HIDE:
-      // case BreadcrumbTypes.PAGE_ON_SHOW:
-      // case BreadcrumbTypes.PAGE_ON_HIDE:
-      // case BreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
-      // case BreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
-      // case BreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP:
-      return BREADCRUMBCATEGORYS.LIFECYCLE
+    // case BreadcrumbTypes.APP_ON_LAUNCH:
+    // case BreadcrumbTypes.APP_ON_SHOW:
+    // case BreadcrumbTypes.APP_ON_HIDE:
+    // case BreadcrumbTypes.PAGE_ON_SHOW:
+    // case BreadcrumbTypes.PAGE_ON_HIDE:
+    // case BreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
+    // case BreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
+    // case BreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP:
+    // return BREADCRUMBCATEGORYS.LIFECYCLE
     case BrowserBreadcrumbTypes.UNHANDLEDREJECTION:
     case BrowserBreadcrumbTypes.CODE_ERROR:
     case BrowserBreadcrumbTypes.RESOURCE:

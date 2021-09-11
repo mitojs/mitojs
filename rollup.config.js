@@ -76,7 +76,7 @@ const common = {
       },
       include: ['*.ts+(|x)', '**/*.ts+(|x)', '../**/*.ts+(|x)']
     }),
-    // remove console.log
+    // remove console.log in bundle
     strip({
       include: ['**/*.(js|ts|tsx)'],
       functions: ['console.log']
