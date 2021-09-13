@@ -4,13 +4,13 @@
 
 ### Using npm
 ```bash
-npm i @mitojs/vue
+$ npm i @mitojs/vue
 ```
 
 ### Using yarn
 
 ```bash
-yarn add @mitojs/vue
+$ yarn add @mitojs/vue
 ```
 
 ### Vue2.X
@@ -45,7 +45,7 @@ const MitoInstance = init({
 ```
 
 ### use log
-you can call `log` in anywhere with mito instance
+you can call `log` function in anywhere with mito instance
 
 ```js
 MitoInstance.log({
