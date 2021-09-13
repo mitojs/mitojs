@@ -13,7 +13,7 @@ npm i @mitojs/vue
 yarn add @mitojs/vue
 ```
 
-### Usage
+## Usage
 
 ### Vue2.X
 
@@ -28,8 +28,8 @@ const MitoInstance = init({
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100
 })
-```
 
+```
 
 ### Vue3.x
 ```typescript
@@ -41,4 +41,16 @@ const MitoInstance = init({
   maxBreadcrumbs: 100
 })
 ```
+
+### use log
+you can call `log` in anywhere with mito instance
+
+```js
+MitoInstance.log({
+  message: 'some msg',
+  tag: 'your tag',
+})
+```
+
+
 
