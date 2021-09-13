@@ -69,15 +69,15 @@ window.Vue = Vue
 **index.html**
 
 ```html
- 	<header>
-      <script src="https://cdn.jsdelivr.net/npm/@mitojs/vue/dist/vue.min.js"></script>
-      <script>
-        MITO.init({
-          dsn: 'http://test.com/yourServer',
-          vue:window.Vue
-        });
-      </script>
-	 </header>
+<header>
+  <script src="https://cdn.jsdelivr.net/npm/@mitojs/vue/dist/vue.min.js"></script>
+  <script>
+    MITO.init({
+      dsn: 'http://test.com/yourServer',
+      vue:window.Vue
+    });
+  </script>
+</header>
 ```
 
 ### Vue3.x
@@ -95,16 +95,14 @@ app.mount('#app');
 **index.html**
 
 ```html
- 	<header>
-      <script src="https://cdn.jsdelivr.net/npm/@mitojs/vue/dist/vue.min.js"></script>
-      <script>
-        MITO.init({
-          dsn: 'http://test.com/yourServer',
-          vue:window.Vue
-        });
-      </script>
-	 </header>
+<header>
+  <script src="https://cdn.jsdelivr.net/npm/@mitojs/vue/dist/vue.min.js"></script>
+  <script>
+    MITO.init({
+      dsn: 'http://test.com/yourServer',
+      vue:window.Vue
+    });
+  </script>
+</header>
 ```
-
-
 

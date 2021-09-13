@@ -119,7 +119,7 @@ CDN way is **not recommended**.Because `@mitojs/react` commonjs file is include 
 
 **index.html**
 
-```html
+```js
 <header>
   <script src="https://cdn.jsdelivr.net/npm/@mitojs/react/dist/react.min.js"></script>
   <script>
