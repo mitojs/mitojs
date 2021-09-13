@@ -33,7 +33,7 @@ const MitoInstance = init({
 
 ### Vue3.x
 ```typescript
-// main.js
+// main.ts
 import { createApp } from 'vue'
 import App from './App.vue'
 import { init } from '@mitojs/vue'
