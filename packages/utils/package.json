@@ -1,6 +1,6 @@
 {
   "name": "@mitojs/utils",
-  "version": "2.1.22",
+  "version": "2.1.24",
   "description": "@mitojs/utils",
   "author": "cjinhuo",
   "license": "MIT",
@@ -24,9 +24,9 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/core": "2.1.22",
-    "@mitojs/browser": "2.1.22",
-    "@mitojs/shared": "2.1.22",
-    "@mitojs/types": "2.1.22"
+    "@mitojs/core": "2.1.24",
+    "@mitojs/browser": "2.1.24",
+    "@mitojs/shared": "2.1.24",
+    "@mitojs/types": "2.1.24"
   }
 }

@@ -16,7 +16,7 @@ const vuePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.VUE,
   monitor(notify) {
     const Vue = this.options.vue
-    if (Vue && Vue.config && Vue.config.errorHandler) {
+    if (Vue && Vue.config) {
       const originErrorHandle = Vue.config.errorHandler
       Vue.config.errorHandler = function (err: Error, vm: ViewModel, info: string): void {
         const data: ReportDataType = {
@@ -36,7 +36,7 @@ const vuePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
             console.error(err)
           })
         }
-        return originErrorHandle(err, vm, info)
+        return originErrorHandle?.(err, vm, info)
       }
     }
   },

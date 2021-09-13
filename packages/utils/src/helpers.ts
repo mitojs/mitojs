@@ -241,3 +241,40 @@ export function firstStrtoUppercase(str: string): string {
     return `${$1.toUpperCase()}${$2}`
   })
 }
+
+/**
+ * 安全的转换对象，包括循环引用，如果是循环引用就返回Circular
+ *
+ * @export
+ * @param {object} obj 需要转换的对象
+ * @return {*}  {string}
+ */
+export function safeStringify(obj: object): string {
+  const set = new Set()
+  const str = JSON.stringify(obj, function (_key, value) {
+    if (set.has(value)) {
+      return 'Circular'
+    }
+    typeof value === 'object' && set.add(value)
+    return value
+  })
+  set.clear()
+  return str
+}
+
+/**
+ * 解决Vue3抛出的proxy对象循环引用的问题
+ *
+ * @export
+ * @template T
+ * @param {object} obj
+ * @return {*}  {T}
+ */
+export function getObjectWithForIn<T = object>(obj: object): T {
+  if (!variableTypeDetection.isObject(obj)) obj
+  const result = {}
+  for (const key in obj) {
+    result[key] = obj[key]
+  }
+  return result as T
+}

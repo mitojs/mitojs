@@ -1,4 +1,5 @@
 import { ViewModel } from '@mitojs/types'
+import { getObjectWithForIn } from '@mitojs/utils'
 
 export function vue2VmHandler(vm: ViewModel) {
   let componentName = ''
@@ -26,6 +27,6 @@ export function vue3VmHandler(vm: ViewModel) {
   }
   return {
     componentName,
-    propsData: vm.$props
+    propsData: getObjectWithForIn(vm.$props)
   }
 }

@@ -1,6 +1,6 @@
 import { MethodTypes, ToStringTypes } from '@mitojs/shared'
 import { BrowserOptionsFieldsTypes } from './types'
-import { toStringValidateOption } from '@mitojs/utils'
+import { safeStringify, toStringValidateOption } from '@mitojs/utils'
 import { ReportDataType } from '@mitojs/types'
 import { BaseTransport } from '@mitojs/core'
 
@@ -20,7 +20,7 @@ export default class BrowserTransport extends BaseTransport<BrowserOptionsFields
       if (typeof this.configReportXhr === 'function') {
         this.configReportXhr(xhr, data)
       }
-      xhr.send(JSON.stringify(data))
+      xhr.send(safeStringify(data))
     }
     this.queue.addTask(requestFun)
   }
@@ -28,7 +28,7 @@ export default class BrowserTransport extends BaseTransport<BrowserOptionsFields
     const requestFun = () => {
       let img = new Image()
       const spliceStr = url.indexOf('?') === -1 ? '?' : '&'
-      img.src = `${url}${spliceStr}data=${encodeURIComponent(JSON.stringify(data))}`
+      img.src = `${url}${spliceStr}data=${encodeURIComponent(safeStringify(data))}`
       img = null
     }
     this.queue.addTask(requestFun)
