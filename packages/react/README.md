@@ -119,7 +119,7 @@ CDN way is **not recommended**.Because `@mitojs/react` commonjs file is include 
 
 **index.html**
 
-```js
+```html
 <header>
   <script src="https://cdn.jsdelivr.net/npm/@mitojs/react/dist/react.min.js"></script>
   <script>
@@ -147,7 +147,7 @@ const MitoInstance = MITO.init({
 const APP: React.FC = () => {
   return (
     <MITO.MitoProvider MitoInstance={MitoInstance}>
-        <pp />
+        <App />
     </MITO.MitoProvider>
   )
 }
