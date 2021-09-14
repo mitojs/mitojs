@@ -21,7 +21,7 @@ interface MITOGlobal {
   __MITO__?: MitoSupport
 }
 
-// export const isNodeEnv = variableTypeDetection.isProcess(typeof process !== 'undefined' ? process : 0)
+export const isNodeEnv = variableTypeDetection.isProcess(typeof process !== 'undefined' ? process : 0)
 
 export const isWxMiniEnv =
   variableTypeDetection.isObject(typeof wx !== 'undefined' ? wx : 0) &&
@@ -36,9 +36,9 @@ export const isBrowserEnv = variableTypeDetection.isWindow(typeof window !== 'un
 export function getGlobal<T>() {
   if (isBrowserEnv) return window as unknown as MITOGlobal & T
   if (isWxMiniEnv) return wx as unknown as MITOGlobal & T
-  // if (isNodeEnv) return process as unknown as MITOGlobal & T
+  // it's true when run e2e
+  if (isNodeEnv) return process as unknown as MITOGlobal & T
 }
-console.log('window', window)
 // whether it is right use &
 const _global = getGlobal<Window & WechatMiniprogram.Wx>()
 const _support = getGlobalMitoSupport()

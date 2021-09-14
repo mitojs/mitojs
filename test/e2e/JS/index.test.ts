@@ -20,9 +20,10 @@ describe('Native JS e2e:', () => {
   beforeEach(async () => {
     browser = await puppeteer.launch()
     page = await browser.newPage()
-    page.on('console', (msg) => {
-      for (let i = 0; i < msg.args().length; ++i) console.log(`${i}: ${msg.args()[i]}`)
-    })
+    // print console
+    // page.on('console', (msg) => {
+    //   for (let i = 0; i < msg.args().length; ++i) console.log(`${i}: ${msg.args()[i]}`)
+    // })
     await page.goto(jsUrl)
     page.on('request', (request) => {
       if (request.url().includes(ServerUrls.errorsUpload) && uploadRequestHandles.length > 0) {
@@ -48,7 +49,6 @@ describe('Native JS e2e:', () => {
     async () => {
       const interceptRequest = (request: puppeteer.Request) => {
         const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
-        console.log('data', data)
         expect((data as ReportDataType).type).toBe(ErrorTypes.JAVASCRIPT)
         expect((data as ReportDataType).level).toBe(Severity.Normal)
         expect(Array.isArray((data as ReportDataType).stack)).toBeTruthy()
@@ -60,7 +60,7 @@ describe('Native JS e2e:', () => {
 
       const stack = await getStack()
       // click
-      expect(stack[0].type).toBe(BrowserBreadcrumbTypes.CODE_ERROR)
+      expect(stack[0].type).toBe(BrowserBreadcrumbTypes.CLICK)
       expect(stack[0].category).toBe(BREADCRUMBCATEGORYS.USER)
       // expect(stack[0].level).toBe(Severity.Info)
       // code error
