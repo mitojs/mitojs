@@ -19,12 +19,10 @@ export interface AuthInfo {
 export interface TransportDataType {
   authInfo?: AuthInfo
   breadcrumb?: BreadcrumbPushData[]
-  data?: FinalReportType
+  data?: ReportDataType
   record?: any[]
   deviceInfo?: DeviceInfo
 }
-
-export type FinalReportType = ReportDataType
 
 export interface BaseTransformType {
   type?: ErrorTypes

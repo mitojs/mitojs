@@ -1,6 +1,7 @@
 import { EventTypes } from '@mitojs/shared'
 import { Logger } from './logger'
 import { DeviceInfo } from '@mitojs/types'
+import { variableTypeDetection } from './is'
 
 /**
  *MITO的全局变量
@@ -22,28 +23,27 @@ interface MITOGlobal {
 
 // export const isNodeEnv = variableTypeDetection.isProcess(typeof process !== 'undefined' ? process : 0)
 
-// export const isWxMiniEnv =
-//   variableTypeDetection.isObject(typeof wx !== 'undefined' ? wx : 0) &&
-//   variableTypeDetection.isFunction(typeof App !== 'undefined' ? App : 0)
+export const isWxMiniEnv =
+  variableTypeDetection.isObject(typeof wx !== 'undefined' ? wx : 0) &&
+  variableTypeDetection.isFunction(typeof App !== 'undefined' ? App : 0)
 
-// export const isBrowserEnv = variableTypeDetection.isWindow(typeof window !== 'undefined' ? window : 0)
+export const isBrowserEnv = variableTypeDetection.isWindow(typeof window !== 'undefined' ? window : 0)
 /**
  * 获取全局变量
  *
  * ../returns Global scope object
  */
-// export function getGlobal<T>() {
-//   if (isBrowserEnv) return window as unknown as MITOGlobal & T
-//   if (isWxMiniEnv) return wx as unknown as MITOGlobal & T
-//   if (isNodeEnv) return process as unknown as MITOGlobal & T
-// }
-
-const _global = window as unknown as MITOGlobal & Window
-// const _wx = getGlobal<>()
+export function getGlobal<T>() {
+  if (isBrowserEnv) return window as unknown as MITOGlobal & T
+  if (isWxMiniEnv) return wx as unknown as MITOGlobal & T
+  // if (isNodeEnv) return process as unknown as MITOGlobal & T
+}
+console.log('window', window)
+// whether it is right use &
+const _global = getGlobal<Window & WechatMiniprogram.Wx>()
 const _support = getGlobalMitoSupport()
-
 /**
- * 获取全部变量__MITO__的引用地址
+ * 获取全局变量__MITO__的引用地址
  *
  * @return {*}  {MitoSupport}
  */

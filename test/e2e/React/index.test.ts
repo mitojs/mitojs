@@ -1,4 +1,4 @@
-import { BREADCRUMBCATEGORYS, BREADCRUMBTYPES, ERRORTYPES, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
+import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
 import { reactUrl } from '@/test/config'
 import { ReportDataType, TransportDataType } from '@mitojs/types'
 import { Severity } from '@mitojs/utils'
@@ -50,12 +50,12 @@ describe('React e2e', () => {
         // breadcrumb valid
         const stack = await getStack()
         expect(stack[0].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-        expect(stack[0].type).toBe(BREADCRUMBTYPES.REACT)
+        expect(stack[0].type).toBe(BrowserBreadcrumbTypes.REACT)
         expect(stack[0].level).toBe(Severity.Error)
         expect(stack[0].data).toBe('Error: I crashed!')
         // upload
         const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
-        expect((data as ReportDataType).type).toBe(ERRORTYPES.REACT_ERROR)
+        expect((data as ReportDataType).type).toBe(ErrorTypes.REACT)
         expect((data as ReportDataType).level).toBe(Severity.Normal)
         expect((data as ReportDataType).name).toBe('Error')
         expect((data as ReportDataType).level).toBe(Severity.Normal)

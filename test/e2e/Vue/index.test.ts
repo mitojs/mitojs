@@ -1,4 +1,4 @@
-import { BREADCRUMBCATEGORYS, BREADCRUMBTYPES, ERRORTYPES, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
+import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
 import { vueUrl } from '@/test/config'
 import { TransportDataType, BreadcrumbPushData, ReportDataType } from '@mitojs/types'
 import { Severity } from '@mitojs/utils'
@@ -49,11 +49,11 @@ describe('Vue e2e', () => {
         // breadcrumb valid
         const stack = await getStack()
         expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-        expect(stack[1].type).toBe(BREADCRUMBTYPES.VUE)
+        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.VUE)
         expect(stack[1].level).toBe(Severity.Error)
         // upload
         const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
-        expect((data as ReportDataType).type).toBe(ERRORTYPES.VUE_ERROR)
+        expect((data as ReportDataType).type).toBe(ErrorTypes.VUE)
         expect((data as ReportDataType).level).toBe(Severity.Normal)
         expect((data as ReportDataType).name).toBe('TypeError')
         expect((data as ReportDataType).level).toBe(Severity.Normal)
