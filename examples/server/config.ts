@@ -12,7 +12,6 @@ const vueDistFilePath = resolve('./packages/vue/dist')
 const reactDistFilePath = resolve('./packages/react/dist')
 const wxDistFilePath = resolve('./packages/wx-mini/dist')
 const webPerfFilePath = resolve('./packages/web-performance/dist')
-console.log(webPerfFilePath, 'webPerfFilePath')
 export const FilePaths = {
   '/JS': JsFilePath,
   '/Vue': VueFilePath,

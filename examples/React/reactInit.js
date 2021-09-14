@@ -8,8 +8,6 @@ const MitoInstance = MITO.init({
 
 window._MITO_ = MitoInstance
 
-console.log(MitoInstance)
-
 class BuggyCounter extends React.Component {
   constructor(props) {
     super(props)

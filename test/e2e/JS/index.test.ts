@@ -62,171 +62,171 @@ describe('Native JS e2e:', () => {
       // click
       expect(stack[0].type).toBe(BrowserBreadcrumbTypes.CLICK)
       expect(stack[0].category).toBe(BREADCRUMBCATEGORYS.USER)
-      // expect(stack[0].level).toBe(Severity.Info)
+      expect(stack[0].level).toBe(Severity.Info)
       // code error
       expect(stack[1].type).toBe(BrowserBreadcrumbTypes.CODE_ERROR)
       expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-      // expect(stack[1].level).toBe(Severity.Error)
+      expect(stack[1].level).toBe(Severity.Error)
       expect(stack.length).toBe(2)
     },
     timeout
   )
 
-  // it(
-  //   'a normal get XHR request，breadcrumb stack should add one',
-  //   (done) => {
-  //     async function requestfinishedHandle(request: puppeteer.Request) {
-  //       if (request.method() === MethodTypes.Get && request.url().includes(ServerUrls.normalGet)) {
-  //         const stack = await getStack()
-  //         expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
-  //         expect(stack[1].type).toBe(BrowserBreadcrumbTypes.XHR)
-  //         expect(stack[1].level).toBe(Severity.Info)
-  //         expect((stack[1].data as ReportDataType).message).toBe(SpanStatus.Ok)
-  //         expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
-  //         expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Get)
-  //         expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.normalGet)
-  //       }
-  //       done()
-  //     }
-  //     finishedRequestHandles.push(requestfinishedHandle)
-  //     page.click('#normalReq')
-  //   },
-  //   timeout
-  // )
+  it(
+    'a normal get XHR request，breadcrumb stack should add one',
+    (done) => {
+      async function requestfinishedHandle(request: puppeteer.Request) {
+        if (request.method() === MethodTypes.Get && request.url().includes(ServerUrls.normalGet)) {
+          const stack = await getStack()
+          expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
+          expect(stack[1].type).toBe(BrowserBreadcrumbTypes.XHR)
+          expect(stack[1].level).toBe(Severity.Info)
+          expect((stack[1].data as ReportDataType).message).toBe(SpanStatus.Ok)
+          expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
+          expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Get)
+          expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.normalGet)
+        }
+        done()
+      }
+      finishedRequestHandles.push(requestfinishedHandle)
+      page.click('#normalReq')
+    },
+    timeout
+  )
 
-  // it(
-  //   'a exception get XHR request，breadcrumb stack should add two and upload this error',
-  //   (done) => {
-  //     async function requestfinishedHandle(request: puppeteer.Request) {
-  //       // if (request.method() === MethodTypes.Get && request.url().includes('/exception')) {
-  //       const stack = await getStack()
-  //       expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
-  //       expect(stack[1].type).toBe(BrowserBreadcrumbTypes.XHR)
-  //       expect(stack[1].level).toBe(Severity.Info)
-  //       expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionGet}`)
-  //       expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
-  //       expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Get)
-  //       expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.exceptionGet)
+  it(
+    'a exception get XHR request，breadcrumb stack should add two and upload this error',
+    (done) => {
+      async function requestfinishedHandle(request: puppeteer.Request) {
+        // if (request.method() === MethodTypes.Get && request.url().includes('/exception')) {
+        const stack = await getStack()
+        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
+        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.XHR)
+        expect(stack[1].level).toBe(Severity.Info)
+        expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionGet}`)
+        expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
+        expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Get)
+        expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.exceptionGet)
 
-  //       expect(stack[2].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-  //       expect(stack[2].type).toBe(BrowserBreadcrumbTypes.XHR)
-  //       expect(stack[2].level).toBe(Severity.Error)
-  //       expect((stack[2].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
-  //       expect((stack[2].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionGet}`)
-  //       expect((stack[2].data as ReportDataType).request.method).toBe(MethodTypes.Get)
-  //       expect((stack[2].data as ReportDataType).request.url).toBe(ServerUrls.exceptionGet)
-  //       done()
-  //       // }
-  //     }
-  //     finishedRequestHandles.push(requestfinishedHandle)
-  //     function interceptedRequest(request: puppeteer.Request) {
-  //       const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
-  //       expect((data as ReportDataType).type).toBe(ErrorTypes.HTTP)
-  //       expect((data as ReportDataType).level).toBe(Severity.Low)
-  //       expect(authInfo.sdkName).toBe(SDK_NAME)
-  //       expect(authInfo.sdkVersion).toBe(SDK_VERSION)
-  //     }
-  //     uploadRequestHandles.push(interceptedRequest)
-  //     page.click('#exceptionReq')
-  //   },
-  //   timeout
-  // )
+        expect(stack[2].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
+        expect(stack[2].type).toBe(BrowserBreadcrumbTypes.XHR)
+        expect(stack[2].level).toBe(Severity.Error)
+        expect((stack[2].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
+        expect((stack[2].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionGet}`)
+        expect((stack[2].data as ReportDataType).request.method).toBe(MethodTypes.Get)
+        expect((stack[2].data as ReportDataType).request.url).toBe(ServerUrls.exceptionGet)
+        done()
+        // }
+      }
+      finishedRequestHandles.push(requestfinishedHandle)
+      function interceptedRequest(request: puppeteer.Request) {
+        const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
+        expect((data as ReportDataType).type).toBe(ErrorTypes.HTTP)
+        expect((data as ReportDataType).level).toBe(Severity.Low)
+        expect(authInfo.sdkName).toBe(SDK_NAME)
+        expect(authInfo.sdkVersion).toBe(SDK_VERSION)
+      }
+      uploadRequestHandles.push(interceptedRequest)
+      page.click('#exceptionReq')
+    },
+    timeout
+  )
 
-  // it(
-  //   'a normal post fetch request，breadcrumb stack should add one',
-  //   (done) => {
-  //     async function requestfinishedHandle() {
-  //       const stack = await getStack()
-  //       expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
-  //       expect(stack[1].type).toBe(BrowserBreadcrumbTypes.FETCH)
-  //       expect(stack[1].level).toBe(Severity.Info)
-  //       expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.Ok}`)
-  //       expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
-  //       expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Post)
-  //       expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.normalPost)
-  //       done()
-  //     }
-  //     finishedRequestHandles.push(requestfinishedHandle)
-  //     page.click('#normalFetch')
-  //   },
-  //   timeout
-  // )
+  it(
+    'a normal post fetch request，breadcrumb stack should add one',
+    (done) => {
+      async function requestfinishedHandle() {
+        const stack = await getStack()
+        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
+        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.FETCH)
+        expect(stack[1].level).toBe(Severity.Info)
+        expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.Ok}`)
+        expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
+        expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Post)
+        expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.normalPost)
+        done()
+      }
+      finishedRequestHandles.push(requestfinishedHandle)
+      page.click('#normalFetch')
+    },
+    timeout
+  )
 
-  // it(
-  //   'a exception post fetch request，breadcrumb stack should add two and upload this error',
-  //   (done) => {
-  //     async function requestfinishedHandle() {
-  //       const stack = await getStack()
-  //       expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
-  //       expect(stack[1].type).toBe(BrowserBreadcrumbTypes.FETCH)
-  //       expect(stack[1].level).toBe(Severity.Info)
-  //       expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionPost}`)
-  //       expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
-  //       expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Post)
-  //       expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.exceptionPost)
+  it(
+    'a exception post fetch request，breadcrumb stack should add two and upload this error',
+    (done) => {
+      async function requestfinishedHandle() {
+        const stack = await getStack()
+        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
+        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.FETCH)
+        expect(stack[1].level).toBe(Severity.Info)
+        expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionPost}`)
+        expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
+        expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Post)
+        expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.exceptionPost)
 
-  //       expect(stack[2].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-  //       expect(stack[2].type).toBe(BrowserBreadcrumbTypes.FETCH)
-  //       expect(stack[2].level).toBe(Severity.Error)
-  //       expect((stack[2].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
-  //       expect((stack[2].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionPost}`)
-  //       expect((stack[2].data as ReportDataType).request.method).toBe(MethodTypes.Post)
-  //       expect((stack[2].data as ReportDataType).request.data).toBe(JSON.stringify({ test: '测试请求体' }))
-  //       expect((stack[2].data as ReportDataType).request.url).toBe(ServerUrls.exceptionPost)
-  //       done()
-  //     }
-  //     finishedRequestHandles.push(requestfinishedHandle)
-  //     function interceptedRequest(request: puppeteer.Request) {
-  //       const { data } = JSON.parse(request.postData()) as TransportDataType
-  //       expect((data as ReportDataType).type).toBe(ErrorTypes.HTTP)
-  //       expect((data as ReportDataType).level).toBe(Severity.Low)
-  //     }
-  //     uploadRequestHandles.push(interceptedRequest)
-  //     page.click('#exceptionFetch')
-  //   },
-  //   timeout
-  // )
+        expect(stack[2].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
+        expect(stack[2].type).toBe(BrowserBreadcrumbTypes.FETCH)
+        expect(stack[2].level).toBe(Severity.Error)
+        expect((stack[2].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
+        expect((stack[2].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionPost}`)
+        expect((stack[2].data as ReportDataType).request.method).toBe(MethodTypes.Post)
+        expect((stack[2].data as ReportDataType).request.data).toBe(JSON.stringify({ test: '测试请求体' }))
+        expect((stack[2].data as ReportDataType).request.url).toBe(ServerUrls.exceptionPost)
+        done()
+      }
+      finishedRequestHandles.push(requestfinishedHandle)
+      function interceptedRequest(request: puppeteer.Request) {
+        const { data } = JSON.parse(request.postData()) as TransportDataType
+        expect((data as ReportDataType).type).toBe(ErrorTypes.HTTP)
+        expect((data as ReportDataType).level).toBe(Severity.Low)
+      }
+      uploadRequestHandles.push(interceptedRequest)
+      page.click('#exceptionFetch')
+    },
+    timeout
+  )
 
-  // it(
-  //   'manual report，breadcrumb should add one and upload this error',
-  //   async (done) => {
-  //     async function interceptedRequest(request: puppeteer.Request) {
-  //       const stack = await getStack()
-  //       expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.DEBUG)
-  //       expect(stack[1].type).toBe(BrowserBreadcrumbTypes.CUSTOMER)
-  //       expect(stack[1].level).toBe(Severity.Error)
-  //       const { data } = JSON.parse(request.postData()) as TransportDataType
-  //       expect((data as ReportDataType).customTag).toBe('测试')
-  //       expect((data as ReportDataType).name).toBe('MITO.log')
-  //       expect((data as ReportDataType).type).toBe(ErrorTypes.LOG)
-  //       expect((data as ReportDataType).level).toBe(Severity.Critical)
-  //       expect((data as ReportDataType).message).toBe(JSON.stringify({ one: 111 }))
-  //       done()
-  //     }
-  //     uploadRequestHandles.push(interceptedRequest)
-  //     await page.click('#logUpload')
-  //   },
-  //   timeout
-  // )
+  it(
+    'manual report，breadcrumb should add one and upload this error',
+    async (done) => {
+      async function interceptedRequest(request: puppeteer.Request) {
+        const stack = await getStack()
+        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.DEBUG)
+        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.CUSTOMER)
+        expect(stack[1].level).toBe(Severity.Error)
+        const { data } = JSON.parse(request.postData()) as TransportDataType
+        expect((data as ReportDataType).customTag).toBe('测试')
+        expect((data as ReportDataType).name).toBe('MITO.log')
+        expect((data as ReportDataType).type).toBe(ErrorTypes.LOG)
+        expect((data as ReportDataType).level).toBe(Severity.Critical)
+        expect((data as ReportDataType).message).toBe(JSON.stringify({ one: 111 }))
+        done()
+      }
+      uploadRequestHandles.push(interceptedRequest)
+      await page.click('#logUpload')
+    },
+    timeout
+  )
 
-  // it(
-  //   'promiseError，breadcrumb should add one and upload this error',
-  //   async (done) => {
-  //     async function interceptedRequest(request: puppeteer.Request) {
-  //       const stack = await getStack()
-  //       expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-  //       expect(stack[1].type).toBe(BrowserBreadcrumbTypes.UNHANDLEDREJECTION)
-  //       expect(stack[1].level).toBe(Severity.Error)
-  //       const { data } = JSON.parse(request.postData()) as TransportDataType
-  //       expect((data as ReportDataType).name).toBe('unhandledrejection')
-  //       expect((data as ReportDataType).type).toBe(ErrorTypes.PROMISE)
-  //       expect((data as ReportDataType).level).toBe(Severity.Low)
-  //       expect((data as ReportDataType).message).toBe('promise reject')
-  //       done()
-  //     }
-  //     uploadRequestHandles.push(interceptedRequest)
-  //     await page.click('#promiseError')
-  //   },
-  //   timeout
-  // )
+  it(
+    'promiseError，breadcrumb should add one and upload this error',
+    async (done) => {
+      async function interceptedRequest(request: puppeteer.Request) {
+        const stack = await getStack()
+        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
+        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.UNHANDLEDREJECTION)
+        expect(stack[1].level).toBe(Severity.Error)
+        const { data } = JSON.parse(request.postData()) as TransportDataType
+        expect((data as ReportDataType).name).toBe('unhandledrejection')
+        expect((data as ReportDataType).type).toBe(ErrorTypes.PROMISE)
+        expect((data as ReportDataType).level).toBe(Severity.Low)
+        expect((data as ReportDataType).message).toBe('promise reject')
+        done()
+      }
+      uploadRequestHandles.push(interceptedRequest)
+      await page.click('#promiseError')
+    },
+    timeout
+  )
 })

@@ -3,7 +3,7 @@ import { reactUrl } from '@/test/config'
 import { ReportDataType, TransportDataType } from '@mitojs/types'
 import { Severity } from '@mitojs/utils'
 import puppeteer from 'puppeteer'
-import { BreadcrumbPushData } from '@mitojs/types'
+import { BrowserClient } from '@mitojs/browser'
 
 describe('React e2e', () => {
   const timeout = 3000
@@ -13,7 +13,7 @@ describe('React e2e', () => {
   const finishedRequestHandles = []
   async function getStack() {
     return await page.evaluate(() => {
-      return window['__MITO__'].breadcrumb.stack as BreadcrumbPushData[]
+      return (window['_MITO_'] as BrowserClient).breadcrumb.getStack()
     })
   }
   beforeEach(async () => {
@@ -47,21 +47,22 @@ describe('React e2e', () => {
     'errorboundary capture react render error:breadcrumb should add one and upload this error',
     async (done) => {
       async function uploadRequestHandle(request: puppeteer.Request) {
-        // breadcrumb valid
+        // breadcrumb validate
         const stack = await getStack()
-        expect(stack[0].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-        expect(stack[0].type).toBe(BrowserBreadcrumbTypes.REACT)
-        expect(stack[0].level).toBe(Severity.Error)
-        expect(stack[0].data).toBe('Error: I crashed!')
+        const breadcrumbItem = stack[0]
+        expect(breadcrumbItem.category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
+        expect(breadcrumbItem.type).toBe(BrowserBreadcrumbTypes.REACT)
+        expect(breadcrumbItem.level).toBe(Severity.Error)
         // upload
-        const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
-        expect((data as ReportDataType).type).toBe(ErrorTypes.REACT)
-        expect((data as ReportDataType).level).toBe(Severity.Normal)
-        expect((data as ReportDataType).name).toBe('Error')
-        expect((data as ReportDataType).level).toBe(Severity.Normal)
-        expect((data as ReportDataType).message).toBe('I crashed!')
+        const postData = JSON.parse(request.postData()) as TransportDataType
+        const { authInfo, data } = postData
+        expect(data.type).toBe(ErrorTypes.REACT)
+        expect(data.level).toBe(Severity.Normal)
+        expect(data.name).toBe('Error')
+        expect(data.level).toBe(Severity.Normal)
+        expect(data.message).toBe('I crashed!')
         // stack is array
-        expect(Array.isArray((data as ReportDataType).stack)).toBeTruthy()
+        expect(Array.isArray(data.stack)).toBeTruthy()
         expect(authInfo.sdkName).toBe(SDK_NAME)
         expect(authInfo.sdkVersion).toBe(SDK_VERSION)
         done()

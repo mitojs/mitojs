@@ -1,13 +1,13 @@
-const webInstance = MITO.init({
+const instance = MITO.init({
   vue: Vue,
   debug: true,
   silentConsole: true,
   maxBreadcrumbs: 10,
   dsn: 'http://localhost:2021/errors/upload'
 })
-window._MITO_ = webInstance
+window._MITO_ = instance
 
-const webInstance2 = MITO.init({
+const instance2 = MITO.init({
   vue: Vue,
   silentXhr: true,
   debug: true,
@@ -15,4 +15,4 @@ const webInstance2 = MITO.init({
   maxBreadcrumbs: 10,
   dsn: 'http://localhost:2021/errors/upload'
 })
-window._MITO_2 = webInstance2
+window._MITO_2 = instance2

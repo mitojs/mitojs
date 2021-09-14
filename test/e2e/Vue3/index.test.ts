@@ -4,6 +4,7 @@ import { TransportDataType, BreadcrumbPushData, ReportDataType } from '@mitojs/t
 import { Severity } from '@mitojs/utils'
 import puppeteer from 'puppeteer'
 import {} from '@mitojs/types'
+import { BrowserClient } from '@mitojs/browser'
 
 describe('Vue3 e2e', () => {
   const timeout = 3000
@@ -13,7 +14,7 @@ describe('Vue3 e2e', () => {
   const finishedRequestHandles = []
   async function getStack() {
     return await page.evaluate(() => {
-      return window['__MITO__'].breadcrumb.stack as BreadcrumbPushData[]
+      return (window['_MITO_'] as BrowserClient).breadcrumb.getStack()
     })
   }
   beforeEach(async () => {
