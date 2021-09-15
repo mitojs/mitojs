@@ -4,7 +4,7 @@
     <a href="#" target="_blank">
     <img src="https://i.loli.net/2021/07/28/EvPwd4NjVH3tBfO.jpg" alt="mito-logo" height="90">
     </a>
-    <p>A Lite SDK For Monitor Web Errors</p>
+    <p>A Lite SDK For Monitor Web</p>
 
 [![npm version](https://img.shields.io/npm/v/@mitojs/web.svg?style=flat-square)](https://www.npmjs.com/package/@mitojs/web)
 [![license](https://img.shields.io/github/license/mitojs/mitojs)](https://github.com/mitojs/mitojs/blob/dev/LICENSE)
@@ -15,7 +15,7 @@
 
 <!-- [![npm downloads](https://img.shields.io/npm/dm/@zyf2e/mitojs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@zyf2e/mitojs) -->
 
-</div>
+</div>  
 
 ## Features
 
