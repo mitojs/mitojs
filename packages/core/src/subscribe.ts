@@ -8,11 +8,10 @@ type MonitorCallback = (data: any) => void
  * @class Subscrib
  * @template T 事件枚举
  */
-export default class Subscrib<T> {
+export class Subscrib<T> {
   dep: Map<T, MonitorCallback[]> = new Map()
   constructor() {}
   watch(eventName: T, callBack: (data: any) => any) {
-    console.log(this)
     const fns = this.dep.get(eventName)
     if (fns) {
       this.dep.set(eventName, fns.concat(callBack))
@@ -29,7 +28,7 @@ export default class Subscrib<T> {
           fn(data)
         },
         (e: Error) => {
-          logger.error(`Subscrib.notify：重写事件的回调函数发生错误\neventName:${eventName}\nName: ${getFunctionName(fn)}\nError: ${e}`)
+          logger.error(`Subscrib.notify：监听事件的回调函数发生错误\neventName:${eventName}\nName: ${getFunctionName(fn)}\nError: ${e}`)
         }
       )
     })

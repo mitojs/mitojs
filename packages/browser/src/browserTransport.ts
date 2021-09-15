@@ -4,7 +4,7 @@ import { safeStringify, toStringValidateOption } from '@mitojs/utils'
 import { ReportDataType } from '@mitojs/types'
 import { BaseTransport } from '@mitojs/core'
 
-export default class BrowserTransport extends BaseTransport<BrowserOptionsFieldsTypes> {
+export class BrowserTransport extends BaseTransport<BrowserOptionsFieldsTypes> {
   configReportXhr: unknown
   useImgUpload = false
   constructor(options: BrowserOptionsFieldsTypes) {

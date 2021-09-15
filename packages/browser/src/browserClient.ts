@@ -11,8 +11,8 @@ import {
   unknownToString
 } from '@mitojs/utils'
 import { LogTypes } from '@mitojs/types'
-import BrowserOptions from './browserOptions'
-import BrowserTransport from './browserTransport'
+import { BrowserOptions } from './browserOptions'
+import {BrowserTransport} from './browserTransport'
 import { BrowserOptionsFieldsTypes } from './types'
 
 export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTypes> {

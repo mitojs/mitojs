@@ -4,7 +4,7 @@ import { toStringValidateOption } from '@mitojs/utils'
 import { VueInstance } from 'packages/types/src'
 import { BrowserOptionsFieldsTypes } from './types'
 
-export default class BrowserOptions extends BaseOptions<BrowserOptionsFieldsTypes> {
+export class BrowserOptions extends BaseOptions<BrowserOptionsFieldsTypes> {
   /**
    * 静默监控xhr事件
    */

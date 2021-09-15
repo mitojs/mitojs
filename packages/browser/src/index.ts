@@ -1,4 +1,4 @@
-export * from './types'
+export * from './export'
 import { BrowserClient } from './browserClient'
 import { BrowserOptionsFieldsTypes } from './types'
 import fetchPlugin from './plugins/fetch'
@@ -27,4 +27,4 @@ function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins:
 }
 
 const init = createBrowserInstance
-export { createBrowserInstance, init, BrowserClient }
+export { createBrowserInstance, init }
