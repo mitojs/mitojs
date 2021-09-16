@@ -35,45 +35,47 @@
 
 ## Install
 
-### Web
-
-#### use npm
-
+### browser
 ```bash
-$ npm i @mitojs/web
+# using npm
+$ npm i @mitojs/browser
+# using yarn
+yarn add @mitojs/browser
 ```
-
-### use yarn
-
+go to [browser usage manual](./packages/browser/README.md)
+### react
 ```bash
-$ yarn add @mitojs/web
+# using npm
+$ npm i @mitojs/react
+# using yarn
+yarn add @mitojs/react
 ```
+go to [react usage manual](./packages/react/README.md)
 
-#### use CDN
-
-```javascript
-<script src="https://cdn.jsdelivr.net/npm/@mitojs/web/dist/web.min.js"></script>
+### vue
+```bash
+# using npm
+$ npm i @mitojs/vue
+# using yarn
+yarn add @mitojs/vue
 ```
+go to [vue usage manual](./packages/vue/README.md)
+
 
 ### wx-mini
-
-#### use npm
-
 ```bash
+# using npm
 $ npm i @mitojs/wx-mini
+# using yarn
+yarn add @mitojs/wx-mini
 ```
+go to [wx-mini usage manual](./packages/wx-mini/README.md)
 
-### use yarn
 
-```bash
-$ yarn add @mitojs/wx-mini
-```
+## hooks&&options
 
-#### use CDN
+[hooks&&options](https://github.com/mitojs/mitojs/blob/master/docs/option.md)
 
-```javascript
-<script src="https://cdn.jsdelivr.net/npm/@mitojs/wx-mini/dist/wx-mini.js"></script>
-```
 
 ## Demo for SDK
 
@@ -83,16 +85,7 @@ $ yarn add @mitojs/wx-mini
 
 ![mito-在线demo](https://tva1.sinaimg.cn/large/008eGmZEly1gmxgn4y1sag315g0m2hdt.gif)
 
-## Manual
 
-* [vue portal](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#Vue)
-* [react portal](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#react)
-* [wx-mini portal](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#微信小程序)
-* [wx-mini-performance portal](https://github.com/mitojs/mitojs/blob/master/docs/wx-mini-performance.md)
-
-## hooks&&options
-
-[hooks&&options](https://github.com/mitojs/mitojs/blob/master/docs/option.md)
 
 
 ## monitoring platform
@@ -117,5 +110,4 @@ welcome to raise issue, you can contact me on wx or email if you have some good 
 * email：cjinhuo@qq.com
 * bytedance introduce：(Hanghou、Beijing、Shanghai、Shenzhen、Guangzhou)
 1. [hangzhou-jobs](https://jobs.bytedance.com/experienced/position?keywords=%E5%89%8D%E7%AB%AF&category=6704215862603155720%2C6704215862557018372%2C6704215886108035339%2C6704215888985327886%2C6704215897130666254%2C6704215956018694411%2C6704215957146962184%2C6704215958816295181%2C6704215963966900491%2C6704216109274368264%2C6704216296701036811%2C6704216635923761412%2C6704217321877014787%2C6704219452277262596%2C6704219534724696331%2C6938376045242353957&location=CT_52&project=&type=&job_hot_flag=&current=1&limit=10)（web infrastructure、platform architecture etc.）
-
 

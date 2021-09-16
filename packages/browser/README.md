@@ -1,9 +1,53 @@
 # @mitojs/browser
 
-- [x] 🔨监听请求错误
-- [x] 🔨console
-- [x] 🔨路由跳转
-- [x] 🔨代码报错
-- [x] 🔨click
-- [x] 🔨资源加载错误
-- [x] 🌝支持IE8和安卓5以上
+## Install
+
+### Using npm
+```bash
+$ npm i @mitojs/browser
+```
+
+### Using yarn
+
+```bash
+$ yarn add @mitojs/browser
+```
+
+### usage
+
+```typescript
+// some.js
+import { init } from '@mitojs/vue'
+
+// multiple instances
+const MitoInstance = init({
+  vue: Vue,
+  dsn: 'https://test.com/yourInterface',
+  maxBreadcrumbs: 100
+})
+
+```
+
+### use log
+you can call `log` function in anywhere with mito instance
+
+```js
+MitoInstance.log({
+  message: 'some msg',
+  tag: 'your tag',
+})
+```
+
+## Using With CDN
+**index.html**
+
+```html
+<header>
+  <script src="https://cdn.jsdelivr.net/npm/@mitojs/vue/dist/vue.min.js"></script>
+  <script>
+    MITO.init({
+      dsn: 'http://test.com/yourServer',
+    });
+  </script>
+</header>
+```
