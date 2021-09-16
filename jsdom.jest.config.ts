@@ -23,5 +23,6 @@ export default {
       tsconfig: './tsconfig.json',
       diagnostics: false
     }
-  }
+  },
+  testEnvironment: 'jsdom'
 }
