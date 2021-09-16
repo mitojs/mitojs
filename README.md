@@ -1,5 +1,3 @@
-<!-- [中文文档]() -->
-
 <div align="center">
     <a href="#" target="_blank">
     <img src="https://i.loli.net/2021/07/28/EvPwd4NjVH3tBfO.jpg" alt="mito-logo" height="90">
@@ -16,6 +14,9 @@
 <!-- [![npm downloads](https://img.shields.io/npm/dm/@zyf2e/mitojs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@zyf2e/mitojs) -->
 
 </div>
+
+[中文文档](./README.zh_CN.md)
+
 
 ## Features
 
