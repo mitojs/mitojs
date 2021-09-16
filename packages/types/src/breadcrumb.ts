@@ -1,8 +1,8 @@
 import { Severity } from '@mitojs/utils'
 import { ReportDataType } from './transport'
-import { Replace } from './replace'
 import { TNumStrObj } from './common'
 import { BreadcrumbTypes } from '@mitojs/shared'
+import { ConsoleCollectType, RouteChangeCollectType } from './basePluginType'
 
 export interface BreadcrumbPushData {
   /**
@@ -10,21 +10,11 @@ export interface BreadcrumbPushData {
    */
   type: BreadcrumbTypes
   // string for click dom
-  data: ReportDataType | BreadcrumbRouterItemType | BreadcrumConsoleItemType | TNumStrObj
+  data: ReportDataType | RouteChangeCollectType | ConsoleCollectType | TNumStrObj
   /**
    * 分为user action、debug、http、
    */
   category?: string
   time?: number
   level: Severity
-}
-
-export interface BreadcrumbRouterItemType {
-  from: string
-  to: string
-}
-
-export interface BreadcrumConsoleItemType {
-  args: any[]
-  level: string
 }

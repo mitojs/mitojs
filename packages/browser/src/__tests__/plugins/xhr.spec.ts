@@ -1,6 +1,6 @@
 import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes, HttpTypes, MethodTypes } from '@mitojs/shared'
 import { HttpCollectedType } from '@mitojs/types'
-import { getBreadcrumbCategoryInBrowser, getTimestamp, Severity } from '@mitojs/utils'
+import { getBreadcrumbCategoryInBrowser, Severity } from '@mitojs/utils'
 import { BrowserClient } from '../../browserClient'
 import xhrPlugin, { httpTransform, httpTransformedDataConsumer } from '../../plugins/xhr'
 

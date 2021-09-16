@@ -1,30 +1,15 @@
-import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes, HttpTypes, MethodTypes } from '@mitojs/shared'
-import { HttpCollectedType } from '@mitojs/types'
-import { getBreadcrumbCategoryInBrowser, getTimestamp, Severity } from '@mitojs/utils'
+import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes } from '@mitojs/shared'
+import { getBreadcrumbCategoryInBrowser } from '@mitojs/utils'
 import { BrowserClient } from '../../browserClient'
 import fetchPlugin from '../../plugins/fetch'
 import fetch from 'node-fetch'
 
 describe('fetchPlugin', () => {
+  // eslint-disable-next-line @typescript-eslint/no-extra-semi
   ;(window as any).fetch = fetch
   fetchPlugin.monitor = jest.fn(fetchPlugin.monitor)
   fetchPlugin.transform = jest.fn(fetchPlugin.transform)
   fetchPlugin.consumer = jest.fn(fetchPlugin.consumer)
-  const mockData: HttpCollectedType = {
-    request: {
-      httpType: HttpTypes.XHR,
-      method: MethodTypes.Post,
-      url: 'http://localhost',
-      data: {
-        test: 1
-      }
-    },
-    response: {
-      status: 200,
-      data: 'ok'
-    },
-    elapsedTime: 800
-  }
   const browserInstance = new BrowserClient({
     dsn: 'http://test.com/upload'
   })
