@@ -43,3 +43,7 @@ export function parseErrorString(str: string): WxParsedErrorType {
     stack
   }
 }
+
+export function getAppId() {
+  return wx.getAccountInfoSync().miniProgram.appId
+}
