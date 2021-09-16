@@ -17,11 +17,10 @@ $ yarn add @mitojs/browser
 
 ```typescript
 // some.js
-import { init } from '@mitojs/vue'
+import { init } from '@mitojs/browser'
 
 // multiple instances
 const MitoInstance = init({
-  vue: Vue,
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100
 })
@@ -43,7 +42,7 @@ MitoInstance.log({
 
 ```html
 <header>
-  <script src="https://cdn.jsdelivr.net/npm/@mitojs/vue/dist/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mitojs/browser/dist/browser.min.js"></script>
   <script>
     MITO.init({
       dsn: 'http://test.com/yourServer',
