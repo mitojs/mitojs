@@ -40,13 +40,13 @@
 #### 使用npm
 
 ```bash
-$ npm i @mitojs/web
+npm i @mitojs/web
 ```
 
 ### 使用yarn
 
 ```bash
-$ yarn add @mitojs/web
+yarn add @mitojs/web
 ```
 
 #### 使用CDN
@@ -60,13 +60,13 @@ $ yarn add @mitojs/web
 #### 使用npm
 
 ```bash
-$ npm i @mitojs/wx-mini
+npm i @mitojs/wx-mini
 ```
 
 ### 使用yarn
 
 ```bash
-$ yarn add @mitojs/wx-mini
+yarn add @mitojs/wx-mini
 ```
 
 #### 使用CDN

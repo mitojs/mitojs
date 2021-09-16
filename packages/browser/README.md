@@ -4,13 +4,13 @@
 
 ### Using npm
 ```bash
-$ npm i @mitojs/browser
+npm i @mitojs/browser
 ```
 
 ### Using yarn
 
 ```bash
-$ yarn add @mitojs/browser
+yarn add @mitojs/browser
 ```
 
 ### usage

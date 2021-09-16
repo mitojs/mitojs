@@ -1,3 +1,21 @@
+## 全局函数
+### log
+```js
+interface LogTypes {
+  message: string | number | Object
+  tag?: string;
+  level?: Severity;
+  ex?: any;
+}
+export declare function log({ message, tag, level, ex }: LogTypes): void;
+```
+手动上报函数[具体使用](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#%E6%89%8B%E5%8A%A8%E4%B8%8A%E6%8A%A5)
+### SDK_VERSION
+sdk版本：string
+### SDK_NAME
+sdk名称：string
+### errorBoundaryReport
+react@next的ErrorBoundary的错误上报函数[具体使用](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#NPM%E5%8C%85%E5%BD%A2%E5%BC%8F)
 ## options
 
 ### options.property
@@ -152,12 +170,12 @@ interface ReportDataType {
 
 **示例**：如果错误事件发生在`test.com/test`地址下则不上报服务端
 
-```js
+```typescript
 MITO.init({
   ...
   async beforeDataReport(event){
   	if (event.data.url === 'test.com/test') return false
-    return event
+    // 注意:判断是否调用dsn还是trackDsn的规则
     // (event.data.actionType === undefined || !event.data.isTrackData) 为true那么认为此次上报的类型是错误上报，否则是埋点上报
 	}
 })
@@ -312,16 +330,3 @@ MITO.init({
   }
 })
 ```
-
-
-### log
-```js
-interface LogTypes {
-  message: string | number | Object
-  tag?: string;
-  level?: Severity;
-  ex?: any;
-}
-export declare function log({ message, tag, level, ex }: LogTypes): void;
-```
-手动上报函数[具体使用](https://github.com/mitojs/mitojs/blob/master/docs/guide.md#%E6%89%8B%E5%8A%A8%E4%B8%8A%E6%8A%A5)

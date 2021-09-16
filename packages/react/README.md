@@ -5,13 +5,13 @@
 ### yarn
 
 ``` bash
-$ yarn add @mitojs/react
+yarn add @mitojs/react
 ```
 
 ### npm
 
 ``` bash
-$ npm install @mitojs/react
+npm install @mitojs/react
 ```
 
 ## usage

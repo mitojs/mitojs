@@ -20,8 +20,8 @@
 
 ## Features
 
-- [x] 🔨monitor Xhr、Fetch
-- [x] 🔨monitor window.console
+- [x] 🔨monitor  Xhr、Fetch
+- [x] 🔨monitor console
 - [x] 🔨monitor route change(hashroute、browser route)
 - [x] 🔨monitor code error、resource load error
 - [x] 🔨monitor click、wx:tab、wx:touchmove
@@ -38,7 +38,7 @@
 ### browser
 ```bash
 # using npm
-$ npm i @mitojs/browser
+npm i @mitojs/browser
 # using yarn
 yarn add @mitojs/browser
 ```
@@ -46,7 +46,7 @@ go to [browser usage manual](./packages/browser/README.md)
 ### react
 ```bash
 # using npm
-$ npm i @mitojs/react
+npm i @mitojs/react
 # using yarn
 yarn add @mitojs/react
 ```
@@ -55,7 +55,7 @@ go to [react usage manual](./packages/react/README.md)
 ### vue
 ```bash
 # using npm
-$ npm i @mitojs/vue
+npm i @mitojs/vue
 # using yarn
 yarn add @mitojs/vue
 ```
@@ -65,7 +65,7 @@ go to [vue usage manual](./packages/vue/README.md)
 ### wx-mini
 ```bash
 # using npm
-$ npm i @mitojs/wx-mini
+npm i @mitojs/wx-mini
 # using yarn
 yarn add @mitojs/wx-mini
 ```
@@ -73,34 +73,40 @@ go to [wx-mini usage manual](./packages/wx-mini/README.md)
 
 
 ## hooks&&options
+```js
+import {init} from '@mitojs/browser'
+init({
+  //options and hooks
+})
+```
 
-[hooks&&options](https://github.com/mitojs/mitojs/blob/master/docs/option.md)
-
+hooks and options be found [here](./docs/option.md)
 
 ## Demo for SDK
 
-[react-sdk-demo](https://mitojs.github.io/react-sdk-demo)
+**here are some demo for sdk of collecting data**
 
-[vue2-sdk-demo](https://mitojs.github.io/vue2-sdk-demo)
+[react-sdk-demo](https://mitojs.github.io/react-sdk-demo):Use @mitojs/react  in react@next
 
-![mito-在线demo](https://tva1.sinaimg.cn/large/008eGmZEly1gmxgn4y1sag315g0m2hdt.gif)
+[vue3-sdk-demo](https://mitojs.github.io/vue3-sdk-demo):Use @mitojs/vue in Vue3.x
 
+[vue2-sdk-demo](https://mitojs.github.io/vue2-sdk-demo):Use @mitojs/vue in Vue2.x
 
-
+<!-- ![mito-在线demo](https://tva1.sinaimg.cn/large/008eGmZEly1gmxgn4y1sag315g0m2hdt.gif)： -->
 
 ## monitoring platform
 
-**Here are some examples for SDK reported**
+**here are some examples for sdk of reporting to admin(there is mock data)**
 
-![react-example](https://tva1.sinaimg.cn/large/008eGmZEly1gmxggqptzwg30u00hoe84.gif)
+<!-- ![react-example](https://tva1.sinaimg.cn/large/008eGmZEly1gmxggqptzwg30u00hoe84.gif) -->
 
-[vue-demo](https://mitojs.github.io/mito-admin-demo/#/errors/1/info)
+[vue-admin-demo](https://mitojs.github.io/mito-admin-demo/#/errors/1/info): show a HTTP_ERROR in vue platform
 
-[react-demo](https://mitojs.github.io/mito-admin-demo/#/errors/2/info)
+[react-admin-demo](https://mitojs.github.io/mito-admin-demo/#/errors/2/info): show a JAVASCRIPT_ERROR in react platform
 
-[js-demo](https://mitojs.github.io/mito-admin-demo/#/errors/3/info)
+[js-admin-demo](https://mitojs.github.io/mito-admin-demo/#/errors/3/info):show JAVASCRIPT_ERROR in js platform
 
-[wx-mini-demo](https://mitojs.github.io/mito-admin-demo/#/errors/4/info)
+[wx-mini-admin-demo](https://mitojs.github.io/mito-admin-demo/#/errors/4/info):show JAVASCRIPT_ERROR in wx-mini platform
 
 ## issue&&contact
 ### issue

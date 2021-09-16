@@ -4,13 +4,13 @@
 
 ### Using npm
 ```bash
-$ npm i @mitojs/vue
+npm i @mitojs/vue
 ```
 
 ### Using yarn
 
 ```bash
-$ yarn add @mitojs/vue
+yarn add @mitojs/vue
 ```
 
 ### Vue2.X
