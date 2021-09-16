@@ -15,7 +15,7 @@
 
 <!-- [![npm downloads](https://img.shields.io/npm/dm/@zyf2e/mitojs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@zyf2e/mitojs) -->
 
-</div>  
+</div>
 
 ## Features
 
