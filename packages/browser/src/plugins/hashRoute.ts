@@ -32,6 +32,7 @@ export function routeTransform(collectedData: RouteChangeCollectType): RouteChan
 }
 
 export function routeTransformedConsumer(this: BrowserClient, transformedData: RouteChangeCollectType) {
+  if (transformedData.from === transformedData.to) return
   this.breadcrumb.push({
     type: BrowserBreadcrumbTypes.ROUTE,
     category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.ROUTE),
