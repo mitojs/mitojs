@@ -13,7 +13,7 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
   maxBreadcrumbs = 10
   beforePushBreadcrumb: unknown = null
   stack: BreadcrumbPushData[] = []
-  constructor(options: O) {
+  constructor(options: Partial<O> = {}) {
     this.bindOptions(options)
   }
   /**

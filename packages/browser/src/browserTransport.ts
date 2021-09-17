@@ -7,7 +7,7 @@ import { BaseTransport } from '@mitojs/core'
 export class BrowserTransport extends BaseTransport<BrowserOptionsFieldsTypes> {
   configReportXhr: unknown
   useImgUpload = false
-  constructor(options: BrowserOptionsFieldsTypes) {
+  constructor(options: BrowserOptionsFieldsTypes = {}) {
     super()
     super.bindOptions(options)
   }

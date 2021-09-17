@@ -48,6 +48,8 @@ export const enum BREADCRUMBCATEGORYS {
  */
 export type EventTypes = BrowserEventTypes | WxEventTypes
 
+export const MitoLog = 'Mito.log'
+
 export const enum HttpTypes {
   XHR = 'xhr',
   FETCH = 'fetch'

@@ -1,5 +1,5 @@
 import { Breadcrumb, BaseClient } from '@mitojs/core'
-import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes, EventTypes } from '@mitojs/shared'
+import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes, EventTypes, MitoLog } from '@mitojs/shared'
 import {
   extractErrorStack,
   firstStrtoUppercase,
@@ -46,7 +46,7 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
       type: ErrorTypes.LOG,
       level,
       message: unknownToString(message),
-      name: 'MITO.log',
+      name: MitoLog,
       customTag: unknownToString(tag),
       time: getTimestamp(),
       url: getLocationHref(),
