@@ -2,6 +2,14 @@ import { ToStringTypes } from '@mitojs/shared'
 import { BaseOptionsFieldsIntegrationType, BaseOptionsType } from '@mitojs/types'
 import { generateUUID, toStringValidateOption } from '@mitojs/utils'
 
+/**
+ * 公用的基础配置项绑定
+ *
+ * @export
+ * @class BaseOptions
+ * @implements {BaseOptionsType<O>}
+ * @template O
+ */
 export class BaseOptions<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> implements BaseOptionsType<O> {
   enableTraceId = false
   filterXhrUrlRegExp: RegExp

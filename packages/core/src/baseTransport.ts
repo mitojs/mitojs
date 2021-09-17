@@ -3,7 +3,7 @@ import { SDK_NAME, SDK_VERSION, ToStringTypes } from '@mitojs/shared'
 import { AuthInfo, BaseOptionsFieldsIntegrationType, BreadcrumbPushData, ReportDataType, TransportDataType } from '@mitojs/types'
 
 /**
- * 传输数据基础类
+ * 传输数据抽象类
  *
  * @export
  * @abstract

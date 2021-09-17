@@ -7,6 +7,10 @@ export interface MiniRoute {
   message?: string
 }
 
+export interface WxsilentOptionsType {
+  slientRequest: boolean
+}
+
 export interface WxOnShareAppMessageBreadcrumb {
   path: string
   query: IAnyObject

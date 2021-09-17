@@ -2,7 +2,7 @@ import { getFunctionName, logger, nativeTryCatch } from '@mitojs/utils'
 
 type MonitorCallback = (data: any) => void
 /**
- *发布订阅类
+ * 发布订阅类
  *
  * @export
  * @class Subscrib

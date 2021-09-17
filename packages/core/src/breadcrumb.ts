@@ -3,7 +3,7 @@ import { logger, getTimestamp, silentConsoleScope, toStringValidateOption } from
 import { BaseOptionsFieldsIntegrationType, BreadcrumbPushData } from '@mitojs/types'
 
 /**
- * 用户行为栈存储类
+ * 用户行为栈存储，实体类
  *
  * @export
  * @class Breadcrumb
