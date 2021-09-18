@@ -2,7 +2,7 @@ import { WxEventTypes, globalVar, WxBreadcrumbTypes } from '@mitojs/shared'
 import { getBreadcrumbCategoryInWx, replaceOld, Severity, variableTypeDetection } from '@mitojs/utils'
 import { BasePluginType, ConsoleCollectType } from '@mitojs/types'
 import { WxClient } from '../wxClient'
-const consolePlugin: BasePluginType<WxEventTypes, WxClient> = {
+const wxConsolePlugin: BasePluginType<WxEventTypes, WxClient> = {
   name: WxEventTypes.CONSOLE,
   monitor(notify) {
     if (console && variableTypeDetection.isObject(console)) {
@@ -35,4 +35,4 @@ const consolePlugin: BasePluginType<WxEventTypes, WxClient> = {
   }
 }
 
-export default consolePlugin
+export default wxConsolePlugin
