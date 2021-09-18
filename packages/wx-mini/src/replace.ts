@@ -5,7 +5,7 @@ import { HandleWxAppEvents, HandleWxPageEvents } from './handleWxEvents'
 import { MITOHttp, EMethods } from '@mitojs/types'
 import { getNavigateBackTargetUrl } from './utils'
 import { ELinstenerTypes } from './constant'
-import { MiniRoute } from './types'
+import { WxRouteCollectType } from './types'
 
 function isFilterHttpUrl(url: string) {
   return sdkOptions.filterXhrUrlRegExp && sdkOptions.filterXhrUrlRegExp.test(url)
@@ -365,7 +365,7 @@ export function replaceRoute() {
             | WechatMiniprogram.RedirectToFailCallback
             | WechatMiniprogram.NavigateToFailCallback
             | WechatMiniprogram.NavigateBackFailCallback = function (res) {
-            const failData: MiniRoute = {
+            const failData: WxRouteCollectType = {
               ...data,
               isFail: true,
               message: res.errMsg

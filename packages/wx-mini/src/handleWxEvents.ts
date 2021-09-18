@@ -4,7 +4,7 @@ import { ReportDataType, Replace, MITOHttp } from '@mitojs/types'
 import { extractErrorStack, getCurrentRoute, getTimestamp, isError, isHttpFail, unknownToString, _support } from '@mitojs/utils'
 import { Severity, parseErrorString } from '@mitojs/utils'
 import { getWxMiniDeviceInfo, targetAsString } from './utils'
-import { MiniRoute, WxLifeCycleBreadcrumb, WxOnShareAppMessageBreadcrumb, WxOnTabItemTapBreadcrumb } from './types'
+import { WxRouteCollectType, WxLifeCycleBreadcrumb, WxOnShareAppMessageBreadcrumb, WxOnTabItemTapBreadcrumb } from './types'
 import { ELinstenerTypes } from './constant'
 
 const HandleWxAppEvents = {
@@ -223,7 +223,7 @@ const HandleNetworkEvents = {
 }
 
 const HandleWxEvents = {
-  handleRoute(data: MiniRoute) {
+  handleRoute(data: WxRouteCollectType) {
     if (data.isFail) {
       breadcrumb.push({
         type: BREADCRUMBTYPES.ROUTE,

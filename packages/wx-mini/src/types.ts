@@ -1,6 +1,6 @@
 import { BaseOptionsFieldsIntegrationType, IAnyObject, TransportDataType } from '@mitojs/types'
 
-export interface MiniRoute {
+export interface WxRouteCollectType {
   from: string
   to: string
   isFail?: boolean
