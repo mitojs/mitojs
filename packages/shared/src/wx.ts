@@ -29,6 +29,17 @@ export const enum WxRouteEvents {
 }
 
 export const enum WxBreadcrumbTypes {
+  // platform
+  VUE = 'Vue',
+  REACT = 'React',
+  // base
+  ROUTE = 'Route',
+  CONSOLE = 'Console',
+  XHR = 'Xhr',
+  UNHANDLEDREJECTION = 'Unhandledrejection',
+  RESOURCE = 'Resource',
+  CODE_ERROR = 'Code Error',
+  CUSTOMER = 'Customer',
   // wx life cycle
   APP_ON_SHOW = 'App On Show',
   APP_ON_LAUNCH = 'App On Launch',
@@ -38,7 +49,7 @@ export const enum WxBreadcrumbTypes {
   PAGE_ON_SHARE_APP_MESSAGE = 'Page On Share App Message',
   PAGE_ON_SHARE_TIMELINE = 'Page On Share Timeline',
   PAGE_ON_TAB_ITEM_TAP = 'Page On Tab Item Tap',
-  // wx BaseEvent
+  // wx Event
   TAP = 'UI.Tap',
   TOUCHMOVE = 'UI.Touchmove'
 }
@@ -52,8 +63,10 @@ export const enum WxBreadcrumbTypes {
 export const enum WxEventTypes {
   XHR = 'xhr',
   CONSOLE = 'console',
+  ERROR = 'error',
   UNHANDLEDREJECTION = 'unhandledrejection',
   MINI_ROUTE = 'miniRoute',
+  //
   MINI_PERFORMANCE = 'miniPerformance',
   MINI_MEMORY_WARNING = 'miniMemoryWarning',
   MINI_NETWORK_STATUS_CHANGE = 'miniNetworkStatusChange',

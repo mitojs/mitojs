@@ -4,22 +4,25 @@ import {
   extractErrorStack,
   firstStrtoUppercase,
   getBreadcrumbCategoryInBrowser,
-  getLocationHref,
+  getCurrentRoute,
   getTimestamp,
   isError,
   Severity,
   unknownToString
 } from '@mitojs/utils'
 import { LogTypes } from '@mitojs/types'
+import { WxOptions } from './wxOptions'
+import { WxTransport } from './wxTransport'
+import { WxOptionsFieldsTypes } from './types'
 
-export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTypes> {
-  transport: BrowserTransport
-  options: BrowserOptions
-  breadcrumb: Breadcrumb<BrowserOptionsFieldsTypes>
-  constructor(options: BrowserOptionsFieldsTypes = {}) {
+export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
+  transport: WxTransport
+  options: WxOptions
+  breadcrumb: Breadcrumb<WxOptionsFieldsTypes>
+  constructor(options: WxOptionsFieldsTypes = {}) {
     super(options)
-    this.options = new BrowserOptions(options)
-    this.transport = new BrowserTransport(options)
+    this.options = new WxOptions(options)
+    this.transport = new WxTransport(options)
     this.breadcrumb = new Breadcrumb(options)
   }
   /**
@@ -46,7 +49,7 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
       name: MitoLog,
       customTag: unknownToString(tag),
       time: getTimestamp(),
-      url: getLocationHref(),
+      url: getCurrentRoute(),
       ...errorInfo
     }
     const breadcrumbStack = this.breadcrumb.push({

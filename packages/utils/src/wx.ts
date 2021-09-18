@@ -1,4 +1,4 @@
-import { ErrorTypes } from '@mitojs/shared'
+import { BREADCRUMBCATEGORYS, WxBreadcrumbTypes, ErrorTypes } from '@mitojs/shared'
 import { WxParsedErrorType } from '@mitojs/types'
 
 /**
@@ -41,6 +41,36 @@ export function parseErrorString(str: string): WxParsedErrorType {
     message,
     name,
     stack
+  }
+}
+
+export function getBreadcrumbCategoryInWx(type: WxBreadcrumbTypes) {
+  switch (type) {
+    case WxBreadcrumbTypes.XHR:
+      return BREADCRUMBCATEGORYS.HTTP
+    case WxBreadcrumbTypes.ROUTE:
+    case WxBreadcrumbTypes.TAP:
+    case WxBreadcrumbTypes.TOUCHMOVE:
+      return BREADCRUMBCATEGORYS.USER
+    case WxBreadcrumbTypes.CUSTOMER:
+    case WxBreadcrumbTypes.CONSOLE:
+      return BREADCRUMBCATEGORYS.DEBUG
+    case WxBreadcrumbTypes.APP_ON_LAUNCH:
+    case WxBreadcrumbTypes.APP_ON_SHOW:
+    case WxBreadcrumbTypes.APP_ON_HIDE:
+    case WxBreadcrumbTypes.PAGE_ON_SHOW:
+    case WxBreadcrumbTypes.PAGE_ON_HIDE:
+    case WxBreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
+    case WxBreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
+    case WxBreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP:
+      return BREADCRUMBCATEGORYS.LIFECYCLE
+    case WxBreadcrumbTypes.UNHANDLEDREJECTION:
+    case WxBreadcrumbTypes.CODE_ERROR:
+    case WxBreadcrumbTypes.RESOURCE:
+    case WxBreadcrumbTypes.VUE:
+    case WxBreadcrumbTypes.REACT:
+    default:
+      return BREADCRUMBCATEGORYS.EXCEPTION
   }
 }
 
