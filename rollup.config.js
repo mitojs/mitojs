@@ -46,7 +46,7 @@ const processEnvBanner = `
     }
   }
 `
-const banner = `${mitoAnnotation}${name === 'react' && '\n' + processEnvBanner}`
+const banner = `${mitoAnnotation}${name === 'react' ? '\n' + processEnvBanner : ''}`
 
 const common = {
   input: `${packageDir}/src/index.ts`,
@@ -113,7 +113,7 @@ const cjsPackage = {
   ...common,
   external: [],
   output: {
-    file: `${packageDirDist}/${name}.js`,
+    file: `/Users/bytedance/Desktop/github/mitojs/examples/Mini/utils/${name}.js`,
     format: 'cjs',
     sourcemap: true,
     minifyInternalExports: true,
