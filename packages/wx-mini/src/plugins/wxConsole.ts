@@ -1,10 +1,10 @@
-import { WxEventTypes, globalVar, WxBreadcrumbTypes } from '@mitojs/shared'
-import { getBreadcrumbCategoryInWx, replaceOld, Severity, variableTypeDetection } from '@mitojs/utils'
+import { WxEventTypes, globalVar, WxBreadcrumbTypes, WxBaseEventTypes } from '@mitojs/shared'
+import { replaceOld, Severity, variableTypeDetection } from '@mitojs/utils'
 import { BasePluginType, ConsoleCollectType } from '@mitojs/types'
 import { WxClient } from '../wxClient'
 import { addBreadcrumbInWx } from '../utils'
 const wxConsolePlugin: BasePluginType<WxEventTypes, WxClient> = {
-  name: WxEventTypes.CONSOLE,
+  name: WxBaseEventTypes.CONSOLE,
   monitor(notify) {
     if (console && variableTypeDetection.isObject(console)) {
       const logType = ['log', 'debug', 'info', 'warn', 'error', 'assert']
@@ -13,7 +13,7 @@ const wxConsolePlugin: BasePluginType<WxEventTypes, WxClient> = {
         replaceOld(console, level, function (originalConsole): Function {
           return function (...args: any[]): void {
             if (originalConsole) {
-              notify(WxEventTypes.CONSOLE, { args, level })
+              notify(WxBaseEventTypes.CONSOLE, { args, level })
               originalConsole.apply(console, args)
             }
           }

@@ -1,5 +1,5 @@
-import { ErrorTypes, WxBreadcrumbTypes, WxEventTypes, WxRouteEvents } from '@mitojs/shared'
-import { getBreadcrumbCategoryInWx, getCurrentRoute, Severity, variableTypeDetection } from '@mitojs/utils'
+import { ErrorTypes, WxBaseEventTypes, WxBreadcrumbTypes, WxEventTypes, WxRouteEvents } from '@mitojs/shared'
+import { getCurrentRoute, Severity, variableTypeDetection } from '@mitojs/utils'
 import { BasePluginType, ReportDataType } from '@mitojs/types'
 import { addBreadcrumbInWx, getNavigateBackTargetUrl } from '../utils'
 import { WxClient } from '../wxClient'
@@ -11,7 +11,7 @@ interface WxRouteTransformType {
 }
 
 const wxRoutePlugins: BasePluginType<WxEventTypes, WxClient> = {
-  name: WxEventTypes.MINI_ROUTE,
+  name: WxBaseEventTypes.MINI_ROUTE,
   monitor(notify) {
     monitorWxRoute.call(this, notify)
   },
@@ -38,7 +38,7 @@ const wxRoutePlugins: BasePluginType<WxEventTypes, WxClient> = {
   }
 }
 
-export function monitorWxRoute(this: WxClient, notify: (eventName: WxEventTypes, data: any) => void) {
+export function monitorWxRoute(this: WxClient, notify: (eventName: WxBaseEventTypes, data: any) => void) {
   const { options: wxOptions } = this
   const methods = [
     WxRouteEvents.SwitchTab,
@@ -73,7 +73,7 @@ export function monitorWxRoute(this: WxClient, notify: (eventName: WxEventTypes,
           from: getCurrentRoute(),
           to: toUrl
         }
-        notify(WxEventTypes.MINI_ROUTE, data)
+        notify(WxBaseEventTypes.MINI_ROUTE, data)
         // 如果complete||success||fail一个都没有，则原方法返回promise，此时sdk也不需要处理
         if (
           variableTypeDetection.isFunction(options.complete) ||
@@ -92,7 +92,7 @@ export function monitorWxRoute(this: WxClient, notify: (eventName: WxEventTypes,
               isFail: true,
               message: res.errMsg
             }
-            notify(WxEventTypes.MINI_ROUTE, failData)
+            notify(WxBaseEventTypes.MINI_ROUTE, failData)
             if (variableTypeDetection.isFunction(_fail)) {
               return _fail(res)
             }

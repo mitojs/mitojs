@@ -1,34 +1,4 @@
-export const enum WxAppEvents {
-  AppOnLaunch = 'AppOnLaunch',
-  AppOnShow = 'AppOnShow',
-  AppOnHide = 'AppOnHide',
-  AppOnError = 'AppOnError',
-  AppOnPageNotFound = 'AppOnPageNotFound',
-  AppOnUnhandledRejection = 'AppOnUnhandledRejection'
-}
-
-export const enum WxPageEvents {
-  PageOnLoad = 'PageOnLoad',
-  PageOnShow = 'PageOnShow',
-  PageOnHide = 'PageOnHide',
-  PageOnReady = 'PageOnReady',
-  PageOnUnload = 'PageOnUnload',
-  PageOnShareAppMessage = 'PageOnShareAppMessage',
-  PageOnShareTimeline = 'PageOnShareTimeline',
-  PageOnTabItemTap = 'PageOnTabItemTap'
-}
-
-export const enum WxRouteEvents {
-  SwitchTab = 'switchTab',
-  ReLaunch = 'reLaunch',
-  RedirectTo = 'redirectTo',
-  NavigateTo = 'navigateTo',
-  NavigateBack = 'navigateBack',
-  NavigateToMiniProgram = 'navigateToMiniProgram',
-  RouteFail = 'routeFail'
-}
-
-export const enum WxBreadcrumbTypes {
+export enum WxBreadcrumbTypes {
   // platform
   VUE = 'Vue',
   REACT = 'React',
@@ -54,13 +24,43 @@ export const enum WxBreadcrumbTypes {
   TOUCHMOVE = 'UI.Touchmove'
 }
 
+export enum WxAppEvents {
+  AppOnLaunch = 'AppOnLaunch',
+  AppOnShow = 'AppOnShow',
+  AppOnHide = 'AppOnHide',
+  AppOnError = 'AppOnError',
+  AppOnPageNotFound = 'AppOnPageNotFound',
+  AppOnUnhandledRejection = 'AppOnUnhandledRejection'
+}
+
+export enum WxPageEvents {
+  PageOnLoad = 'PageOnLoad',
+  PageOnShow = 'PageOnShow',
+  PageOnHide = 'PageOnHide',
+  PageOnReady = 'PageOnReady',
+  PageOnUnload = 'PageOnUnload',
+  PageOnShareAppMessage = 'PageOnShareAppMessage',
+  PageOnShareTimeline = 'PageOnShareTimeline',
+  PageOnTabItemTap = 'PageOnTabItemTap'
+}
+
+export enum WxRouteEvents {
+  SwitchTab = 'switchTab',
+  ReLaunch = 'reLaunch',
+  RedirectTo = 'redirectTo',
+  NavigateTo = 'navigateTo',
+  NavigateBack = 'navigateBack',
+  NavigateToMiniProgram = 'navigateToMiniProgram',
+  RouteFail = 'routeFail'
+}
+
 /**
  *微信小程序需要监听的事件类型
  *
  * @export
  *  const@enum {number}
  */
-export const enum WxEventTypes {
+export enum WxBaseEventTypes {
   XHR = 'xhr',
   CONSOLE = 'console',
   ERROR = 'error',
@@ -72,3 +72,6 @@ export const enum WxEventTypes {
   MINI_NETWORK_STATUS_CHANGE = 'miniNetworkStatusChange',
   MINI_BATTERY_INFO = 'miniBatteryInfo'
 }
+
+export const WxEventTypes = Object.assign({}, WxAppEvents, WxPageEvents, WxBaseEventTypes)
+export type WxEventTypes = WxAppEvents | WxPageEvents | WxBaseEventTypes
