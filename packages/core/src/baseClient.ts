@@ -35,8 +35,8 @@ export abstract class BaseClient<O extends BaseOptionsFieldsIntegrationType, E e
       if (!this.isPluginEnable(item.name)) return
       item.monitor.call(this, subscrib.notify.bind(subscrib))
       const wrapperTranform = (...args: any[]) => {
-        const res = item.transform.apply(this, args)
-        item.consumer.call(this, res)
+        const res = item.transform?.apply(this, args)
+        item.consumer?.call(this, res)
       }
       subscrib.watch(item.name, wrapperTranform)
     })

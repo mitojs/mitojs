@@ -80,5 +80,6 @@ export enum ELinstenerTypes {
   Longpress = 'longpress'
 }
 
+// merge enum
 export const WxEventTypes = Object.assign({}, WxAppEvents, WxPageEvents, WxBaseEventTypes)
 export type WxEventTypes = WxAppEvents | WxPageEvents | WxBaseEventTypes

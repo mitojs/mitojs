@@ -850,14 +850,13 @@ wxAppPluginMap.set(WxAppEvents.AppOnShow, {
 function getWxAppPlugins() {
     if (!App)
         return [];
-    var wxAppPlugins = [];
-    var originApp = App;
-    App = function (appOptions) {
-        var methodHooks = Object.values(WxAppEvents);
-        methodHooks.forEach(function (method) {
-            var plugin = {
-                name: method,
-                monitor: function (notify) {
+    var methodHooks = Object.values(WxAppEvents);
+    var plugins = methodHooks.map(function (method) {
+        return {
+            name: method,
+            monitor: function (notify) {
+                var originApp = App;
+                App = function (appOptions) {
                     replaceOld(appOptions, method.replace('AppOn', 'on'), function (originMethod) {
                         return function () {
                             var args = [];
@@ -870,15 +869,20 @@ function getWxAppPlugins() {
                             notify.apply(null, __spreadArray([method], args, true));
                         };
                     }, true);
-                }
-            };
-            wxAppPlugins.push(plugin);
-        });
-        return originApp(appOptions);
-    };
-    return wxAppPlugins;
+                    return originApp(appOptions);
+                };
+            }
+        };
+    });
+    return plugins.map(function (item) {
+        if (wxAppPluginMap.get(item.name)) {
+            return __assign(__assign({}, item), wxAppPluginMap.get(item.name));
+        }
+        return item;
+    });
 }
 var wxAppPlugins = getWxAppPlugins();
+console.log('wxAppPlugins', wxAppPlugins);
 
 var wxConsolePlugin = {
     name: WxBaseEventTypes.CONSOLE,
@@ -1084,12 +1088,13 @@ var BaseClient = (function () {
                 return;
             item.monitor.call(_this, subscrib.notify.bind(subscrib));
             var wrapperTranform = function () {
+                var _a, _b;
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
-                var res = item.transform.apply(_this, args);
-                item.consumer.call(_this, res);
+                var res = (_a = item.transform) === null || _a === void 0 ? void 0 : _a.apply(_this, args);
+                (_b = item.consumer) === null || _b === void 0 ? void 0 : _b.call(_this, res);
             };
             subscrib.watch(item.name, wrapperTranform);
         });

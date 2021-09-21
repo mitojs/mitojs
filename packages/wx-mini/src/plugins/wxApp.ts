@@ -25,14 +25,13 @@ wxAppPluginMap.set(WxAppEvents.AppOnShow, {
 
 function getWxAppPlugins() {
   if (!App) return []
-  const wxAppPlugins: BasePluginType<WxEventTypes, WxClient>[] = []
-  const originApp = App
-  App = function (appOptions: WechatMiniprogram.App.Option) {
-    const methodHooks = Object.values(WxAppEvents)
-    methodHooks.forEach((method) => {
-      const plugin: BasePluginType<WxEventTypes, WxClient> = {
-        name: method,
-        monitor: function (notify) {
+  const methodHooks = Object.values(WxAppEvents)
+  const plugins = methodHooks.map((method) => {
+    return {
+      name: method,
+      monitor: function (notify) {
+        const originApp = App
+        App = function (appOptions: WechatMiniprogram.App.Option) {
           replaceOld(
             appOptions,
             method.replace('AppOn', 'on'),
@@ -47,16 +46,22 @@ function getWxAppPlugins() {
             },
             true
           )
-        }
+          return originApp(appOptions)
+        } as WechatMiniprogram.App.Constructor
       }
-      wxAppPlugins.push(plugin)
-    })
-    return originApp(appOptions)
-  } as WechatMiniprogram.App.Constructor
-  return wxAppPlugins
+    }
+  }) as BasePluginType<WxAppEvents, WxClient>[]
+  return plugins.map((item) => {
+    if (wxAppPluginMap.get(item.name)) {
+      return {
+        ...item,
+        ...wxAppPluginMap.get(item.name)
+      }
+    }
+    return item
+  })
 }
 
 const wxAppPlugins = getWxAppPlugins()
-console.log('wxAppPlugins', wxAppPlugins)
 export { wxAppPluginMap }
 export default wxAppPlugins
