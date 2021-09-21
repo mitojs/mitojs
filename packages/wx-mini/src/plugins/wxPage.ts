@@ -1,16 +1,6 @@
-import { ErrorTypes, WxPageEvents, WxBreadcrumbTypes, WxEventTypes } from '@mitojs/shared'
-import { BasePluginType, ReportDataType, voidFun } from '@mitojs/types'
-import {
-  extractErrorStack,
-  firstStrtoLowerCase,
-  getCurrentRoute,
-  getTimestamp,
-  isError,
-  parseErrorString,
-  replaceOld,
-  Severity,
-  unknownToString
-} from '@mitojs/utils'
+import { WxPageEvents, WxBreadcrumbTypes, WxEventTypes } from '@mitojs/shared'
+import { BasePluginType, voidFun } from '@mitojs/types'
+import { firstStrtoLowerCase, isEmptyObject, replaceOld } from '@mitojs/utils'
 import { WxLifeCycleBreadcrumb, WxOnShareAppMessageBreadcrumb, WxOnTabItemTapBreadcrumb } from '../types'
 import { addBreadcrumbInWx, getCurrentPagesPop } from '../utils'
 import { WxClient } from '../wxClient'
@@ -133,14 +123,13 @@ function getWxPagePlugins() {
     return {
       name: hook,
       monitor: function (notify) {
-        const originPageo = Page
-        Page = function (
-          pageOptions:
+        function monitorPageHookWithOptions(
+          options:
             | WechatMiniprogram.Page.Options<WechatMiniprogram.Page.DataOption, WechatMiniprogram.Page.CustomOption>
             | WechatMiniprogram.Component.MethodOption
         ) {
           replaceOld(
-            pageOptions,
+            options,
             hook.replace('PageOn', 'on'),
             function (originMethod: voidFun) {
               return function (...args: any): void {
@@ -152,8 +141,13 @@ function getWxPagePlugins() {
             },
             true
           )
-          return originPageo(pageOptions)
-        } as WechatMiniprogram.App.Constructor
+        }
+        invokeCallbackInReplacePage((pageOptions) => {
+          monitorPageHookWithOptions(pageOptions)
+        })
+        invokeCallbackInReplaceComponent((componentOptions) => {
+          monitorPageHookWithOptions(componentOptions)
+        })
       }
     }
   }) as BasePluginType<WxPageEvents, WxClient>[]
@@ -168,7 +162,46 @@ function getWxPagePlugins() {
   })
 }
 
+export function invokeCallbackInReplacePage(
+  callback: (
+    pageOptions:
+      | WechatMiniprogram.Page.Options<WechatMiniprogram.Page.DataOption, WechatMiniprogram.Page.CustomOption>
+      | WechatMiniprogram.Component.MethodOption
+  ) => void
+) {
+  const originPage = Page
+  Page = function (pageOptions) {
+    callback(pageOptions)
+    return originPage(pageOptions)
+  }
+}
+
+// 重写Component
+export function invokeCallbackInReplaceComponent(
+  callback: (
+    pageOptions:
+      | WechatMiniprogram.Page.Options<WechatMiniprogram.Page.DataOption, WechatMiniprogram.Page.CustomOption>
+      | WechatMiniprogram.Component.MethodOption
+  ) => void
+) {
+  if (!Component) {
+    return
+  }
+  const originComponent = Component
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  Component = function (componentOptions): WechatMiniprogram.Component.Constructor {
+    if (!isEmptyObject(componentOptions.methods)) {
+      /*
+       * 兼容用Component构造页面的上报
+       * 当用Component构造页面时，页面的生命周期函数应写在methods定义段中，所以重写componentOptions.methods中的对应周期函数
+       */
+      callback(componentOptions.methods)
+    }
+    return originComponent.call(this, componentOptions)
+  }
+}
+
 const wxPagePlugins = getWxPagePlugins()
-console.log('wxPagePlugins', wxPagePlugins)
 export { wxPagePluginMap }
 export default wxPagePlugins

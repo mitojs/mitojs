@@ -70,6 +70,7 @@ export enum WxBaseEventTypes {
   ERROR = 'error',
   UNHANDLEDREJECTION = 'unhandledrejection',
   MINI_ROUTE = 'miniRoute',
+  DOM = 'dom',
   //
   MINI_PERFORMANCE = 'miniPerformance',
   MINI_MEMORY_WARNING = 'miniMemoryWarning',
@@ -77,7 +78,7 @@ export enum WxBaseEventTypes {
   MINI_BATTERY_INFO = 'miniBatteryInfo'
 }
 
-export enum ELinstenerTypes {
+export enum LinstenerTypes {
   Touchmove = 'touchmove',
   Tap = 'tap',
   Longtap = 'longtap',
