@@ -10,7 +10,7 @@ interface WxRouteTransformType {
   collectedData: WxRouteCollectType
 }
 
-const wxRoutePlugins: BasePluginType<WxEventTypes, WxClient> = {
+const wxRoutePlugin: BasePluginType<WxEventTypes, WxClient> = {
   name: WxBaseEventTypes.MINI_ROUTE,
   monitor(notify) {
     monitorWxRoute.call(this, notify)
@@ -108,4 +108,4 @@ export function monitorWxRoute(this: WxClient, notify: (eventName: WxBaseEventTy
   })
 }
 
-export default wxRoutePlugins
+export default wxRoutePlugin

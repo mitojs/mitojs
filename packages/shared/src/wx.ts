@@ -73,5 +73,12 @@ export enum WxBaseEventTypes {
   MINI_BATTERY_INFO = 'miniBatteryInfo'
 }
 
+export enum ELinstenerTypes {
+  Touchmove = 'touchmove',
+  Tap = 'tap',
+  Longtap = 'longtap',
+  Longpress = 'longpress'
+}
+
 export const WxEventTypes = Object.assign({}, WxAppEvents, WxPageEvents, WxBaseEventTypes)
 export type WxEventTypes = WxAppEvents | WxPageEvents | WxBaseEventTypes

@@ -1,15 +1,15 @@
-import { InitOptions } from '@mitojs/types'
-import { isWxMiniEnv } from '@mitojs/utils'
-import { setupReplace } from './load'
-import { initOptions, log } from '@mitojs/core'
-import { sendTrackData, track } from './initiative'
-import { SDK_NAME, SDK_VERSION } from '@mitojs/shared'
-import { MitoVue } from '@mitojs/vue'
-import { errorBoundaryReport } from '@mitojs/react'
-export function init(options: InitOptions = {}) {
-  if (!isWxMiniEnv) return
-  initOptions(options)
-  setupReplace()
-  Object.assign(wx, { mitoLog: log, SDK_NAME, SDK_VERSION })
+import xhrPlugin from 'packages/browser/src/plugins/xhr'
+import wxAppPlugins from './plugins/wxApp'
+import wxConsolePlugin from './plugins/wxConsole'
+import wxRoutePlugin from './plugins/wxRoute'
+import { WxOptionsFieldsTypes } from './types'
+import { WxClient } from './wxClient'
+
+function createWxInstance(options: WxOptionsFieldsTypes) {
+  const wxClient = new WxClient(options)
+  const plugins = [xhrPlugin, wxRoutePlugin, wxConsolePlugin, ...wxAppPlugins]
+  wxClient.use(plugins)
 }
-export { log, sendTrackData, track, MitoVue, errorBoundaryReport }
+
+const init = createWxInstance
+export { init }
