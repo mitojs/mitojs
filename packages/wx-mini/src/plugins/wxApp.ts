@@ -141,13 +141,10 @@ function getWxAppPlugins() {
     }
   }) as BasePluginType<WxAppEvents, WxClient>[]
   return plugins.map((item) => {
-    if (wxAppPluginMap.get(item.name)) {
-      return {
-        ...item,
-        ...wxAppPluginMap.get(item.name)
-      }
+    return {
+      ...item,
+      ...(wxAppPluginMap.has(item.name) ? wxAppPluginMap.get(item.name) : {})
     }
-    return item
   })
 }
 

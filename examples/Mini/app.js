@@ -3,7 +3,7 @@ const instance = MITO.init({
   apikey: 'a1329cc0-563b-11eb-98fe-259847d73cdd',
   dsn: 'http://localhost:2021/errors/upload',
   silentConsole: true,
-  debug: true,
+  debug: false,
   appOnLaunch(options) {
     console.log('options appOnlauch',options)
   },

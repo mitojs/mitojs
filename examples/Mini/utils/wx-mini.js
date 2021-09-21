@@ -1016,10 +1016,7 @@ function getWxAppPlugins() {
         };
     });
     return plugins.map(function (item) {
-        if (wxAppPluginMap.get(item.name)) {
-            return __assign(__assign({}, item), wxAppPluginMap.get(item.name));
-        }
-        return item;
+        return __assign(__assign({}, item), (wxAppPluginMap.has(item.name) ? wxAppPluginMap.get(item.name) : {}));
     });
 }
 var wxAppPlugins = getWxAppPlugins();
@@ -1182,10 +1179,7 @@ function getWxPagePlugins() {
         };
     });
     return plugins.map(function (item) {
-        if (wxPagePluginMap.get(item.name)) {
-            return __assign(__assign({}, item), wxPagePluginMap.get(item.name));
-        }
-        return item;
+        return __assign(__assign({}, item), (wxPagePluginMap.has(item.name) ? wxPagePluginMap.get(item.name) : {}));
     });
 }
 function invokeCallbackInReplacePage(callback) {

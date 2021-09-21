@@ -152,13 +152,10 @@ function getWxPagePlugins() {
     }
   }) as BasePluginType<WxPageEvents, WxClient>[]
   return plugins.map((item) => {
-    if (wxPagePluginMap.get(item.name)) {
-      return {
-        ...item,
-        ...wxPagePluginMap.get(item.name)
-      }
+    return {
+      ...item,
+      ...(wxPagePluginMap.has(item.name) ? wxPagePluginMap.get(item.name) : {})
     }
-    return item
   })
 }
 
