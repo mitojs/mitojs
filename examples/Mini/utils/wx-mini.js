@@ -675,6 +675,42 @@ function hashCode(str) {
     return hash;
 }
 
+function parseErrorString(str) {
+    var splitLine = str.split('\n');
+    if (splitLine.length < 2)
+        return null;
+    if (splitLine[0].indexOf('MiniProgramError') !== -1) {
+        splitLine.splice(0, 1);
+    }
+    var message = splitLine.splice(0, 1)[0];
+    var name = splitLine.splice(0, 1)[0].split(':')[0];
+    var stack = [];
+    splitLine.forEach(function (errorLine) {
+        var regexpGetFun = /at\s+([\S]+)\s+\(/;
+        var regexGetFile = /\(([^)]+)\)/;
+        var regexGetFileNoParenthese = /\s+at\s+(\S+)/;
+        var funcExec = regexpGetFun.exec(errorLine);
+        var fileURLExec = regexGetFile.exec(errorLine);
+        if (!fileURLExec) {
+            fileURLExec = regexGetFileNoParenthese.exec(errorLine);
+        }
+        var funcNameMatch = Array.isArray(funcExec) && funcExec.length > 0 ? funcExec[1].trim() : '';
+        var fileURLMatch = Array.isArray(fileURLExec) && fileURLExec.length > 0 ? fileURLExec[1] : '';
+        var lineInfo = fileURLMatch.split(':');
+        stack.push({
+            args: [],
+            func: funcNameMatch || "UNKNOWN_FUNCTION",
+            column: Number(lineInfo.pop()),
+            line: Number(lineInfo.pop()),
+            url: lineInfo.join(':')
+        });
+    });
+    return {
+        message: message,
+        name: name,
+        stack: stack
+    };
+}
 function getBreadcrumbCategoryInWx(type) {
     switch (type) {
         case WxBreadcrumbTypes.XHR:
@@ -833,7 +869,7 @@ function addBreadcrumbInWx(data, type, level) {
 }
 
 var wxAppPluginMap = new Map();
-wxAppPluginMap.set(WxAppEvents.AppOnShow, {
+wxAppPluginMap.set(WxAppEvents.AppOnLaunch, {
     transform: function (options) {
         var sdkOptions = this.options;
         sdkOptions.appOnLaunch(options);
@@ -845,6 +881,88 @@ wxAppPluginMap.set(WxAppEvents.AppOnShow, {
     },
     consumer: function (data) {
         addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_LAUNCH);
+    }
+});
+wxAppPluginMap.set(WxAppEvents.AppOnShow, {
+    transform: function (options) {
+        var sdkOptions = this.options;
+        sdkOptions.appOnShow(options);
+        var data = {
+            path: options.path,
+            query: options.query
+        };
+        return data;
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW);
+    }
+});
+wxAppPluginMap.set(WxAppEvents.AppOnHide, {
+    transform: function () {
+        var sdkOptions = this.options;
+        sdkOptions.appOnHide();
+    },
+    consumer: function () {
+        addBreadcrumbInWx.call(this, null, WxBreadcrumbTypes.APP_ON_HIDE);
+    }
+});
+wxAppPluginMap.set(WxAppEvents.AppOnShow, {
+    transform: function (options) {
+        var sdkOptions = this.options;
+        sdkOptions.appOnShow(options);
+        var data = {
+            path: options.path,
+            query: options.query
+        };
+        return data;
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW);
+    }
+});
+wxAppPluginMap.set(WxAppEvents.AppOnError, {
+    transform: function (error) {
+        var parsedError = parseErrorString(error);
+        var data = __assign(__assign({}, parsedError), { time: getTimestamp(), level: Severity.Normal, url: getCurrentRoute(), type: "JAVASCRIPT" });
+        return data;
+    },
+    consumer: function (transformedData) {
+        var breadcrumbStack = addBreadcrumbInWx.call(this, transformedData, WxBreadcrumbTypes.CODE_ERROR, Severity.Error);
+        this.transport.send(transformedData, breadcrumbStack);
+    }
+});
+wxAppPluginMap.set(WxAppEvents.AppOnShow, {
+    transform: function (options) {
+        var sdkOptions = this.options;
+        sdkOptions.appOnShow(options);
+        var data = {
+            path: options.path,
+            query: options.query
+        };
+        return data;
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW);
+    }
+});
+wxAppPluginMap.set(WxAppEvents.AppOnUnhandledRejection, {
+    transform: function (ev) {
+        var data = {
+            type: "PROMISE",
+            message: unknownToString(ev.reason),
+            url: getCurrentRoute(),
+            name: 'unhandledrejection',
+            time: getTimestamp(),
+            level: Severity.Low
+        };
+        if (isError(ev.reason)) {
+            data = __assign(__assign(__assign({}, data), extractErrorStack(ev.reason, Severity.Low)), { url: getCurrentRoute() });
+        }
+        return data;
+    },
+    consumer: function (transformedData) {
+        var breadcrumbStack = addBreadcrumbInWx.call(this, transformedData, WxBreadcrumbTypes.UNHANDLEDREJECTION, Severity.Error);
+        this.transport.send(transformedData, breadcrumbStack);
     }
 });
 function getWxAppPlugins() {
@@ -882,7 +1000,6 @@ function getWxAppPlugins() {
     });
 }
 var wxAppPlugins = getWxAppPlugins();
-console.log('wxAppPlugins', wxAppPlugins);
 
 var wxConsolePlugin = {
     name: WxBaseEventTypes.CONSOLE,

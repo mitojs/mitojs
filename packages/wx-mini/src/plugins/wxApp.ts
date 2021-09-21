@@ -1,6 +1,15 @@
-import { WxAppEvents, WxBreadcrumbTypes, WxEventTypes } from '@mitojs/shared'
-import { BasePluginType, voidFun } from '@mitojs/types'
-import { replaceOld } from '@mitojs/utils'
+import { ErrorTypes, WxAppEvents, WxBreadcrumbTypes, WxEventTypes } from '@mitojs/shared'
+import { BasePluginType, ReportDataType, voidFun } from '@mitojs/types'
+import {
+  extractErrorStack,
+  getCurrentRoute,
+  getTimestamp,
+  isError,
+  parseErrorString,
+  replaceOld,
+  Severity,
+  unknownToString
+} from '@mitojs/utils'
 import { WxLifeCycleBreadcrumb } from '../types'
 import { addBreadcrumbInWx } from '../utils'
 import { WxClient } from '../wxClient'
@@ -8,7 +17,7 @@ import { WxClient } from '../wxClient'
 type WxAppPluginMapType = Map<WxAppEvents, Partial<BasePluginType<WxEventTypes, WxClient>>>
 
 const wxAppPluginMap: WxAppPluginMapType = new Map()
-wxAppPluginMap.set(WxAppEvents.AppOnShow, {
+wxAppPluginMap.set(WxAppEvents.AppOnLaunch, {
   transform(options: WechatMiniprogram.App.LaunchShowOption) {
     const { options: sdkOptions } = this
     sdkOptions.appOnLaunch(options)
@@ -20,6 +29,104 @@ wxAppPluginMap.set(WxAppEvents.AppOnShow, {
   },
   consumer(data: WxLifeCycleBreadcrumb) {
     addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_LAUNCH)
+  }
+})
+
+wxAppPluginMap.set(WxAppEvents.AppOnShow, {
+  transform(options: WechatMiniprogram.App.LaunchShowOption) {
+    const { options: sdkOptions } = this
+    sdkOptions.appOnShow(options)
+    const data: WxLifeCycleBreadcrumb = {
+      path: options.path,
+      query: options.query
+    }
+    return data
+  },
+  consumer(data: WxLifeCycleBreadcrumb) {
+    addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW)
+  }
+})
+
+wxAppPluginMap.set(WxAppEvents.AppOnHide, {
+  transform() {
+    const { options: sdkOptions } = this
+    sdkOptions.appOnHide()
+  },
+  consumer() {
+    addBreadcrumbInWx.call(this, null, WxBreadcrumbTypes.APP_ON_HIDE)
+  }
+})
+
+wxAppPluginMap.set(WxAppEvents.AppOnShow, {
+  transform(options: WechatMiniprogram.App.LaunchShowOption) {
+    const { options: sdkOptions } = this
+    sdkOptions.appOnShow(options)
+    const data: WxLifeCycleBreadcrumb = {
+      path: options.path,
+      query: options.query
+    }
+    return data
+  },
+  consumer(data: WxLifeCycleBreadcrumb) {
+    addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW)
+  }
+})
+
+wxAppPluginMap.set(WxAppEvents.AppOnError, {
+  transform(error: string) {
+    const parsedError = parseErrorString(error)
+    const data: ReportDataType = {
+      ...parsedError,
+      time: getTimestamp(),
+      level: Severity.Normal,
+      url: getCurrentRoute(),
+      type: ErrorTypes.JAVASCRIPT
+    }
+    return data
+  },
+  consumer(transformedData: ReportDataType) {
+    const breadcrumbStack = addBreadcrumbInWx.call(this, transformedData, WxBreadcrumbTypes.CODE_ERROR, Severity.Error)
+    this.transport.send(transformedData, breadcrumbStack)
+  }
+})
+
+wxAppPluginMap.set(WxAppEvents.AppOnShow, {
+  transform(options: WechatMiniprogram.App.LaunchShowOption) {
+    const { options: sdkOptions } = this
+    sdkOptions.appOnShow(options)
+    const data: WxLifeCycleBreadcrumb = {
+      path: options.path,
+      query: options.query
+    }
+    return data
+  },
+  consumer(data: WxLifeCycleBreadcrumb) {
+    addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW)
+  }
+})
+
+wxAppPluginMap.set(WxAppEvents.AppOnUnhandledRejection, {
+  transform(ev: WechatMiniprogram.OnUnhandledRejectionCallbackResult) {
+    let data: ReportDataType = {
+      type: ErrorTypes.PROMISE,
+      message: unknownToString(ev.reason),
+      url: getCurrentRoute(),
+      name: 'unhandledrejection', // 小程序当初onUnhandledRejection回调中无type参数，故写死
+      time: getTimestamp(),
+      level: Severity.Low
+    }
+    if (isError(ev.reason)) {
+      data = {
+        ...data,
+        ...extractErrorStack(ev.reason, Severity.Low),
+        url: getCurrentRoute()
+      }
+    }
+    return data
+  },
+  consumer(transformedData: ReportDataType) {
+    const breadcrumbStack = addBreadcrumbInWx.call(this, transformedData, WxBreadcrumbTypes.UNHANDLEDREJECTION, Severity.Error)
+    this.transport.send(transformedData, breadcrumbStack)
   }
 })
 
