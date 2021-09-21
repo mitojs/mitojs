@@ -1,11 +1,17 @@
 import * as MITO from './utils/wx-mini'
-MITO.init({
+const instance = MITO.init({
   apikey: 'a1329cc0-563b-11eb-98fe-259847d73cdd',
   dsn: 'http://localhost:2021/errors/upload',
   silentConsole: true,
   debug: true,
   appOnLaunch(options) {
     console.log('options appOnlauch',options)
+  },
+  pageOnload() {
+    console.log('mito page onload')
+  },
+  pageOnReady(options) {
+    console.log('mito page pageOnReady',options)
   },
   configReportWxRequest() {
     return {
@@ -16,6 +22,8 @@ MITO.init({
     }
   }
 })
+
+wx.instance = instance
 
 function interceptRequest(params) {
   Object.assign(wx, {

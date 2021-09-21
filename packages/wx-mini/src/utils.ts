@@ -21,6 +21,16 @@ export function getNavigateBackTargetUrl(delta: number | undefined) {
 }
 
 /**
+ * 获取wx的pages的pop
+ *
+ * @export
+ * @return {*}
+ */
+export function getCurrentPagesPop() {
+  return getCurrentPages().pop()
+}
+
+/**
  * 返回包含id、data字符串的标签
  * @param e wx BaseEvent
  */

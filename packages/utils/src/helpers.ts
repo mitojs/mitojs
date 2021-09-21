@@ -235,10 +235,25 @@ export function getCurrentRoute() {
  * @export
  * @param {string} str 原字符
  * @return {*}  {string}
+ * @example xhr => Xhr
  */
 export function firstStrtoUppercase(str: string): string {
   return str.replace(/\b(\w)(\w*)/g, function ($0: string, $1: string, $2: string) {
     return `${$1.toUpperCase()}${$2}`
+  })
+}
+
+/**
+ *将传入的字符串的首字母改为小写，其他不变
+ *
+ * @export
+ * @param {string} str 原字符
+ * @return {*}  {string}
+ * @example Xhr => xhr
+ */
+export function firstStrtoLowerCase(str: string): string {
+  return str.replace(/\b(\w)(\w*)/g, function ($0: string, $1: string, $2: string) {
+    return `${$1.toLowerCase()}${$2}`
   })
 }
 

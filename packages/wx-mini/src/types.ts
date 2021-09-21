@@ -37,9 +37,17 @@ export interface WxHookOptionsType {
    */
   onPageNotFound?(data: WechatMiniprogram.OnPageNotFoundCallbackResult): void
   /**
+   * 先执行hook:pageOnLoad再执行wx小程序的Page下的onShow
+   */
+  pageOnLoad?(page: IWxPageInstance): void
+  /**
    * 先执行hook:pageOnShow再执行wx小程序的Page下的onShow
    */
   pageOnShow?(page: IWxPageInstance): void
+  /**
+   * 先执行hook:pageOnShow再执行wx小程序的Page下的onShow
+   */
+  pageOnReady?(page: IWxPageInstance): void
   /**
    * wx小程序的App下的pageOnUnload执行完后再执行以下hook
    */

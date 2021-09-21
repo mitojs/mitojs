@@ -58,7 +58,9 @@ export function getBreadcrumbCategoryInWx(type: WxBreadcrumbTypes) {
     case WxBreadcrumbTypes.APP_ON_LAUNCH:
     case WxBreadcrumbTypes.APP_ON_SHOW:
     case WxBreadcrumbTypes.APP_ON_HIDE:
+    case WxBreadcrumbTypes.PAGE_ON_LOAD:
     case WxBreadcrumbTypes.PAGE_ON_SHOW:
+    case WxBreadcrumbTypes.PAGE_ON_READY:
     case WxBreadcrumbTypes.PAGE_ON_HIDE:
     case WxBreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
     case WxBreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:

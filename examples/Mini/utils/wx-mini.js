@@ -97,8 +97,11 @@ var WxBreadcrumbTypes;
     WxBreadcrumbTypes["APP_ON_SHOW"] = "App On Show";
     WxBreadcrumbTypes["APP_ON_LAUNCH"] = "App On Launch";
     WxBreadcrumbTypes["APP_ON_HIDE"] = "App On Hide";
+    WxBreadcrumbTypes["PAGE_ON_LOAD"] = "Page On Load";
     WxBreadcrumbTypes["PAGE_ON_SHOW"] = "Page On Show";
+    WxBreadcrumbTypes["PAGE_ON_READY"] = "Page On Ready";
     WxBreadcrumbTypes["PAGE_ON_HIDE"] = "Page On Hide";
+    WxBreadcrumbTypes["PAGE_ON_UNLOAD"] = "Page On Unload";
     WxBreadcrumbTypes["PAGE_ON_SHARE_APP_MESSAGE"] = "Page On Share App Message";
     WxBreadcrumbTypes["PAGE_ON_SHARE_TIMELINE"] = "Page On Share Timeline";
     WxBreadcrumbTypes["PAGE_ON_TAB_ITEM_TAP"] = "Page On Tab Item Tap";
@@ -375,6 +378,11 @@ function getCurrentRoute() {
 function firstStrtoUppercase(str) {
     return str.replace(/\b(\w)(\w*)/g, function ($0, $1, $2) {
         return "" + $1.toUpperCase() + $2;
+    });
+}
+function firstStrtoLowerCase(str) {
+    return str.replace(/\b(\w)(\w*)/g, function ($0, $1, $2) {
+        return "" + $1.toLowerCase() + $2;
     });
 }
 
@@ -725,7 +733,9 @@ function getBreadcrumbCategoryInWx(type) {
         case WxBreadcrumbTypes.APP_ON_LAUNCH:
         case WxBreadcrumbTypes.APP_ON_SHOW:
         case WxBreadcrumbTypes.APP_ON_HIDE:
+        case WxBreadcrumbTypes.PAGE_ON_LOAD:
         case WxBreadcrumbTypes.PAGE_ON_SHOW:
+        case WxBreadcrumbTypes.PAGE_ON_READY:
         case WxBreadcrumbTypes.PAGE_ON_HIDE:
         case WxBreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
         case WxBreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
@@ -858,6 +868,9 @@ function getNavigateBackTargetUrl(delta) {
     var toPage = pages[pages.length - delta];
     return setUrlQuery(toPage.route, toPage.options);
 }
+function getCurrentPagesPop() {
+    return getCurrentPages().pop();
+}
 function addBreadcrumbInWx(data, type, level) {
     if (level === void 0) { level = Severity.Info; }
     return this.breadcrumb.push({
@@ -906,20 +919,6 @@ wxAppPluginMap.set(WxAppEvents.AppOnHide, {
         addBreadcrumbInWx.call(this, null, WxBreadcrumbTypes.APP_ON_HIDE);
     }
 });
-wxAppPluginMap.set(WxAppEvents.AppOnShow, {
-    transform: function (options) {
-        var sdkOptions = this.options;
-        sdkOptions.appOnShow(options);
-        var data = {
-            path: options.path,
-            query: options.query
-        };
-        return data;
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW);
-    }
-});
 wxAppPluginMap.set(WxAppEvents.AppOnError, {
     transform: function (error) {
         var parsedError = parseErrorString(error);
@@ -931,18 +930,14 @@ wxAppPluginMap.set(WxAppEvents.AppOnError, {
         this.transport.send(transformedData, breadcrumbStack);
     }
 });
-wxAppPluginMap.set(WxAppEvents.AppOnShow, {
-    transform: function (options) {
+wxAppPluginMap.set(WxAppEvents.AppOnPageNotFound, {
+    transform: function (data) {
         var sdkOptions = this.options;
-        sdkOptions.appOnShow(options);
-        var data = {
-            path: options.path,
-            query: options.query
-        };
+        sdkOptions.onPageNotFound(data);
         return data;
     },
     consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW);
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.ROUTE, Severity.Error);
     }
 });
 wxAppPluginMap.set(WxAppEvents.AppOnUnhandledRejection, {
@@ -1033,6 +1028,96 @@ var wxConsolePlugin = {
         }
     }
 };
+
+function pageHookTransform(hook) {
+    var page = getCurrentPagesPop();
+    var sdkOptions = this.options;
+    if (page) {
+        sdkOptions[firstStrtoLowerCase(hook)](page);
+        return {
+            path: page.route,
+            query: page.options
+        };
+    }
+    sdkOptions[firstStrtoLowerCase(hook)]();
+}
+var wxPagePluginMap = new Map();
+wxPagePluginMap.set(WxPageEvents.PageOnLoad, {
+    transform: function () {
+        return pageHookTransform.call(this, WxPageEvents.PageOnLoad);
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_LOAD);
+    }
+});
+wxPagePluginMap.set(WxPageEvents.PageOnShow, {
+    transform: function () {
+        return pageHookTransform.call(this, WxPageEvents.PageOnShow);
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHOW);
+    }
+});
+wxPagePluginMap.set(WxPageEvents.PageOnReady, {
+    transform: function () {
+        return pageHookTransform.call(this, WxPageEvents.PageOnReady);
+    },
+    consumer: function () {
+        addBreadcrumbInWx.call(this, null, WxBreadcrumbTypes.PAGE_ON_READY);
+    }
+});
+wxPagePluginMap.set(WxPageEvents.PageOnHide, {
+    transform: function () {
+        return pageHookTransform.call(this, WxPageEvents.PageOnHide);
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_HIDE);
+    }
+});
+wxPagePluginMap.set(WxPageEvents.PageOnUnload, {
+    transform: function () {
+        return pageHookTransform.call(this, WxPageEvents.PageOnHide);
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_UNLOAD);
+    }
+});
+function getWxPagePlugins() {
+    if (!Page)
+        return [];
+    var pageHooks = Object.values(WxPageEvents);
+    var plugins = pageHooks.map(function (hook) {
+        return {
+            name: hook,
+            monitor: function (notify) {
+                var originPageo = Page;
+                Page = function (pageOptions) {
+                    replaceOld(pageOptions, hook.replace('PageOn', 'on'), function (originMethod) {
+                        return function () {
+                            var args = [];
+                            for (var _i = 0; _i < arguments.length; _i++) {
+                                args[_i] = arguments[_i];
+                            }
+                            notify.apply(null, __spreadArray([hook], args, true));
+                            if (originMethod) {
+                                return originMethod.apply(this, args);
+                            }
+                        };
+                    }, true);
+                    return originPageo(pageOptions);
+                };
+            }
+        };
+    });
+    return plugins.map(function (item) {
+        if (wxPagePluginMap.get(item.name)) {
+            return __assign(__assign({}, item), wxPagePluginMap.get(item.name));
+        }
+        return item;
+    });
+}
+var wxPagePlugins = getWxPagePlugins();
+console.log('wxPagePlugins', wxPagePlugins);
 
 var wxRoutePlugin = {
     name: WxBaseEventTypes.MINI_ROUTE,
@@ -1343,11 +1428,13 @@ var WxOptions = (function (_super) {
         var _this = _super.call(this) || this;
         _this.appOnLaunch = function () { };
         _this.appOnShow = function () { };
-        _this.onPageNotFound = function () { };
         _this.appOnHide = function () { };
-        _this.pageOnUnload = function () { };
+        _this.onPageNotFound = function () { };
+        _this.pageOnLoad = function () { };
         _this.pageOnShow = function () { };
+        _this.pageOnReady = function () { };
         _this.pageOnHide = function () { };
+        _this.pageOnUnload = function () { };
         _this.onShareAppMessage = function () { };
         _this.onShareTimeline = function () { };
         _this.onTabItemTap = function () { };
@@ -1357,13 +1444,15 @@ var WxOptions = (function (_super) {
         return _this;
     }
     WxOptions.prototype.bindOptions = function (options) {
-        var beforeAppAjaxSend = options.beforeAppAjaxSend, appOnLaunch = options.appOnLaunch, appOnShow = options.appOnShow, appOnHide = options.appOnHide, pageOnUnload = options.pageOnUnload, pageOnShow = options.pageOnShow, pageOnHide = options.pageOnHide, onPageNotFound = options.onPageNotFound, onShareAppMessage = options.onShareAppMessage, onShareTimeline = options.onShareTimeline, onTabItemTap = options.onTabItemTap, wxNavigateToMiniProgram = options.wxNavigateToMiniProgram, triggerWxEvent = options.triggerWxEvent;
+        var beforeAppAjaxSend = options.beforeAppAjaxSend, appOnLaunch = options.appOnLaunch, appOnShow = options.appOnShow, appOnHide = options.appOnHide, pageOnLoad = options.pageOnLoad, pageOnReady = options.pageOnReady, pageOnShow = options.pageOnShow, pageOnUnload = options.pageOnUnload, pageOnHide = options.pageOnHide, onPageNotFound = options.onPageNotFound, onShareAppMessage = options.onShareAppMessage, onShareTimeline = options.onShareTimeline, onTabItemTap = options.onTabItemTap, wxNavigateToMiniProgram = options.wxNavigateToMiniProgram, triggerWxEvent = options.triggerWxEvent;
         toStringValidateOption(beforeAppAjaxSend, 'beforeAppAjaxSend', "Function") && (this.beforeAppAjaxSend = beforeAppAjaxSend);
         toStringValidateOption(appOnLaunch, 'appOnLaunch', "Function") && (this.appOnLaunch = appOnLaunch);
         toStringValidateOption(appOnShow, 'appOnShow', "Function") && (this.appOnShow = appOnShow);
         toStringValidateOption(appOnHide, 'appOnHide', "Function") && (this.appOnHide = appOnHide);
-        toStringValidateOption(pageOnUnload, 'pageOnUnload', "Function") && (this.pageOnUnload = pageOnUnload);
+        toStringValidateOption(pageOnLoad, 'pageOnLoad', "Function") && (this.pageOnLoad = pageOnLoad);
+        toStringValidateOption(pageOnReady, 'pageOnReady', "Function") && (this.pageOnReady = pageOnReady);
         toStringValidateOption(pageOnShow, 'pageOnShow', "Function") && (this.pageOnShow = pageOnShow);
+        toStringValidateOption(pageOnUnload, 'pageOnUnload', "Function") && (this.pageOnUnload = pageOnUnload);
         toStringValidateOption(pageOnHide, 'pageOnHide', "Function") && (this.pageOnHide = pageOnHide);
         toStringValidateOption(onPageNotFound, 'onPageNotFound', "Function") && (this.onPageNotFound = onPageNotFound);
         toStringValidateOption(onShareAppMessage, 'onShareAppMessage', "Function") && (this.onShareAppMessage = onShareAppMessage);
@@ -1450,8 +1539,9 @@ var WxClient = (function (_super) {
 
 function createWxInstance(options) {
     var wxClient = new WxClient(options);
-    var plugins = __spreadArray([xhrPlugin, wxRoutePlugin, wxConsolePlugin], wxAppPlugins, true);
+    var plugins = __spreadArray(__spreadArray([xhrPlugin, wxRoutePlugin, wxConsolePlugin], wxAppPlugins, true), wxPagePlugins, true);
     wxClient.use(plugins);
+    return wxClient;
 }
 var init = createWxInstance;
 

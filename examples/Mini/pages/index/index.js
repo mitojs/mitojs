@@ -5,7 +5,12 @@ const app = getApp()
 Page({
   data: {
   },
+  
+  onReady(options){
+    console.log('onready', options)
+  },
   onLoad() {
+
     if (wx.getUserProfile) {
       this.setData({
         canIUseGetUserProfile: true

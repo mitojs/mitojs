@@ -7,11 +7,13 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
   // wx-mini
   appOnLaunch: Function = () => {}
   appOnShow: Function = () => {}
-  onPageNotFound: Function = () => {}
   appOnHide: Function = () => {}
-  pageOnUnload: Function = () => {}
+  onPageNotFound: Function = () => {}
+  pageOnLoad: Function = () => {}
   pageOnShow: Function = () => {}
+  pageOnReady: Function = () => {}
   pageOnHide: Function = () => {}
+  pageOnUnload: Function = () => {}
   onShareAppMessage: Function = () => {}
   onShareTimeline: Function = () => {}
   onTabItemTap: Function = () => {}
@@ -29,8 +31,10 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
       appOnLaunch,
       appOnShow,
       appOnHide,
-      pageOnUnload,
+      pageOnLoad,
+      pageOnReady,
       pageOnShow,
+      pageOnUnload,
       pageOnHide,
       onPageNotFound,
       onShareAppMessage,
@@ -44,8 +48,10 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
     toStringValidateOption(appOnLaunch, 'appOnLaunch', ToStringTypes.Function) && (this.appOnLaunch = appOnLaunch)
     toStringValidateOption(appOnShow, 'appOnShow', ToStringTypes.Function) && (this.appOnShow = appOnShow)
     toStringValidateOption(appOnHide, 'appOnHide', ToStringTypes.Function) && (this.appOnHide = appOnHide)
-    toStringValidateOption(pageOnUnload, 'pageOnUnload', ToStringTypes.Function) && (this.pageOnUnload = pageOnUnload)
+    toStringValidateOption(pageOnLoad, 'pageOnLoad', ToStringTypes.Function) && (this.pageOnLoad = pageOnLoad)
+    toStringValidateOption(pageOnReady, 'pageOnReady', ToStringTypes.Function) && (this.pageOnReady = pageOnReady)
     toStringValidateOption(pageOnShow, 'pageOnShow', ToStringTypes.Function) && (this.pageOnShow = pageOnShow)
+    toStringValidateOption(pageOnUnload, 'pageOnUnload', ToStringTypes.Function) && (this.pageOnUnload = pageOnUnload)
     toStringValidateOption(pageOnHide, 'pageOnHide', ToStringTypes.Function) && (this.pageOnHide = pageOnHide)
     toStringValidateOption(onPageNotFound, 'onPageNotFound', ToStringTypes.Function) && (this.onPageNotFound = onPageNotFound)
     toStringValidateOption(onShareAppMessage, 'onShareAppMessage', ToStringTypes.Function) && (this.onShareAppMessage = onShareAppMessage)
