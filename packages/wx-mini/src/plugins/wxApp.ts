@@ -57,21 +57,6 @@ wxAppPluginMap.set(WxAppEvents.AppOnHide, {
   }
 })
 
-wxAppPluginMap.set(WxAppEvents.AppOnShow, {
-  transform(options: WechatMiniprogram.App.LaunchShowOption) {
-    const { options: sdkOptions } = this
-    sdkOptions.appOnShow(options)
-    const data: WxLifeCycleBreadcrumb = {
-      path: options.path,
-      query: options.query
-    }
-    return data
-  },
-  consumer(data: WxLifeCycleBreadcrumb) {
-    addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW)
-  }
-})
-
 wxAppPluginMap.set(WxAppEvents.AppOnError, {
   transform(error: string) {
     const parsedError = parseErrorString(error)
@@ -90,18 +75,15 @@ wxAppPluginMap.set(WxAppEvents.AppOnError, {
   }
 })
 
-wxAppPluginMap.set(WxAppEvents.AppOnShow, {
-  transform(options: WechatMiniprogram.App.LaunchShowOption) {
+wxAppPluginMap.set(WxAppEvents.AppOnPageNotFound, {
+  transform(data: WechatMiniprogram.OnPageNotFoundCallbackResult) {
     const { options: sdkOptions } = this
-    sdkOptions.appOnShow(options)
-    const data: WxLifeCycleBreadcrumb = {
-      path: options.path,
-      query: options.query
-    }
+    sdkOptions.onPageNotFound(data)
     return data
   },
-  consumer(data: WxLifeCycleBreadcrumb) {
-    addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW)
+  consumer(data: WechatMiniprogram.OnPageNotFoundCallbackResult) {
+    // 不发送，因为会被其他AppOnUnhandledRejection捕捉到
+    addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.ROUTE, Severity.Error)
   }
 })
 
