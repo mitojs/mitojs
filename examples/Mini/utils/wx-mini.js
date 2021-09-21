@@ -1082,6 +1082,46 @@ wxPagePluginMap.set(WxPageEvents.PageOnUnload, {
         addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_UNLOAD);
     }
 });
+wxPagePluginMap.set(WxPageEvents.PageOnShareTimeline, {
+    transform: function () {
+        return pageHookTransform.call(this, WxPageEvents.PageOnHide);
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHARE_TIMELINE);
+    }
+});
+wxPagePluginMap.set(WxPageEvents.PageOnShareAppMessage, {
+    transform: function (options) {
+        var page = getCurrentPages().pop();
+        var sdkOptions = this.options;
+        sdkOptions.onShareAppMessage(__assign(__assign({}, page), options));
+        var data = {
+            path: page.route,
+            query: page.options,
+            options: options
+        };
+        return data;
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE);
+    }
+});
+wxPagePluginMap.set(WxPageEvents.PageOnTabItemTap, {
+    transform: function (options) {
+        var page = getCurrentPages().pop();
+        var sdkOptions = this.options;
+        sdkOptions.onShareAppMessage(__assign(__assign({}, page), options));
+        var data = {
+            path: page.route,
+            query: page.options,
+            options: options
+        };
+        return data;
+    },
+    consumer: function (data) {
+        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP);
+    }
+});
 function getWxPagePlugins() {
     if (!Page)
         return [];
