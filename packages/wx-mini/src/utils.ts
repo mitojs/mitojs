@@ -1,5 +1,7 @@
-import { setUrlQuery, variableTypeDetection } from '@mitojs/utils'
+import { getBreadcrumbCategoryInWx, setUrlQuery, Severity, variableTypeDetection } from '@mitojs/utils'
 import { DeviceInfo } from '@mitojs/types'
+import { WxClient } from './wxClient'
+import { WxBreadcrumbTypes } from 'packages/shared/src/wx'
 
 /**
  * 后退时需要计算当前页面地址
@@ -52,5 +54,14 @@ export async function getWxMiniNetWrokType(): Promise<string> {
         resolve('getNetWrokType failed')
       }
     })
+  })
+}
+
+export function addBreadcrumbInWx(this: WxClient, data: any, type: WxBreadcrumbTypes, level = Severity.Info) {
+  return this.breadcrumb.push({
+    type,
+    data,
+    category: getBreadcrumbCategoryInWx(type),
+    level
   })
 }

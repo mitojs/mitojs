@@ -2,6 +2,7 @@ import { WxEventTypes, globalVar, WxBreadcrumbTypes } from '@mitojs/shared'
 import { getBreadcrumbCategoryInWx, replaceOld, Severity, variableTypeDetection } from '@mitojs/utils'
 import { BasePluginType, ConsoleCollectType } from '@mitojs/types'
 import { WxClient } from '../wxClient'
+import { addBreadcrumbInWx } from '../utils'
 const wxConsolePlugin: BasePluginType<WxEventTypes, WxClient> = {
   name: WxEventTypes.CONSOLE,
   monitor(notify) {
@@ -25,12 +26,7 @@ const wxConsolePlugin: BasePluginType<WxEventTypes, WxClient> = {
   },
   consumer(transformedData: ConsoleCollectType) {
     if (globalVar.isLogAddBreadcrumb) {
-      this.breadcrumb.push({
-        type: WxBreadcrumbTypes.CONSOLE,
-        category: getBreadcrumbCategoryInWx(WxBreadcrumbTypes.CONSOLE),
-        data: transformedData,
-        level: Severity.fromString(transformedData.level)
-      })
+      addBreadcrumbInWx.call(this, transformedData, WxBreadcrumbTypes.CONSOLE, Severity.fromString(transformedData.level))
     }
   }
 }

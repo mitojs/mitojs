@@ -1,10 +1,9 @@
 import { ErrorTypes, WxBreadcrumbTypes, WxEventTypes, WxRouteEvents } from '@mitojs/shared'
 import { getBreadcrumbCategoryInWx, getCurrentRoute, Severity, variableTypeDetection } from '@mitojs/utils'
 import { BasePluginType, ReportDataType } from '@mitojs/types'
-import { getNavigateBackTargetUrl } from '../utils'
+import { addBreadcrumbInWx, getNavigateBackTargetUrl } from '../utils'
 import { WxClient } from '../wxClient'
 import { WxRouteCollectType } from '../types'
-import { BREADCRUMBCATEGORYS } from '@mitojs/browser/dist/packages/shared'
 
 interface WxRouteTransformType {
   data: ReportDataType
@@ -16,7 +15,7 @@ const wxRoutePlugins: BasePluginType<WxEventTypes, WxClient> = {
   monitor(notify) {
     monitorWxRoute.call(this, notify)
   },
-  transform(collectedData: WxRouteCollectType) {
+  transform(collectedData: WxRouteCollectType): WxRouteTransformType {
     const reportData: ReportDataType = {
       type: ErrorTypes.ROUTE,
       message: collectedData.message,
@@ -24,26 +23,18 @@ const wxRoutePlugins: BasePluginType<WxEventTypes, WxClient> = {
       name: 'MINI_' + ErrorTypes.ROUTE,
       level: Severity.Error
     }
-    return reportData
+    return {
+      data: reportData,
+      collectedData
+    }
   },
   consumer(transformedData: WxRouteTransformType) {
     const { data, collectedData } = transformedData
-    const breadcrumbType = WxBreadcrumbTypes.ROUTE
     if (collectedData.isFail) {
-      const breadcrumbStack = this.breadcrumb.push({
-        type: breadcrumbType,
-        category: BREADCRUMBCATEGORYS.EXCEPTION,
-        data: transformedData,
-        level: Severity.Error
-      })
+      const breadcrumbStack = addBreadcrumbInWx.call(this, collectedData, WxBreadcrumbTypes.CODE_ERROR, Severity.Error)
       return this.transport.send(data, breadcrumbStack)
     }
-    this.breadcrumb.push({
-      type: breadcrumbType,
-      category: getBreadcrumbCategoryInWx(breadcrumbType),
-      data: collectedData,
-      level: Severity.Info
-    })
+    addBreadcrumbInWx.call(this, collectedData, WxBreadcrumbTypes.ROUTE)
   }
 }
 

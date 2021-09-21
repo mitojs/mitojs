@@ -20,6 +20,7 @@ import {
 } from '@mitojs/utils'
 import { BasePluginType, HttpCollectedType, HttpTransformedType } from '@mitojs/types'
 import { WxClient } from '../wxClient'
+import { addBreadcrumbInWx } from '../utils'
 
 const wxXhrPlugin: BasePluginType<WxEventTypes, WxClient> = {
   name: WxEventTypes.XHR,
@@ -166,22 +167,16 @@ export function httpTransformedDataConsumer(this: WxClient, transformedData: Htt
     time
   } = transformedData
   const isError = status === 0 || status === HTTP_CODE.BAD_REQUEST || status > HTTP_CODE.UNAUTHORIZED
-  this.breadcrumb.push({
-    type,
-    category: getBreadcrumbCategoryInWx(type),
-    data: { ...transformedData },
-    level: Severity.Info,
-    time
-  })
+  addBreadcrumbInWx.call(this, transformedData, type)
   if (isError) {
-    this.breadcrumb.push({
+    const breadcrumbStack = this.breadcrumb.push({
       type,
       category: BREADCRUMBCATEGORYS.EXCEPTION,
       data: { ...transformedData },
       level: Severity.Error,
       time
     })
-    this.transport.send(transformedData, this.breadcrumb.getStack())
+    this.transport.send(transformedData, breadcrumbStack)
   }
 }
 
