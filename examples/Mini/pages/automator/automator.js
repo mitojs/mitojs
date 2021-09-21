@@ -59,5 +59,8 @@ Page({
     wx.navigateTo({
       url: '/pages/index/index?telescope-info={way:"navigateTo"}'
     })
+  },
+  onClickTab(e) {
+    console.log('e',e)
   }
 })

@@ -145,18 +145,19 @@ var WxBaseEventTypes;
     WxBaseEventTypes["ERROR"] = "error";
     WxBaseEventTypes["UNHANDLEDREJECTION"] = "unhandledrejection";
     WxBaseEventTypes["MINI_ROUTE"] = "miniRoute";
+    WxBaseEventTypes["DOM"] = "dom";
     WxBaseEventTypes["MINI_PERFORMANCE"] = "miniPerformance";
     WxBaseEventTypes["MINI_MEMORY_WARNING"] = "miniMemoryWarning";
     WxBaseEventTypes["MINI_NETWORK_STATUS_CHANGE"] = "miniNetworkStatusChange";
     WxBaseEventTypes["MINI_BATTERY_INFO"] = "miniBatteryInfo";
 })(WxBaseEventTypes || (WxBaseEventTypes = {}));
-var ELinstenerTypes;
-(function (ELinstenerTypes) {
-    ELinstenerTypes["Touchmove"] = "touchmove";
-    ELinstenerTypes["Tap"] = "tap";
-    ELinstenerTypes["Longtap"] = "longtap";
-    ELinstenerTypes["Longpress"] = "longpress";
-})(ELinstenerTypes || (ELinstenerTypes = {}));
+var LinstenerTypes;
+(function (LinstenerTypes) {
+    LinstenerTypes["Touchmove"] = "touchmove";
+    LinstenerTypes["Tap"] = "tap";
+    LinstenerTypes["Longtap"] = "longtap";
+    LinstenerTypes["Longpress"] = "longpress";
+})(LinstenerTypes || (LinstenerTypes = {}));
 Object.assign({}, WxAppEvents, WxPageEvents, WxBaseEventTypes);
 
 var nativeToString = Object.prototype.toString;
@@ -189,6 +190,9 @@ function isError(wat) {
         default:
             return isInstanceOf(wat, Error);
     }
+}
+function isEmptyObject(obj) {
+    return variableTypeDetection.isObject(obj) && Object.keys(obj).length === 0;
 }
 function isEmpty(wat) {
     return (variableTypeDetection.isString(wat) && wat.trim() === '') || wat === undefined || wat === null;
@@ -312,6 +316,22 @@ function getFunctionName(fn) {
         return defaultFunctionName;
     }
     return fn.name || defaultFunctionName;
+}
+function throttle(fn, delay) {
+    var canRun = true;
+    return function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        if (!canRun)
+            return;
+        fn.apply(this, args);
+        canRun = false;
+        setTimeout(function () {
+            canRun = true;
+        }, delay);
+    };
 }
 function isInclude(origin, target) {
     return !!~origin.indexOf(target);
@@ -871,6 +891,14 @@ function getNavigateBackTargetUrl(delta) {
 function getCurrentPagesPop() {
     return getCurrentPages().pop();
 }
+function targetAsString(e) {
+    var _a, _b;
+    var id = ((_a = e.currentTarget) === null || _a === void 0 ? void 0 : _a.id) ? " id=\"" + ((_b = e.currentTarget) === null || _b === void 0 ? void 0 : _b.id) + "\"" : '';
+    var dataSets = Object.keys(e.currentTarget.dataset).map(function (key) {
+        return "data-" + key + "=" + e.currentTarget.dataset[key];
+    });
+    return "<element " + id + " " + dataSets.join(' ') + "/>";
+}
 function addBreadcrumbInWx(data, type, level) {
     if (level === void 0) { level = Severity.Info; }
     return this.breadcrumb.push({
@@ -1130,9 +1158,8 @@ function getWxPagePlugins() {
         return {
             name: hook,
             monitor: function (notify) {
-                var originPageo = Page;
-                Page = function (pageOptions) {
-                    replaceOld(pageOptions, hook.replace('PageOn', 'on'), function (originMethod) {
+                function monitorPageHookWithOptions(options) {
+                    replaceOld(options, hook.replace('PageOn', 'on'), function (originMethod) {
                         return function () {
                             var args = [];
                             for (var _i = 0; _i < arguments.length; _i++) {
@@ -1144,8 +1171,13 @@ function getWxPagePlugins() {
                             }
                         };
                     }, true);
-                    return originPageo(pageOptions);
-                };
+                }
+                invokeCallbackInReplacePage(function (pageOptions) {
+                    monitorPageHookWithOptions(pageOptions);
+                });
+                invokeCallbackInReplaceComponent(function (componentOptions) {
+                    monitorPageHookWithOptions(componentOptions);
+                });
             }
         };
     });
@@ -1156,8 +1188,98 @@ function getWxPagePlugins() {
         return item;
     });
 }
+function invokeCallbackInReplacePage(callback) {
+    var originPage = Page;
+    Page = function (pageOptions) {
+        callback(pageOptions);
+        return originPage(pageOptions);
+    };
+}
+function invokeCallbackInReplaceComponent(callback) {
+    if (!Component) {
+        return;
+    }
+    var originComponent = Component;
+    Component = function (componentOptions) {
+        if (!isEmptyObject(componentOptions.methods)) {
+            callback(componentOptions.methods);
+        }
+        return originComponent.call(this, componentOptions);
+    };
+}
 var wxPagePlugins = getWxPagePlugins();
-console.log('wxPagePlugins', wxPagePlugins);
+
+var wxDomPlugin = {
+    name: WxBaseEventTypes.DOM,
+    monitor: function (notify) {
+        var sdkOptions = this.options;
+        function monitorDomWithOption(options) {
+            function gestureTrigger(e) {
+                e.mitoWorked = true;
+                notify(WxBaseEventTypes.DOM, e);
+            }
+            var throttleGesturetrigger = throttle(gestureTrigger, sdkOptions.throttleDelayTime);
+            var linstenerTypes = [LinstenerTypes.Touchmove, LinstenerTypes.Tap];
+            if (options) {
+                Object.keys(options).forEach(function (m) {
+                    if ('function' !== typeof options[m]) {
+                        return;
+                    }
+                    replaceOld(options, m, function (originMethod) {
+                        return function () {
+                            var args = [];
+                            for (var _i = 0; _i < arguments.length; _i++) {
+                                args[_i] = arguments[_i];
+                            }
+                            var e = args[0];
+                            if (e && e.type && e.currentTarget && !e.mitoWorked) {
+                                if (linstenerTypes.indexOf(e.type) > -1) {
+                                    throttleGesturetrigger(e);
+                                }
+                            }
+                            return originMethod.apply(this, args);
+                        };
+                    }, true);
+                });
+            }
+        }
+        invokeCallbackInReplacePage(function (pageOptions) {
+            monitorDomWithOption(pageOptions);
+        });
+        invokeCallbackInReplaceBehavior(function (options) {
+            monitorDomWithOption(options);
+        });
+        invokeCallbackInReplaceComponent(function (componentOptions) {
+            monitorDomWithOption(componentOptions);
+        });
+    },
+    transform: function (e) {
+        var sdkOptions = this.options;
+        sdkOptions.triggerWxEvent(e);
+        var type = WxBreadcrumbTypes.TOUCHMOVE;
+        if (e.type === LinstenerTypes.Tap) {
+            type = WxBreadcrumbTypes.TAP;
+        }
+        var data = targetAsString(e);
+        return { data: data, type: type };
+    },
+    consumer: function (_a) {
+        var data = _a.data, type = _a.type;
+        addBreadcrumbInWx.call(this, data, type);
+    }
+};
+function invokeCallbackInReplaceBehavior(callback) {
+    if (!Behavior) {
+        return;
+    }
+    var originBehavior = Behavior;
+    Behavior = function (behaviorOptions) {
+        if (!isEmptyObject(behaviorOptions.methods)) {
+            callback(behaviorOptions.methods);
+        }
+        return originBehavior.call(this, behaviorOptions);
+    };
+}
 
 var wxRoutePlugin = {
     name: WxBaseEventTypes.MINI_ROUTE,
@@ -1579,7 +1701,7 @@ var WxClient = (function (_super) {
 
 function createWxInstance(options) {
     var wxClient = new WxClient(options);
-    var plugins = __spreadArray(__spreadArray([xhrPlugin, wxRoutePlugin, wxConsolePlugin], wxAppPlugins, true), wxPagePlugins, true);
+    var plugins = __spreadArray(__spreadArray([xhrPlugin, wxRoutePlugin, wxConsolePlugin, wxDomPlugin], wxAppPlugins, true), wxPagePlugins, true);
     wxClient.use(plugins);
     return wxClient;
 }

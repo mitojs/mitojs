@@ -1,6 +1,7 @@
-import { LinstenerTypes, WxBaseEventTypes } from '@mitojs/shared'
+import { LinstenerTypes, WxBaseEventTypes, WxBreadcrumbTypes } from '@mitojs/shared'
 import { BasePluginType } from '@mitojs/types'
 import { isEmptyObject, replaceOld, throttle } from '@mitojs/utils'
+import { addBreadcrumbInWx, targetAsString } from '../utils'
 import { WxClient } from '../wxClient'
 import { invokeCallbackInReplaceComponent, invokeCallbackInReplacePage } from './wxPage'
 
@@ -52,6 +53,19 @@ const wxDomPlugin: BasePluginType<WxBaseEventTypes, WxClient> = {
     invokeCallbackInReplaceComponent((componentOptions) => {
       monitorDomWithOption(componentOptions)
     })
+  },
+  transform(e: WechatMiniprogram.BaseEvent) {
+    const { options: sdkOptions } = this
+    sdkOptions.triggerWxEvent(e)
+    let type = WxBreadcrumbTypes.TOUCHMOVE
+    if (e.type === LinstenerTypes.Tap) {
+      type = WxBreadcrumbTypes.TAP
+    }
+    const data = targetAsString(e)
+    return { data, type }
+  },
+  consumer({ data, type }: { data: string; type: WxBreadcrumbTypes }) {
+    addBreadcrumbInWx.call(this, data, type)
   }
 }
 
