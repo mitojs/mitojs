@@ -1,13 +1,6 @@
 import { logger, Queue, isInclude, toStringValidateOption, createErrorId, isEmpty } from '@mitojs/utils'
 import { SDK_NAME, SDK_VERSION, ToStringTypes } from '@mitojs/shared'
-import {
-  AuthInfo,
-  BaseOptionsFieldsIntegrationType,
-  BreadcrumbPushData,
-  ReportDataType,
-  TrackReportDataType,
-  TransportDataType
-} from '@mitojs/types'
+import { AuthInfo, BaseOptionsFieldsIntegrationType, BreadcrumbPushData, ReportDataType, TransportDataType } from '@mitojs/types'
 
 /**
  * 传输数据抽象类

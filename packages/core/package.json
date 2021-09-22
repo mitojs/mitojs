@@ -24,7 +24,6 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/core": "2.1.26",
     "@mitojs/types": "2.1.26",
     "@mitojs/utils": "2.1.26",
     "@mitojs/shared": "2.1.26"

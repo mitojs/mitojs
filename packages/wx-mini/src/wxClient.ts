@@ -1,27 +1,11 @@
 import { Breadcrumb, BaseClient } from '@mitojs/core'
-import {
-  BrowserBreadcrumbTypes,
-  BrowserEventTypes,
-  ErrorTypes,
-  EventTypes,
-  MitoLog,
-  MitoLogEmptyMsg,
-  MitoLogEmptyTag
-} from '@mitojs/shared'
-import {
-  extractErrorStack,
-  firstStrtoUppercase,
-  getBreadcrumbCategoryInBrowser,
-  getCurrentRoute,
-  getTimestamp,
-  isError,
-  Severity,
-  unknownToString
-} from '@mitojs/utils'
+import { ErrorTypes, EventTypes, MitoLog, MitoLogEmptyMsg, MitoLogEmptyTag, WxBreadcrumbTypes, WxEventTypes } from '@mitojs/shared'
+import { extractErrorStack, firstStrtoUppercase, getCurrentRoute, getTimestamp, isError, Severity, unknownToString } from '@mitojs/utils'
 import { LogTypes, TrackReportDataType } from '@mitojs/types'
 import { WxOptions } from './wxOptions'
 import { WxTransport } from './wxTransport'
 import { WxOptionsFieldsTypes } from './types'
+import { addBreadcrumbInWx } from './utils'
 
 export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
   transport: WxTransport
@@ -33,14 +17,15 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
     this.transport = new WxTransport(options)
     this.breadcrumb = new Breadcrumb(options)
   }
+
   /**
-   * 判断当前插件是否启用，用于browser的option
+   * 判断当前插件是否启用，用于wx的option
    *
-   * @param {BrowserEventTypes} name
-   * @return {*}
-   * @memberof BrowserClient
+   * @param {WxEventTypes} name
+   * @return {*}  {boolean}
+   * @memberof WxClient
    */
-  isPluginEnable(name: BrowserEventTypes): boolean {
+  isPluginEnable(name: WxEventTypes): boolean {
     const silentField = `silent${firstStrtoUppercase(name)}`
     return !this.options[silentField]
   }
@@ -60,12 +45,7 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
       url: getCurrentRoute(),
       ...errorInfo
     }
-    const breadcrumbStack = this.breadcrumb.push({
-      type: BrowserBreadcrumbTypes.CUSTOMER,
-      category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CUSTOMER),
-      data: message,
-      level: Severity.fromString(level.toString())
-    })
+    const breadcrumbStack = addBreadcrumbInWx.call(this, message, WxBreadcrumbTypes.CUSTOMER, Severity.fromString(level.toString()))
     this.transport.send(reportData, breadcrumbStack)
   }
 

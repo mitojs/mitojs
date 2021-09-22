@@ -1,4 +1,4 @@
-/* @mitojs/wx-mini version ' + 2.1.25 */
+/* @mitojs/wx-mini version ' + 2.1.26 */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -72,7 +72,7 @@ function __spreadArray(to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 }
 
-var version = "2.1.25";
+var version = "2.1.26";
 
 var SDK_NAME = 'mitojs';
 var SDK_VERSION = version;
@@ -84,6 +84,16 @@ var globalVar = {
     isLogAddBreadcrumb: true,
     crossOriginThreshold: 1000
 };
+
+var TrackActionType;
+(function (TrackActionType) {
+    TrackActionType["PAGE"] = "PAGE";
+    TrackActionType["EVENT"] = "EVENT";
+    TrackActionType["VIEW"] = "VIEW";
+    TrackActionType["DURATION"] = "DURATION";
+    TrackActionType["DURATION_VIEW"] = "DURATION_VIEW";
+    TrackActionType["OTHER"] = "OTHER";
+})(TrackActionType || (TrackActionType = {}));
 
 var WxBreadcrumbTypes;
 (function (WxBreadcrumbTypes) {
@@ -161,16 +171,6 @@ var LinstenerTypes;
     LinstenerTypes["Longpress"] = "longpress";
 })(LinstenerTypes || (LinstenerTypes = {}));
 Object.assign({}, WxAppEvents, WxPageEvents, WxBaseEventTypes);
-
-var TrackActionType;
-(function (TrackActionType) {
-    TrackActionType["PAGE"] = "PAGE";
-    TrackActionType["EVENT"] = "EVENT";
-    TrackActionType["VIEW"] = "VIEW";
-    TrackActionType["DURATION"] = "DURATION";
-    TrackActionType["DURATION_VIEW"] = "DURATION_VIEW";
-    TrackActionType["OTHER"] = "OTHER";
-})(TrackActionType || (TrackActionType = {}));
 
 var nativeToString = Object.prototype.toString;
 function isType(type) {
@@ -428,26 +428,6 @@ function validateOptionsAndSet(targetArr, expectType) {
     });
 }
 
-function getBreadcrumbCategoryInBrowser(type) {
-    switch (type) {
-        case "Xhr":
-        case "Fetch":
-            return "http";
-        case "UI.Click":
-        case "Route":
-            return "user";
-        case "Customer":
-        case "Console":
-            return "debug";
-        case "Unhandledrejection":
-        case "Code Error":
-        case "Resource":
-        case "Vue":
-        case "React":
-        default:
-            return "exception";
-    }
-}
 function extractErrorStack(ex, level) {
     var normal = {
         time: getTimestamp(),
@@ -1542,6 +1522,8 @@ var BaseClient = (function () {
     }
     BaseClient.prototype.use = function (plugins) {
         var _this = this;
+        if (this.options.disabled)
+            return;
         var subscrib = new Subscrib();
         plugins.forEach(function (item) {
             if (!_this.isPluginEnable(item.name))
@@ -1798,12 +1780,7 @@ var WxClient = (function (_super) {
             errorInfo = extractErrorStack(ex, level);
         }
         var reportData = __assign({ type: "LOG", level: level, message: unknownToString(message), name: MitoLog, customTag: unknownToString(tag), time: getTimestamp(), url: getCurrentRoute() }, errorInfo);
-        var breadcrumbStack = this.breadcrumb.push({
-            type: "Customer",
-            category: getBreadcrumbCategoryInBrowser("Customer"),
-            data: message,
-            level: Severity.fromString(level.toString())
-        });
+        var breadcrumbStack = addBreadcrumbInWx.call(this, message, WxBreadcrumbTypes.CUSTOMER, Severity.fromString(level.toString()));
         this.transport.send(reportData, breadcrumbStack);
     };
     WxClient.prototype.trackSend = function (trackData) {
@@ -1812,10 +1789,11 @@ var WxClient = (function (_super) {
     return WxClient;
 }(BaseClient));
 
-function createWxInstance(options) {
+function createWxInstance(options, plugins) {
+    if (plugins === void 0) { plugins = []; }
     var wxClient = new WxClient(options);
-    var plugins = __spreadArray(__spreadArray([wxRequestPlugin, wxRoutePlugin, wxConsolePlugin, wxDomPlugin], wxAppPlugins, true), wxPagePlugins, true);
-    wxClient.use(plugins);
+    var wxPlugins = __spreadArray(__spreadArray(__spreadArray([wxRequestPlugin, wxRoutePlugin, wxConsolePlugin, wxDomPlugin], wxAppPlugins, true), wxPagePlugins, true), plugins, true);
+    wxClient.use(wxPlugins);
     return wxClient;
 }
 var init = createWxInstance;
