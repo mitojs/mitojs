@@ -13,11 +13,11 @@ export type IWxPageInstance = WechatMiniprogram.Page.Instance<WechatMiniprogram.
 
 export interface WxSilentOptionsType {
   /**
-   * 静默监控Xhr事件
+   * 静默监控wx.request事件
    */
   silentRequest?: boolean
   /**
-   * 静默监控console事件
+   * 静默监控wx.console事件
    */
   silentConsole?: boolean
   /**
@@ -27,15 +27,31 @@ export interface WxSilentOptionsType {
   /**
    * 静默监控Route切换事件
    */
-  silentMiniRoute?: boolean
+  silentRoute?: boolean
   /**
    * 静默监控error事件
    */
-  silentError?: boolean
+  silentAppOnError?: boolean
   /**
    * 静默监控unhandledrejection事件
    */
-  silentUnhandledrejection?: boolean
+  silentAppOnUnhandledRejection?: boolean
+
+  /**
+   * 静默监控onPageNotFound事件
+   *
+   * @type {boolean}
+   * @memberof WxSilentOptionsType
+   */
+  silentAppOnPageNotFound?: boolean
+
+  // silentAppOnLaunch?: boolean
+
+  // slientAppOnShow?: boolean
+
+  // slientAppOnHide?: boolean
+
+  // silentWxOnShareAppMessage?: boolean
 }
 
 export interface WxHookOptionsType {

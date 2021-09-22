@@ -175,7 +175,7 @@ describe('Min e2e:', () => {
 
       const { authInfo, data } = options.data as TransportDataType
 
-      expect((data as ReportDataType).name).toBe('MINI_ROUTE_ERROR')
+      expect((data as ReportDataType).name).toBe('ROUTE_ERROR')
       expect((data as ReportDataType).type).toBe(ERRORTYPES.ROUTE_ERROR)
       expect((data as ReportDataType).level).toBe(Severity.Error)
       expect(authInfo.sdkName).toBe(SDK_NAME)

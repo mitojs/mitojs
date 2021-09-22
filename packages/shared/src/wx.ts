@@ -67,9 +67,7 @@ export enum WxRouteEvents {
 export enum WxBaseEventTypes {
   REQUEST = 'request',
   CONSOLE = 'console',
-  ERROR = 'error',
-  UNHANDLEDREJECTION = 'unhandledrejection',
-  MINI_ROUTE = 'miniRoute',
+  ROUTE = 'route',
   DOM = 'dom',
   //
   MINI_PERFORMANCE = 'miniPerformance',

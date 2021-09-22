@@ -69,3 +69,7 @@ npm i @mitojs/wx-mini @mitojs/react
 
 更多关于`@mitojs/react`的用法[click here](../react/README.md)
 
+
+
+## options
+

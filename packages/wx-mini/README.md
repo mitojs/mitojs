@@ -72,4 +72,17 @@ npm i @mitojs/wx-mini @mitojs/react
 
 more usage of @mitojs/react [click here](../react/README.md)
 
+## options
+
+### WxSilentOptionsType
+
+|              Name              | Type      | Default    | Description                                                  |
+| :----------------------------: | --------- | ---------- | ------------------------------------------------------------ |
+|          `silentRequest`          | `boolean` | `false`    | 默认会监控微信小程序的wx.request（接口&下载），为true时，将不再监控                  |
+|        `silentConsole`         | `boolean` | `false`    | 默认会监控微信小程序的wx.console，为true时，将不再监控                   |
+|          `silentDom`           | `boolean` | `false`    | 默认会监控微信小程序的tab、touch事件，当用户touch的标签有id或者class，就会被b捕捉到放入breadcrumb，为true，将不在监听 |
+| `silentRoute` | `boolean` | `false` | 默认会监控微信小程序App的路由跳转，为true时，将不在监控 |
+|         `silentAppOnError`         | `boolean` | `false`    | 默认会监控微信小程序的error，为true时，将不在监控                        |
+|   `silentAppOnUnhandledRejection`   | `boolean` | `false`    | 默认会监控微信小程序的unhandledrejection，为true时，将不在监控           |
+|    `silentAppOnPageNotFound`    | `boolean` | `false`    | 默认会监控微信小程序的微信小程序App的onPageNotFound，为true时，将不在监控 |
 

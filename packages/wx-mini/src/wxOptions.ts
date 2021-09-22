@@ -21,11 +21,11 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
   onTabItemTap: Function = () => {}
   // silent options
   /**
-   * 静默监控Xhr事件
+   * 静默监控wx.request事件
    */
   silentRequest: boolean
   /**
-   * 静默监控console事件
+   * 静默监控wx.console事件
    */
   silentConsole: boolean
   /**
@@ -35,15 +35,22 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
   /**
    * 静默监控小小程序Route切换
    */
-  silentMiniRoute: boolean
+  silentRoute: boolean
   /**
    * 静默监控error事件
    */
-  silentError: boolean
+  silentAppOnError: boolean
   /**
    * 静默监控unhandledrejection事件
    */
-  silentUnhandledrejection: boolean
+  silentAppOnUnhandledRejection: boolean
+  /**
+   * 静默监控onPageNotFound事件
+   *
+   * @type {boolean}
+   * @memberof WxOptions
+   */
+  silentAppOnPageNotFound: boolean
   // need return opitons，so defaul value is undefined
   wxNavigateToMiniProgram: Function
   triggerWxEvent: Function = () => {}
@@ -72,18 +79,20 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
       silentRequest,
       silentConsole,
       silentDom,
-      silentMiniRoute,
-      silentError,
-      silentUnhandledrejection
+      silentRoute,
+      silentAppOnError,
+      silentAppOnUnhandledRejection,
+      silentAppOnPageNotFound
     } = options
     // silent type
     const booleanOptions = [
       [silentRequest, 'silentRequest'],
       [silentConsole, 'silentConsole'],
       [silentDom, 'silentDom'],
-      [silentMiniRoute, 'silentMiniRoute'],
-      [silentError, 'silentError'],
-      [silentUnhandledrejection, 'silentUnhandledrejection']
+      [silentRoute, 'silentRoute'],
+      [silentAppOnError, 'silentAppOnError'],
+      [silentAppOnUnhandledRejection, 'silentAppOnUnhandledRejection'],
+      [silentAppOnPageNotFound, 'silentAppOnPageNotFound']
     ]
     validateOptionsAndSet.call(this, booleanOptions, ToStringTypes.Boolean)
     const functionOptions = [

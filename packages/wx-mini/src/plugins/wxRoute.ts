@@ -11,7 +11,7 @@ interface WxRouteTransformType {
 }
 
 const wxRoutePlugin: BasePluginType<WxEventTypes, WxClient> = {
-  name: WxBaseEventTypes.MINI_ROUTE,
+  name: WxBaseEventTypes.ROUTE,
   monitor(notify) {
     monitorWxRoute.call(this, notify)
   },
@@ -73,7 +73,7 @@ export function monitorWxRoute(this: WxClient, notify: (eventName: WxBaseEventTy
           from: getCurrentRoute(),
           to: toUrl
         }
-        notify(WxBaseEventTypes.MINI_ROUTE, data)
+        notify(WxBaseEventTypes.ROUTE, data)
         // 如果complete||success||fail一个都没有，则原方法返回promise，此时sdk也不需要处理
         if (
           variableTypeDetection.isFunction(options.complete) ||
@@ -92,7 +92,7 @@ export function monitorWxRoute(this: WxClient, notify: (eventName: WxBaseEventTy
               isFail: true,
               message: res.errMsg
             }
-            notify(WxBaseEventTypes.MINI_ROUTE, failData)
+            notify(WxBaseEventTypes.ROUTE, failData)
             if (variableTypeDetection.isFunction(_fail)) {
               return _fail(res)
             }
