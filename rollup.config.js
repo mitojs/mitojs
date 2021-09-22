@@ -46,7 +46,8 @@ const processEnvBanner = `
     }
   }
 `
-const banner = `${mitoAnnotation}${name === 'react' ? '\n' + processEnvBanner : ''}`
+const includeEnvNames = ['react', 'web']
+const banner = `${mitoAnnotation}${includeEnvNames.includes(name) ? '\n' + processEnvBanner : ''}`
 
 const common = {
   input: `${packageDir}/src/index.ts`,
@@ -86,12 +87,12 @@ const common = {
         }
       },
       include: ['*.ts+(|x)', '**/*.ts+(|x)', '../**/*.ts+(|x)']
-    })
+    }),
     // remove console.log in bundle
-    // strip({
-    //   include: ['**/*.(js|ts|tsx)'],
-    //   functions: ['console.log']
-    // })
+    strip({
+      include: ['**/*.(js|ts|tsx)'],
+      functions: ['console.log']
+    })
   ]
 }
 const esmPackage = {
@@ -113,7 +114,9 @@ const cjsPackage = {
   ...common,
   external: [],
   output: {
-    file: `/Users/bytedance/Desktop/github/mitojs/examples/Mini/utils/${name}.js`,
+    // ${packageDirDist}
+    // /Users/bytedance/Desktop/github/mitojs/examples/Mini/utils/
+    file: `${packageDirDist}/${name}.js`,
     format: 'cjs',
     sourcemap: true,
     minifyInternalExports: true,

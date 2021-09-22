@@ -18,14 +18,15 @@ yarn add @mitojs/vue
 ```typescript
 // main.js
 import Vue from 'vue'
-import { init } from '@mitojs/vue'
+import { init } from '@mitojs/browser'
+import { vuePlugin } from '@mitojs/vue'
 
 // multiple instances
 const MitoInstance = init({
   vue: Vue,
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100
-})
+},[vuePlugin])
 
 ```
 

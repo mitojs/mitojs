@@ -16,8 +16,7 @@ export function initMemoryWarning(store: Store, need: boolean) {
 export function noNetworkType<T extends WechatMiniprogram.GetNetworkTypeOption = WechatMiniprogram.GetNetworkTypeOption>(
   option?: T
 ): WechatMiniprogram.PromisifySuccessResult<T, WechatMiniprogram.GetNetworkTypeOption> {
-  return
-  Promise.resolve({
+  return Promise.resolve({
     networkType: 'unknown',
     signalStrength: 0
   })
