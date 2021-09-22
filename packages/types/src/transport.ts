@@ -42,22 +42,3 @@ export interface ReportDataType extends Partial<HttpTransformedType> {
   // logError 手动报错 MITO.log
   customTag?: string
 }
-
-// export interface TrackReportData extends ICommonDataType {
-//   // uuid
-//   id?: string
-//   // 埋点code 一般由人为传进来，可以自定义规范
-//   trackId?: string
-//   // 埋点类型
-//   actionType: EActionType
-//   // 埋点开始时间
-//   startTime?: number
-//   // 埋点停留时间
-//   durationTime?: number
-//   // 上报时间
-//   trackTime?: number
-// }
-
-// export function isReportDataType(data: ReportDataType | TrackReportData): data is ReportDataType {
-//   return (<TrackReportData>data).actionType === undefined && !data.isTrackData
-// }

@@ -10,7 +10,7 @@ import {
   Severity,
   unknownToString
 } from '@mitojs/utils'
-import { LogTypes } from '@mitojs/types'
+import { LogTypes, TrackReportDataType } from '@mitojs/types'
 import { WxOptions } from './wxOptions'
 import { WxTransport } from './wxTransport'
 import { WxOptionsFieldsTypes } from './types'
@@ -43,7 +43,7 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
     if (isError(ex)) {
       errorInfo = extractErrorStack(ex, level)
     }
-    const error = {
+    const reportData = {
       type: ErrorTypes.LOG,
       level,
       message: unknownToString(message),
@@ -59,6 +59,16 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
       data: message,
       level: Severity.fromString(level.toString())
     })
-    this.transport.send(error, breadcrumbStack)
+    this.transport.send(reportData, breadcrumbStack)
+  }
+
+  /**
+   * 埋点信息发送
+   *
+   * @param {TrackReportDataType} trackData
+   * @memberof WxClient
+   */
+  trackSend(trackData: TrackReportDataType): void {
+    this.transport.send(trackData, this.breadcrumb.getStack())
   }
 }

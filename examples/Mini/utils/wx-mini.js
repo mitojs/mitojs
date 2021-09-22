@@ -1627,8 +1627,7 @@ var BaseTransport = (function () {
                             if (!dsn)
                                 return [2];
                         }
-                        this.sendToServer(transportData, dsn);
-                        return [2];
+                        return [2, this.sendToServer(transportData, dsn)];
                 }
             });
         });
@@ -1752,14 +1751,17 @@ var WxClient = (function (_super) {
         if (isError(ex)) {
             errorInfo = extractErrorStack(ex, level);
         }
-        var error = __assign({ type: "LOG", level: level, message: unknownToString(message), name: MitoLog, customTag: unknownToString(tag), time: getTimestamp(), url: getCurrentRoute() }, errorInfo);
+        var reportData = __assign({ type: "LOG", level: level, message: unknownToString(message), name: MitoLog, customTag: unknownToString(tag), time: getTimestamp(), url: getCurrentRoute() }, errorInfo);
         var breadcrumbStack = this.breadcrumb.push({
             type: "Customer",
             category: getBreadcrumbCategoryInBrowser("Customer"),
             data: message,
             level: Severity.fromString(level.toString())
         });
-        this.transport.send(error, breadcrumbStack);
+        this.transport.send(reportData, breadcrumbStack);
+    };
+    WxClient.prototype.trackSend = function (trackData) {
+        this.transport.send(trackData, this.breadcrumb.getStack());
     };
     return WxClient;
 }(BaseClient));

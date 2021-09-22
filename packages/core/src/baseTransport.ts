@@ -113,7 +113,7 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
       dsn = this.configReportUrl(transportData, dsn)
       if (!dsn) return
     }
-    this.sendToServer(transportData, dsn)
+    return this.sendToServer(transportData, dsn)
   }
   /**
    * post方式，子类需要重写
