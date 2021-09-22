@@ -1,11 +1,11 @@
 import {
   silentConsoleScope,
   Severity,
-  getLocationHref,
   getTimestamp,
   variableTypeDetection,
   getBigVersion,
-  getBreadcrumbCategoryInBrowser
+  getBreadcrumbCategoryInBrowser,
+  getUrlWithEnv
 } from '@mitojs/utils'
 import { vue2VmHandler, vue3VmHandler } from './helper'
 import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes } from '@mitojs/shared'
@@ -23,7 +23,7 @@ const vuePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
           type: ErrorTypes.VUE,
           message: `${err.message}(${info})`,
           level: Severity.Normal,
-          url: getLocationHref(),
+          url: getUrlWithEnv(),
           name: err.name,
           stack: err.stack || [],
           time: getTimestamp()

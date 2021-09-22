@@ -16,7 +16,7 @@ function pushNetwork(store: Store, data: WxPerformanceItem) {
 
 const Events = {
   [WxPerformanceItemType.AppOnLaunch]: function (args: any[]) {
-    let _this = this as Store
+    const _this = this as Store
     const now = Date.now()
     _this.setLaunchTime(now)
     _this.push(WxPerformanceDataType.WX_LIFE_STYLE, { itemType: WxPerformanceItemType.AppOnLaunch, timestamp: now })

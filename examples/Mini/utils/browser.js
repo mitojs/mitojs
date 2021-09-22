@@ -1,4 +1,4 @@
-/* @mitojs/wx-mini version ' + 2.1.25 */
+/* @mitojs/browser version ' + 2.1.25 */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -80,6 +80,7 @@ var SDK_VERSION = version;
 var MitoLog = 'Mito.log';
 var MitoLogEmptyMsg = 'empty.msg';
 var MitoLogEmptyTag = 'empty.tag';
+var ERROR_TYPE_RE = /^(?:[Uu]ncaught (?:exception: )?)?(?:((?:Eval|Internal|Range|Reference|Syntax|Type|URI|)Error): )?(.*)$/;
 var globalVar = {
     isLogAddBreadcrumb: true,
     crossOriginThreshold: 1000
@@ -203,9 +204,6 @@ function isError(wat) {
             return isInstanceOf(wat, Error);
     }
 }
-function isEmptyObject(obj) {
-    return variableTypeDetection.isObject(obj) && Object.keys(obj).length === 0;
-}
 function isEmpty(wat) {
     return (variableTypeDetection.isString(wat) && wat.trim() === '') || wat === undefined || wat === null;
 }
@@ -216,6 +214,9 @@ function isInstanceOf(wat, base) {
     catch (_e) {
         return false;
     }
+}
+function isExistProperty(obj, key) {
+    return obj.hasOwnProperty(key);
 }
 
 var isNodeEnv = variableTypeDetection.isProcess(typeof process !== 'undefined' ? process : 0);
@@ -238,6 +239,12 @@ function getGlobalMitoSupport() {
 }
 _support.replaceFlag = _support.replaceFlag || {};
 _support.replaceFlag;
+function supportsHistory() {
+    var chrome = _global.chrome;
+    var isChromePackagedApp = chrome && chrome.app && chrome.app.runtime;
+    var hasHistoryApi = 'history' in _global && !!_global.history.pushState && !!_global.history.replaceState;
+    return !isChromePackagedApp && hasHistoryApi;
+}
 
 var PREFIX = 'MITO Logger';
 var Logger = (function () {
@@ -312,6 +319,10 @@ function getUrlWithEnv() {
     if (isBrowserEnv)
         return getLocationHref();
     return '';
+}
+function on(target, eventName, handler, opitons) {
+    if (opitons === void 0) { opitons = false; }
+    target.addEventListener(eventName, handler, opitons);
 }
 function replaceOld(source, name, replacement, isForced) {
     if (isForced === void 0) { isForced = false; }
@@ -399,6 +410,12 @@ function setUrlQuery(url, query) {
     }
     return url;
 }
+function interceptStr(str, interceptLength) {
+    if (variableTypeDetection.isString(str)) {
+        return str.slice(0, interceptLength) + (str.length > interceptLength ? ":\u622A\u53D6\u524D" + interceptLength + "\u4E2A\u5B57\u7B26" : '');
+    }
+    return '';
+}
 function getCurrentRoute() {
     if (!variableTypeDetection.isFunction(getCurrentPages)) {
         return '';
@@ -415,19 +432,47 @@ function firstStrtoUppercase(str) {
         return "" + $1.toUpperCase() + $2;
     });
 }
-function firstStrtoLowerCase(str) {
-    return str.replace(/\b(\w)(\w*)/g, function ($0, $1, $2) {
-        return "" + $1.toLowerCase() + $2;
+function safeStringify(obj) {
+    var set = new Set();
+    var str = JSON.stringify(obj, function (_key, value) {
+        if (set.has(value)) {
+            return 'Circular';
+        }
+        typeof value === 'object' && set.add(value);
+        return value;
     });
-}
-function validateOptionsAndSet(targetArr, expectType) {
-    var _this = this;
-    targetArr.forEach(function (_a) {
-        var target = _a[0], targetName = _a[1];
-        return toStringValidateOption(target, targetName, expectType) && (_this[targetName] = target);
-    });
+    set.clear();
+    return str;
 }
 
+function htmlElementAsString(target) {
+    var tagName = target.tagName.toLowerCase();
+    if (tagName === 'body') {
+        return null;
+    }
+    var classNames = target.classList.value;
+    classNames = classNames !== '' ? " class=\"" + classNames + "\"" : '';
+    var id = target.id ? " id=\"" + target.id + "\"" : '';
+    var innerText = target.innerText;
+    return "<" + tagName + id + (classNames !== '' ? classNames : '') + ">" + innerText + "</" + tagName + ">";
+}
+function parseUrlToObj(url) {
+    if (!url) {
+        return {};
+    }
+    var match = url.match(/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/);
+    if (!match) {
+        return {};
+    }
+    var query = match[6] || '';
+    var fragment = match[8] || '';
+    return {
+        host: match[4],
+        path: match[5],
+        protocol: match[2],
+        relative: match[5] + query + fragment
+    };
+}
 function getBreadcrumbCategoryInBrowser(type) {
     switch (type) {
         case "Xhr":
@@ -725,737 +770,6 @@ function hashCode(str) {
     return hash;
 }
 
-function parseErrorString(str) {
-    var splitLine = str.split('\n');
-    if (splitLine.length < 2)
-        return null;
-    if (splitLine[0].indexOf('MiniProgramError') !== -1) {
-        splitLine.splice(0, 1);
-    }
-    var message = splitLine.splice(0, 1)[0];
-    var name = splitLine.splice(0, 1)[0].split(':')[0];
-    var stack = [];
-    splitLine.forEach(function (errorLine) {
-        var regexpGetFun = /at\s+([\S]+)\s+\(/;
-        var regexGetFile = /\(([^)]+)\)/;
-        var regexGetFileNoParenthese = /\s+at\s+(\S+)/;
-        var funcExec = regexpGetFun.exec(errorLine);
-        var fileURLExec = regexGetFile.exec(errorLine);
-        if (!fileURLExec) {
-            fileURLExec = regexGetFileNoParenthese.exec(errorLine);
-        }
-        var funcNameMatch = Array.isArray(funcExec) && funcExec.length > 0 ? funcExec[1].trim() : '';
-        var fileURLMatch = Array.isArray(fileURLExec) && fileURLExec.length > 0 ? fileURLExec[1] : '';
-        var lineInfo = fileURLMatch.split(':');
-        stack.push({
-            args: [],
-            func: funcNameMatch || "UNKNOWN_FUNCTION",
-            column: Number(lineInfo.pop()),
-            line: Number(lineInfo.pop()),
-            url: lineInfo.join(':')
-        });
-    });
-    return {
-        message: message,
-        name: name,
-        stack: stack
-    };
-}
-function getBreadcrumbCategoryInWx(type) {
-    switch (type) {
-        case WxBreadcrumbTypes.XHR:
-            return "http";
-        case WxBreadcrumbTypes.ROUTE:
-        case WxBreadcrumbTypes.TAP:
-        case WxBreadcrumbTypes.TOUCHMOVE:
-            return "user";
-        case WxBreadcrumbTypes.CUSTOMER:
-        case WxBreadcrumbTypes.CONSOLE:
-            return "debug";
-        case WxBreadcrumbTypes.APP_ON_LAUNCH:
-        case WxBreadcrumbTypes.APP_ON_SHOW:
-        case WxBreadcrumbTypes.APP_ON_HIDE:
-        case WxBreadcrumbTypes.PAGE_ON_LOAD:
-        case WxBreadcrumbTypes.PAGE_ON_SHOW:
-        case WxBreadcrumbTypes.PAGE_ON_READY:
-        case WxBreadcrumbTypes.PAGE_ON_HIDE:
-        case WxBreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
-        case WxBreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
-        case WxBreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP:
-            return "lifecycle";
-        case WxBreadcrumbTypes.UNHANDLEDREJECTION:
-        case WxBreadcrumbTypes.CODE_ERROR:
-        case WxBreadcrumbTypes.RESOURCE:
-        case WxBreadcrumbTypes.VUE:
-        case WxBreadcrumbTypes.REACT:
-        default:
-            return "exception";
-    }
-}
-
-function getNavigateBackTargetUrl(delta) {
-    if (!variableTypeDetection.isFunction(getCurrentPages)) {
-        return '';
-    }
-    var pages = getCurrentPages();
-    if (!pages.length) {
-        return 'App';
-    }
-    delta = delta || 1;
-    var toPage = pages[pages.length - delta];
-    return setUrlQuery(toPage.route, toPage.options);
-}
-function getCurrentPagesPop() {
-    return getCurrentPages().pop();
-}
-function targetAsString(e) {
-    var _a, _b;
-    var id = ((_a = e.currentTarget) === null || _a === void 0 ? void 0 : _a.id) ? " id=\"" + ((_b = e.currentTarget) === null || _b === void 0 ? void 0 : _b.id) + "\"" : '';
-    var dataSets = Object.keys(e.currentTarget.dataset).map(function (key) {
-        return "data-" + key + "=" + e.currentTarget.dataset[key];
-    });
-    return "<element " + id + " " + dataSets.join(' ') + "/>";
-}
-function getWxMiniDeviceInfo() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, pixelRatio, screenHeight, screenWidth, netType;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = wx.getSystemInfoSync(), pixelRatio = _a.pixelRatio, screenHeight = _a.screenHeight, screenWidth = _a.screenWidth;
-                    return [4, getWxMiniNetWrokType()];
-                case 1:
-                    netType = _b.sent();
-                    return [2, {
-                            ratio: pixelRatio,
-                            clientHeight: screenHeight,
-                            clientWidth: screenWidth,
-                            netType: netType
-                        }];
-            }
-        });
-    });
-}
-function getWxMiniNetWrokType() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2, new Promise(function (resolve) {
-                    wx.getNetworkType({
-                        success: function (res) {
-                            resolve(res.networkType);
-                        },
-                        fail: function (err) {
-                            console.error("\u83B7\u53D6\u5FAE\u4FE1\u5C0F\u7A0B\u5E8F\u7F51\u7EDC\u7C7B\u578B\u5931\u8D25:" + err);
-                            resolve('getNetWrokType failed');
-                        }
-                    });
-                })];
-        });
-    });
-}
-function addBreadcrumbInWx(data, type, level) {
-    if (level === void 0) { level = Severity.Info; }
-    return this.breadcrumb.push({
-        type: type,
-        data: data,
-        category: getBreadcrumbCategoryInWx(type),
-        level: level
-    });
-}
-
-var wxAppPluginMap = new Map();
-wxAppPluginMap.set(WxAppEvents.AppOnLaunch, {
-    transform: function (options) {
-        var sdkOptions = this.options;
-        sdkOptions.appOnLaunch(options);
-        var data = {
-            path: options.path,
-            query: options.query
-        };
-        return data;
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_LAUNCH);
-    }
-});
-wxAppPluginMap.set(WxAppEvents.AppOnShow, {
-    transform: function (options) {
-        var sdkOptions = this.options;
-        sdkOptions.appOnShow(options);
-        var data = {
-            path: options.path,
-            query: options.query
-        };
-        return data;
-    },
-    consumer: function (data) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = _support;
-                        return [4, getWxMiniDeviceInfo()];
-                    case 1:
-                        _a.deviceInfo = _b.sent();
-                        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW);
-                        return [2];
-                }
-            });
-        });
-    }
-});
-wxAppPluginMap.set(WxAppEvents.AppOnHide, {
-    transform: function () {
-        var sdkOptions = this.options;
-        sdkOptions.appOnHide();
-    },
-    consumer: function () {
-        addBreadcrumbInWx.call(this, null, WxBreadcrumbTypes.APP_ON_HIDE);
-    }
-});
-wxAppPluginMap.set(WxAppEvents.AppOnError, {
-    transform: function (error) {
-        var parsedError = parseErrorString(error);
-        var data = __assign(__assign({}, parsedError), { time: getTimestamp(), level: Severity.Normal, url: getCurrentRoute(), type: "JAVASCRIPT" });
-        return data;
-    },
-    consumer: function (transformedData) {
-        var breadcrumbStack = addBreadcrumbInWx.call(this, transformedData, WxBreadcrumbTypes.CODE_ERROR, Severity.Error);
-        this.transport.send(transformedData, breadcrumbStack);
-    }
-});
-wxAppPluginMap.set(WxAppEvents.AppOnPageNotFound, {
-    transform: function (data) {
-        var sdkOptions = this.options;
-        sdkOptions.onPageNotFound(data);
-        return data;
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.ROUTE, Severity.Error);
-    }
-});
-wxAppPluginMap.set(WxAppEvents.AppOnUnhandledRejection, {
-    transform: function (ev) {
-        var data = {
-            type: "PROMISE",
-            message: unknownToString(ev.reason),
-            url: getCurrentRoute(),
-            name: 'unhandledrejection',
-            time: getTimestamp(),
-            level: Severity.Low
-        };
-        if (isError(ev.reason)) {
-            data = __assign(__assign(__assign({}, data), extractErrorStack(ev.reason, Severity.Low)), { url: getCurrentRoute() });
-        }
-        return data;
-    },
-    consumer: function (transformedData) {
-        var breadcrumbStack = addBreadcrumbInWx.call(this, transformedData, WxBreadcrumbTypes.UNHANDLEDREJECTION, Severity.Error);
-        this.transport.send(transformedData, breadcrumbStack);
-    }
-});
-function getWxAppPlugins() {
-    if (!App)
-        return [];
-    var methodHooks = Object.values(WxAppEvents);
-    var plugins = methodHooks.map(function (method) {
-        return {
-            name: method,
-            monitor: function (notify) {
-                var originApp = App;
-                App = function (appOptions) {
-                    replaceOld(appOptions, method.replace('AppOn', 'on'), function (originMethod) {
-                        return function () {
-                            var args = [];
-                            for (var _i = 0; _i < arguments.length; _i++) {
-                                args[_i] = arguments[_i];
-                            }
-                            if (originMethod) {
-                                originMethod.apply(this, args);
-                            }
-                            notify.apply(null, __spreadArray([method], args, true));
-                        };
-                    }, true);
-                    return originApp(appOptions);
-                };
-            }
-        };
-    });
-    return plugins.map(function (item) {
-        return __assign(__assign({}, item), (wxAppPluginMap.has(item.name) ? wxAppPluginMap.get(item.name) : {}));
-    });
-}
-var wxAppPlugins = getWxAppPlugins();
-
-var wxConsolePlugin = {
-    name: WxBaseEventTypes.CONSOLE,
-    monitor: function (notify) {
-        if (console && variableTypeDetection.isObject(console)) {
-            var logType = ['log', 'debug', 'info', 'warn', 'error', 'assert'];
-            logType.forEach(function (level) {
-                if (!(level in console))
-                    return;
-                replaceOld(console, level, function (originalConsole) {
-                    return function () {
-                        var args = [];
-                        for (var _i = 0; _i < arguments.length; _i++) {
-                            args[_i] = arguments[_i];
-                        }
-                        if (originalConsole) {
-                            notify(WxBaseEventTypes.CONSOLE, { args: args, level: level });
-                            originalConsole.apply(console, args);
-                        }
-                    };
-                });
-            });
-        }
-    },
-    transform: function (collectedData) {
-        return collectedData;
-    },
-    consumer: function (transformedData) {
-        if (globalVar.isLogAddBreadcrumb) {
-            addBreadcrumbInWx.call(this, transformedData, WxBreadcrumbTypes.CONSOLE, Severity.fromString(transformedData.level));
-        }
-    }
-};
-
-function pageHookTransform(hook) {
-    var page = getCurrentPagesPop();
-    var sdkOptions = this.options;
-    if (page) {
-        sdkOptions[firstStrtoLowerCase(hook)](page);
-        return {
-            path: page.route,
-            query: page.options
-        };
-    }
-    sdkOptions[firstStrtoLowerCase(hook)]();
-}
-var wxPagePluginMap = new Map();
-wxPagePluginMap.set(WxPageEvents.PageOnLoad, {
-    transform: function () {
-        return pageHookTransform.call(this, WxPageEvents.PageOnLoad);
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_LOAD);
-    }
-});
-wxPagePluginMap.set(WxPageEvents.PageOnShow, {
-    transform: function () {
-        return pageHookTransform.call(this, WxPageEvents.PageOnShow);
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHOW);
-    }
-});
-wxPagePluginMap.set(WxPageEvents.PageOnReady, {
-    transform: function () {
-        return pageHookTransform.call(this, WxPageEvents.PageOnReady);
-    },
-    consumer: function () {
-        addBreadcrumbInWx.call(this, null, WxBreadcrumbTypes.PAGE_ON_READY);
-    }
-});
-wxPagePluginMap.set(WxPageEvents.PageOnHide, {
-    transform: function () {
-        return pageHookTransform.call(this, WxPageEvents.PageOnHide);
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_HIDE);
-    }
-});
-wxPagePluginMap.set(WxPageEvents.PageOnUnload, {
-    transform: function () {
-        return pageHookTransform.call(this, WxPageEvents.PageOnHide);
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_UNLOAD);
-    }
-});
-wxPagePluginMap.set(WxPageEvents.PageOnShareTimeline, {
-    transform: function () {
-        return pageHookTransform.call(this, WxPageEvents.PageOnHide);
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHARE_TIMELINE);
-    }
-});
-wxPagePluginMap.set(WxPageEvents.PageOnShareAppMessage, {
-    transform: function (options) {
-        var page = getCurrentPages().pop();
-        var sdkOptions = this.options;
-        sdkOptions.onShareAppMessage(__assign(__assign({}, page), options));
-        var data = {
-            path: page.route,
-            query: page.options,
-            options: options
-        };
-        return data;
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE);
-    }
-});
-wxPagePluginMap.set(WxPageEvents.PageOnTabItemTap, {
-    transform: function (options) {
-        var page = getCurrentPages().pop();
-        var sdkOptions = this.options;
-        sdkOptions.onShareAppMessage(__assign(__assign({}, page), options));
-        var data = {
-            path: page.route,
-            query: page.options,
-            options: options
-        };
-        return data;
-    },
-    consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP);
-    }
-});
-function getWxPagePlugins() {
-    if (!Page)
-        return [];
-    var pageHooks = Object.values(WxPageEvents);
-    var plugins = pageHooks.map(function (hook) {
-        return {
-            name: hook,
-            monitor: function (notify) {
-                function monitorPageHookWithOptions(options) {
-                    replaceOld(options, hook.replace('PageOn', 'on'), function (originMethod) {
-                        return function () {
-                            var args = [];
-                            for (var _i = 0; _i < arguments.length; _i++) {
-                                args[_i] = arguments[_i];
-                            }
-                            notify.apply(null, __spreadArray([hook], args, true));
-                            if (originMethod) {
-                                return originMethod.apply(this, args);
-                            }
-                        };
-                    }, true);
-                }
-                invokeCallbackInReplacePage(function (pageOptions) {
-                    monitorPageHookWithOptions(pageOptions);
-                });
-                invokeCallbackInReplaceComponent(function (componentOptions) {
-                    monitorPageHookWithOptions(componentOptions);
-                });
-            }
-        };
-    });
-    return plugins.map(function (item) {
-        return __assign(__assign({}, item), (wxPagePluginMap.has(item.name) ? wxPagePluginMap.get(item.name) : {}));
-    });
-}
-function invokeCallbackInReplacePage(callback) {
-    var originPage = Page;
-    Page = function (pageOptions) {
-        callback(pageOptions);
-        return originPage(pageOptions);
-    };
-}
-function invokeCallbackInReplaceComponent(callback) {
-    if (!Component) {
-        return;
-    }
-    var originComponent = Component;
-    Component = function (componentOptions) {
-        if (!isEmptyObject(componentOptions.methods)) {
-            callback(componentOptions.methods);
-        }
-        return originComponent.call(this, componentOptions);
-    };
-}
-var wxPagePlugins = getWxPagePlugins();
-
-var wxDomPlugin = {
-    name: WxBaseEventTypes.DOM,
-    monitor: function (notify) {
-        var sdkOptions = this.options;
-        function monitorDomWithOption(options) {
-            function gestureTrigger(e) {
-                e.mitoWorked = true;
-                notify(WxBaseEventTypes.DOM, e);
-            }
-            var throttleGesturetrigger = throttle(gestureTrigger, sdkOptions.throttleDelayTime);
-            var linstenerTypes = [LinstenerTypes.Touchmove, LinstenerTypes.Tap];
-            if (options) {
-                Object.keys(options).forEach(function (m) {
-                    if ('function' !== typeof options[m]) {
-                        return;
-                    }
-                    replaceOld(options, m, function (originMethod) {
-                        return function () {
-                            var args = [];
-                            for (var _i = 0; _i < arguments.length; _i++) {
-                                args[_i] = arguments[_i];
-                            }
-                            var e = args[0];
-                            if (e && e.type && e.currentTarget && !e.mitoWorked) {
-                                if (linstenerTypes.indexOf(e.type) > -1) {
-                                    throttleGesturetrigger(e);
-                                }
-                            }
-                            return originMethod.apply(this, args);
-                        };
-                    }, true);
-                });
-            }
-        }
-        invokeCallbackInReplacePage(function (pageOptions) {
-            monitorDomWithOption(pageOptions);
-        });
-        invokeCallbackInReplaceBehavior(function (options) {
-            monitorDomWithOption(options);
-        });
-        invokeCallbackInReplaceComponent(function (componentOptions) {
-            monitorDomWithOption(componentOptions);
-        });
-    },
-    transform: function (e) {
-        var sdkOptions = this.options;
-        sdkOptions.triggerWxEvent(e);
-        var type = WxBreadcrumbTypes.TOUCHMOVE;
-        if (e.type === LinstenerTypes.Tap) {
-            type = WxBreadcrumbTypes.TAP;
-        }
-        var data = targetAsString(e);
-        return { data: data, type: type };
-    },
-    consumer: function (_a) {
-        var data = _a.data, type = _a.type;
-        addBreadcrumbInWx.call(this, data, type);
-    }
-};
-function invokeCallbackInReplaceBehavior(callback) {
-    if (!Behavior) {
-        return;
-    }
-    var originBehavior = Behavior;
-    Behavior = function (behaviorOptions) {
-        if (!isEmptyObject(behaviorOptions.methods)) {
-            callback(behaviorOptions.methods);
-        }
-        return originBehavior.call(this, behaviorOptions);
-    };
-}
-
-var wxRequestPlugin = {
-    name: WxBaseEventTypes.REQUEST,
-    monitor: function (notify) {
-        monitorWxXhr.call(this, notify);
-    },
-    transform: function (collectedData) {
-        return httpTransform(collectedData);
-    },
-    consumer: function (transformedData) {
-        httpTransformedDataConsumer.call(this, transformedData);
-    }
-};
-function monitorWxXhr(notify) {
-    var hookMethods = ['request', 'downloadFile', 'uploadFile'];
-    var that = this;
-    var wxOptions = this.options;
-    hookMethods.forEach(function (hook) {
-        var originRequest = wx[hook];
-        Object.defineProperty(wx, hook, {
-            writable: true,
-            enumerable: true,
-            configurable: true,
-            value: function () {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
-                var options = args[0];
-                var method;
-                if (options.method) {
-                    method = options.method;
-                }
-                else if (hook === 'downloadFile') {
-                    method = "GET";
-                }
-                else {
-                    method = "POST";
-                }
-                var url = options.url;
-                var header = options.header;
-                !header && (header = {});
-                if ((method === "POST" && that.transport.isSelfDsn(url)) || wxOptions.isFilterHttpUrl(url)) {
-                    return originRequest.call(this, options);
-                }
-                var reqData = undefined;
-                if (hook === 'request') {
-                    reqData = options.data;
-                }
-                else if (hook === 'downloadFile') {
-                    reqData = {
-                        filePath: options.filePath
-                    };
-                }
-                else {
-                    reqData = {
-                        filePath: options.filePath,
-                        name: options.name
-                    };
-                }
-                var httpCollect = {
-                    request: {
-                        httpType: "xhr",
-                        url: url,
-                        method: method,
-                        data: reqData
-                    },
-                    response: {},
-                    time: getTimestamp()
-                };
-                wxOptions.setTraceId(url, function (headerFieldName, traceId) {
-                    httpCollect.request.traceId = traceId;
-                    header[headerFieldName] = traceId;
-                });
-                function setRequestHeader(key, value) {
-                    header[key] = value;
-                }
-                wxOptions.beforeAppAjaxSend && wxOptions.beforeAppAjaxSend({ method: method, url: url }, { setRequestHeader: setRequestHeader });
-                var successHandler = function (res) {
-                    var endTime = getTimestamp();
-                    httpCollect.response.data = (variableTypeDetection.isString(res.data) || variableTypeDetection.isObject(res.data)) && res.data;
-                    httpCollect.elapsedTime = endTime - httpCollect.time;
-                    httpCollect.response.status = res.statusCode;
-                    httpCollect.errMsg = res.errMsg;
-                    notify(WxBaseEventTypes.REQUEST, httpCollect);
-                    if (typeof options.success === 'function') {
-                        return options.success(res);
-                    }
-                };
-                var _fail = options.fail;
-                var failHandler = function (err) {
-                    var endTime = getTimestamp();
-                    httpCollect.elapsedTime = endTime - httpCollect.time;
-                    httpCollect.errMsg = err.errMsg;
-                    httpCollect.response.status = 0;
-                    notify(WxBaseEventTypes.REQUEST, httpCollect);
-                    if (variableTypeDetection.isFunction(_fail)) {
-                        return _fail(err);
-                    }
-                };
-                var actOptions = __assign(__assign({}, options), { success: successHandler, fail: failHandler });
-                return originRequest.call(this, actOptions);
-            }
-        });
-    });
-}
-function httpTransform(httpCollectedData) {
-    var message = '';
-    var _a = httpCollectedData.request, httpType = _a.httpType, method = _a.method, url = _a.url, status = httpCollectedData.response.status, elapsedTime = httpCollectedData.elapsedTime;
-    var name = httpType + "--" + method;
-    if (status === 0) {
-        message =
-            elapsedTime <= globalVar.crossOriginThreshold ? 'http请求失败，失败原因：跨域限制或域名不存在' : 'http请求失败，失败原因：超时';
-    }
-    else {
-        message = fromHttpStatus(status);
-    }
-    message = message === "ok" ? message : message + " " + getRealPath(url);
-    return __assign(__assign({}, httpCollectedData), { type: "HTTP", url: getCurrentRoute(), level: Severity.Low, message: message, name: name });
-}
-function httpTransformedDataConsumer(transformedData) {
-    var type = WxBreadcrumbTypes.XHR;
-    var status = transformedData.response.status;
-    var isError = status === 0 || status === 400 || status > 401;
-    addBreadcrumbInWx.call(this, transformedData, type);
-    if (isError) {
-        var breadcrumbStack = this.breadcrumb.push({
-            type: type,
-            category: "exception",
-            data: __assign({}, transformedData),
-            level: Severity.Error
-        });
-        this.transport.send(transformedData, breadcrumbStack);
-    }
-}
-
-var wxRoutePlugin = {
-    name: WxBaseEventTypes.MINI_ROUTE,
-    monitor: function (notify) {
-        monitorWxRoute.call(this, notify);
-    },
-    transform: function (collectedData) {
-        var reportData = {
-            type: "ROUTE",
-            message: collectedData.message,
-            url: collectedData.to,
-            name: 'MINI_' + "ROUTE",
-            level: Severity.Error
-        };
-        return {
-            data: reportData,
-            collectedData: collectedData
-        };
-    },
-    consumer: function (transformedData) {
-        var data = transformedData.data, collectedData = transformedData.collectedData;
-        if (collectedData.isFail) {
-            var breadcrumbStack = addBreadcrumbInWx.call(this, collectedData, WxBreadcrumbTypes.CODE_ERROR, Severity.Error);
-            return this.transport.send(data, breadcrumbStack);
-        }
-        addBreadcrumbInWx.call(this, collectedData, WxBreadcrumbTypes.ROUTE);
-    }
-};
-function monitorWxRoute(notify) {
-    var wxOptions = this.options;
-    var methods = [
-        WxRouteEvents.SwitchTab,
-        WxRouteEvents.ReLaunch,
-        WxRouteEvents.RedirectTo,
-        WxRouteEvents.NavigateTo,
-        WxRouteEvents.NavigateBack,
-        WxRouteEvents.NavigateToMiniProgram
-    ];
-    methods.forEach(function (method) {
-        var originMethod = wx[method];
-        Object.defineProperty(wx, method, {
-            writable: true,
-            enumerable: true,
-            configurable: true,
-            value: function (options) {
-                var _a;
-                var toUrl;
-                if (method === WxRouteEvents.NavigateBack) {
-                    toUrl = getNavigateBackTargetUrl((_a = options) === null || _a === void 0 ? void 0 : _a.delta);
-                }
-                else {
-                    toUrl = options.url;
-                }
-                var data = {
-                    from: getCurrentRoute(),
-                    to: toUrl
-                };
-                notify(WxBaseEventTypes.MINI_ROUTE, data);
-                if (variableTypeDetection.isFunction(options.complete) ||
-                    variableTypeDetection.isFunction(options.success) ||
-                    variableTypeDetection.isFunction(options.fail)) {
-                    var _fail_1 = options.fail;
-                    var failHandler = function (res) {
-                        var failData = __assign(__assign({}, data), { isFail: true, message: res.errMsg });
-                        notify(WxBaseEventTypes.MINI_ROUTE, failData);
-                        if (variableTypeDetection.isFunction(_fail_1)) {
-                            return _fail_1(res);
-                        }
-                    };
-                    options.fail = failHandler;
-                }
-                if (method === WxRouteEvents.NavigateToMiniProgram && variableTypeDetection.isFunction(wxOptions.wxNavigateToMiniProgram)) {
-                    options = wxOptions.wxNavigateToMiniProgram(options);
-                }
-                return originMethod.call(this, options);
-            }
-        });
-    });
-}
-
 var Breadcrumb = (function () {
     function Breadcrumb(options) {
         if (options === void 0) { options = {}; }
@@ -1682,145 +996,573 @@ var BaseTransport = (function () {
     return BaseTransport;
 }());
 
-var WxOptions = (function (_super) {
-    __extends(WxOptions, _super);
-    function WxOptions(options) {
+var BrowserOptions = (function (_super) {
+    __extends(BrowserOptions, _super);
+    function BrowserOptions(options) {
         var _this = _super.call(this) || this;
-        _this.appOnLaunch = function () { };
-        _this.appOnShow = function () { };
-        _this.appOnHide = function () { };
-        _this.pageOnLoad = function () { };
-        _this.pageOnShow = function () { };
-        _this.pageOnReady = function () { };
-        _this.pageOnHide = function () { };
-        _this.pageOnUnload = function () { };
-        _this.onPageNotFound = function () { };
-        _this.onShareAppMessage = function () { };
-        _this.onShareTimeline = function () { };
-        _this.onTabItemTap = function () { };
-        _this.triggerWxEvent = function () { };
+        _this.vue = null;
+        _this.configReportXhr = null;
         _super.prototype.bindOptions.call(_this, options);
         _this.bindOptions(options);
         return _this;
     }
-    WxOptions.prototype.bindOptions = function (options) {
-        var beforeAppAjaxSend = options.beforeAppAjaxSend, appOnLaunch = options.appOnLaunch, appOnShow = options.appOnShow, appOnHide = options.appOnHide, pageOnLoad = options.pageOnLoad, pageOnReady = options.pageOnReady, pageOnShow = options.pageOnShow, pageOnUnload = options.pageOnUnload, pageOnHide = options.pageOnHide, onPageNotFound = options.onPageNotFound, onShareAppMessage = options.onShareAppMessage, onShareTimeline = options.onShareTimeline, onTabItemTap = options.onTabItemTap, wxNavigateToMiniProgram = options.wxNavigateToMiniProgram, triggerWxEvent = options.triggerWxEvent, silentRequest = options.silentRequest, silentConsole = options.silentConsole, silentDom = options.silentDom, silentMiniRoute = options.silentMiniRoute, silentError = options.silentError, silentUnhandledrejection = options.silentUnhandledrejection;
-        var booleanOptions = [
-            [silentRequest, 'silentRequest'],
-            [silentConsole, 'silentConsole'],
-            [silentDom, 'silentDom'],
-            [silentMiniRoute, 'silentMiniRoute'],
-            [silentError, 'silentError'],
-            [silentUnhandledrejection, 'silentUnhandledrejection']
-        ];
-        validateOptionsAndSet.call(this, booleanOptions, "Boolean");
-        var functionOptions = [
-            [beforeAppAjaxSend, 'beforeAppAjaxSend'],
-            [appOnLaunch, 'appOnLaunch'],
-            [appOnShow, 'appOnShow'],
-            [appOnHide, 'appOnHide'],
-            [pageOnLoad, 'pageOnLoad'],
-            [pageOnReady, 'pageOnReady'],
-            [pageOnShow, 'pageOnShow'],
-            [pageOnUnload, 'pageOnUnload'],
-            [pageOnHide, 'pageOnHide'],
-            [onPageNotFound, 'onPageNotFound'],
-            [onShareAppMessage, 'onShareAppMessage'],
-            [onShareTimeline, 'onShareTimeline'],
-            [onTabItemTap, 'onTabItemTap'],
-            [wxNavigateToMiniProgram, 'wxNavigateToMiniProgram'],
-            [triggerWxEvent, 'triggerWxEvent']
-        ];
-        validateOptionsAndSet.call(this, functionOptions, "Function");
+    BrowserOptions.prototype.bindOptions = function (options) {
+        var silentXhr = options.silentXhr, silentFetch = options.silentFetch, silentConsole = options.silentConsole, silentDom = options.silentDom, silentHistory = options.silentHistory, silentError = options.silentError, silentHashchange = options.silentHashchange, silentUnhandledrejection = options.silentUnhandledrejection, useImgUpload = options.useImgUpload, configReportXhr = options.configReportXhr, vue = options.vue;
+        toStringValidateOption(silentXhr, 'silentXhr', "Boolean") && (this.silentXhr = silentXhr);
+        toStringValidateOption(silentFetch, 'silentFetch', "Boolean") && (this.silentFetch = silentFetch);
+        toStringValidateOption(silentConsole, 'silentConsole', "Boolean") && (this.silentConsole = silentConsole);
+        toStringValidateOption(silentDom, 'silentDom', "Boolean") && (this.silentDom = silentDom);
+        toStringValidateOption(silentHistory, 'silentHistory', "Boolean") && (this.silentHistory = silentHistory);
+        toStringValidateOption(silentError, 'silentError', "Boolean") && (this.silentError = silentError);
+        toStringValidateOption(silentHashchange, 'silentHashchange', "Boolean") && (this.silentHashchange = silentXhr);
+        toStringValidateOption(silentUnhandledrejection, 'silentUnhandledrejection', "Boolean") &&
+            (this.silentUnhandledrejection = silentUnhandledrejection);
+        toStringValidateOption(useImgUpload, 'useImgUpload', "Boolean") && (this.useImgUpload = useImgUpload);
+        this.vue = vue;
+        toStringValidateOption(configReportXhr, 'configReportXhr', "Function") && (this.configReportXhr = configReportXhr);
     };
-    return WxOptions;
+    return BrowserOptions;
 }(BaseOptions));
 
-var WxTransport = (function (_super) {
-    __extends(WxTransport, _super);
-    function WxTransport(options) {
+var BrowserTransport = (function (_super) {
+    __extends(BrowserTransport, _super);
+    function BrowserTransport(options) {
         if (options === void 0) { options = {}; }
         var _this = _super.call(this) || this;
         _this.useImgUpload = false;
         _super.prototype.bindOptions.call(_this, options);
         return _this;
     }
-    WxTransport.prototype.post = function (data, url) {
+    BrowserTransport.prototype.post = function (data, url) {
         var _this = this;
         var requestFun = function () {
-            var requestOptions = { method: 'POST' };
-            if (typeof _this.configReportWxRequest === 'function') {
-                var params = _this.configReportWxRequest(data);
-                requestOptions = __assign(__assign({}, requestOptions), params);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.withCredentials = true;
+            if (typeof _this.configReportXhr === 'function') {
+                _this.configReportXhr(xhr, data);
             }
-            requestOptions = __assign(__assign({}, requestOptions), { data: JSON.stringify(data), url: url });
-            wx.request(requestOptions);
+            xhr.send(safeStringify(data));
         };
         this.queue.addTask(requestFun);
     };
-    WxTransport.prototype.sendToServer = function (data, url) {
-        return this.post(data, url);
+    BrowserTransport.prototype.imgRequest = function (data, url) {
+        var requestFun = function () {
+            var img = new Image();
+            var spliceStr = url.indexOf('?') === -1 ? '?' : '&';
+            img.src = "" + url + spliceStr + "data=" + encodeURIComponent(safeStringify(data));
+            img = null;
+        };
+        this.queue.addTask(requestFun);
     };
-    WxTransport.prototype.getTransportData = function (data) {
+    BrowserTransport.prototype.sendToServer = function (data, url) {
+        return this.useImgUpload ? this.imgRequest(data, url) : this.post(data, url);
+    };
+    BrowserTransport.prototype.getTransportData = function (data) {
         return {
             authInfo: this.getAuthInfo(),
-            data: data,
-            deviceInfo: _support.deviceInfo
+            data: data
         };
     };
-    WxTransport.prototype.bindOptions = function (options) {
+    BrowserTransport.prototype.bindOptions = function (options) {
         if (options === void 0) { options = {}; }
-        var configReportWxRequest = options.configReportWxRequest;
-        toStringValidateOption(configReportWxRequest, 'configReportWxRequest', "Function") &&
-            (this.configReportWxRequest = configReportWxRequest);
+        var configReportXhr = options.configReportXhr, useImgUpload = options.useImgUpload;
+        toStringValidateOption(configReportXhr, 'configReportXhr', "Function") && (this.configReportXhr = configReportXhr);
+        toStringValidateOption(useImgUpload, 'useImgUpload', "Boolean") && (this.useImgUpload = useImgUpload);
     };
-    return WxTransport;
+    return BrowserTransport;
 }(BaseTransport));
 
-var WxClient = (function (_super) {
-    __extends(WxClient, _super);
-    function WxClient(options) {
+var BrowserClient = (function (_super) {
+    __extends(BrowserClient, _super);
+    function BrowserClient(options) {
         if (options === void 0) { options = {}; }
         var _this = _super.call(this, options) || this;
-        _this.options = new WxOptions(options);
-        _this.transport = new WxTransport(options);
+        _this.options = new BrowserOptions(options);
+        _this.transport = new BrowserTransport(options);
         _this.breadcrumb = new Breadcrumb(options);
         return _this;
     }
-    WxClient.prototype.isPluginEnable = function (name) {
+    BrowserClient.prototype.isPluginEnable = function (name) {
         var silentField = "silent" + firstStrtoUppercase(name);
         return !this.options[silentField];
     };
-    WxClient.prototype.log = function (data) {
+    BrowserClient.prototype.log = function (data) {
         var _a = data.message, message = _a === void 0 ? MitoLogEmptyMsg : _a, _b = data.tag, tag = _b === void 0 ? MitoLogEmptyTag : _b, _c = data.level, level = _c === void 0 ? Severity.Critical : _c, _d = data.ex, ex = _d === void 0 ? '' : _d;
         var errorInfo = {};
         if (isError(ex)) {
             errorInfo = extractErrorStack(ex, level);
         }
-        var reportData = __assign({ type: "LOG", level: level, message: unknownToString(message), name: MitoLog, customTag: unknownToString(tag), time: getTimestamp(), url: getCurrentRoute() }, errorInfo);
+        var error = __assign({ type: "LOG", level: level, message: unknownToString(message), name: MitoLog, customTag: unknownToString(tag), time: getTimestamp(), url: getLocationHref() }, errorInfo);
         var breadcrumbStack = this.breadcrumb.push({
             type: "Customer",
             category: getBreadcrumbCategoryInBrowser("Customer"),
             data: message,
             level: Severity.fromString(level.toString())
         });
-        this.transport.send(reportData, breadcrumbStack);
+        this.transport.send(error, breadcrumbStack);
     };
-    WxClient.prototype.trackSend = function (trackData) {
-        this.transport.send(__assign({ isTrack: true }, trackData), this.breadcrumb.getStack());
-    };
-    return WxClient;
+    return BrowserClient;
 }(BaseClient));
 
-function createWxInstance(options) {
-    var wxClient = new WxClient(options);
-    var plugins = __spreadArray(__spreadArray([wxRequestPlugin, wxRoutePlugin, wxConsolePlugin, wxDomPlugin], wxAppPlugins, true), wxPagePlugins, true);
-    wxClient.use(plugins);
-    return wxClient;
+var xhrPlugin = {
+    name: "xhr",
+    monitor: function (notify) {
+        monitorXhr.call(this, notify);
+    },
+    transform: function (collectedData) {
+        return httpTransform(collectedData);
+    },
+    consumer: function (transformedData) {
+        httpTransformedDataConsumer.call(this, transformedData);
+    }
+};
+function monitorXhr(notify) {
+    var _a = this, options = _a.options, transport = _a.transport;
+    if (!('XMLHttpRequest' in _global)) {
+        return;
+    }
+    var originalXhrProto = XMLHttpRequest.prototype;
+    replaceOld(originalXhrProto, 'open', function (originalOpen) {
+        return function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            this.httpCollect = {
+                request: {
+                    httpType: "xhr",
+                    method: variableTypeDetection.isString(args[0]) ? args[0].toUpperCase() : args[0],
+                    url: args[1]
+                },
+                response: {},
+                time: getTimestamp()
+            };
+            originalOpen.apply(this, args);
+        };
+    });
+    replaceOld(originalXhrProto, 'send', function (originalSend) {
+        return function () {
+            var _this = this;
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var request = this.httpCollect.request;
+            var method = request.method, url = request.url;
+            options.setTraceId(url, function (headerFieldName, traceId) {
+                request.traceId = traceId;
+                _this.setRequestHeader(headerFieldName, traceId);
+            });
+            options.beforeAppAjaxSend && options.beforeAppAjaxSend({ method: method, url: url }, this);
+            on(this, 'loadend', function () {
+                var isBlock = transport.isSelfDsn(url) || options.isFilterHttpUrl(url);
+                if (isBlock)
+                    return;
+                var _a = this, responseType = _a.responseType, response = _a.response, status = _a.status;
+                request.data = args[0];
+                var eTime = getTimestamp();
+                if (['', 'json', 'text'].indexOf(responseType) !== -1) {
+                    this.httpCollect.response.data = typeof response === 'object' ? JSON.stringify(response) : response;
+                }
+                this.httpCollect.response.status = status;
+                this.httpCollect.elapsedTime = eTime - this.httpCollect.time;
+                notify("xhr", this.httpCollect);
+            });
+            originalSend.apply(this, args);
+        };
+    });
 }
-var init = createWxInstance;
+function httpTransform(httpCollectedData) {
+    var message = '';
+    var _a = httpCollectedData.request, httpType = _a.httpType, method = _a.method, url = _a.url, status = httpCollectedData.response.status, elapsedTime = httpCollectedData.elapsedTime;
+    var name = httpType + "--" + method;
+    if (status === 0) {
+        message =
+            elapsedTime <= globalVar.crossOriginThreshold ? 'http请求失败，失败原因：跨域限制或域名不存在' : 'http请求失败，失败原因：超时';
+    }
+    else {
+        message = fromHttpStatus(status);
+    }
+    message = message === "ok" ? message : message + " " + getRealPath(url);
+    return __assign(__assign({}, httpCollectedData), { type: "HTTP", url: getLocationHref(), level: Severity.Low, message: message, name: name });
+}
+function httpTransformedDataConsumer(transformedData) {
+    var type = transformedData.request.httpType === "fetch" ? "Fetch" : "Xhr";
+    var status = transformedData.response.status, time = transformedData.time;
+    var isError = status === 0 || status === 400 || status > 401;
+    this.breadcrumb.push({
+        type: type,
+        category: getBreadcrumbCategoryInBrowser(type),
+        data: __assign({}, transformedData),
+        level: Severity.Info,
+        time: time
+    });
+    if (isError) {
+        this.breadcrumb.push({
+            type: type,
+            category: "exception",
+            data: __assign({}, transformedData),
+            level: Severity.Error,
+            time: time
+        });
+        this.transport.send(transformedData, this.breadcrumb.getStack());
+    }
+}
 
-exports.WxClient = WxClient;
+var fetchPlugin = {
+    name: "fetch",
+    monitor: function (notify) {
+        monitorFetch.call(this, notify);
+    },
+    transform: function (collectedData) {
+        return httpTransform(collectedData);
+    },
+    consumer: function (transformedData) {
+        httpTransformedDataConsumer.call(this, transformedData);
+    }
+};
+function monitorFetch(notify) {
+    var _a = this, options = _a.options, transport = _a.transport;
+    if (!('fetch' in _global)) {
+        return;
+    }
+    replaceOld(_global, "fetch", function (originalFetch) {
+        return function (url, config) {
+            if (config === void 0) { config = {}; }
+            var sTime = getTimestamp();
+            var method = (config && config.method) || 'GET';
+            var httpCollect = {
+                request: {
+                    httpType: "fetch",
+                    url: url,
+                    method: method,
+                    data: config && config.body
+                },
+                time: sTime,
+                response: {}
+            };
+            var headers = new Headers(config.headers || {});
+            Object.assign(headers, {
+                setRequestHeader: headers.set
+            });
+            options.setTraceId(url, function (headerFieldName, traceId) {
+                httpCollect.request.traceId = traceId;
+                headers.set(headerFieldName, traceId);
+            });
+            options.beforeAppAjaxSend && options.beforeAppAjaxSend({ method: method, url: url }, headers);
+            config = __assign(__assign({}, config), { headers: headers });
+            var isBlock = transport.isSelfDsn(url) || options.isFilterHttpUrl(url);
+            return originalFetch.apply(_global, [url, config]).then(function (res) {
+                var resClone = res.clone();
+                var eTime = getTimestamp();
+                httpCollect.elapsedTime = eTime - sTime;
+                httpCollect.response.status = resClone.status;
+                resClone.text().then(function (data) {
+                    if (isBlock)
+                        return;
+                    httpCollect.response.data = data;
+                    notify("fetch", httpCollect);
+                });
+                return res;
+            }, function (err) {
+                if (isBlock)
+                    return;
+                var eTime = getTimestamp();
+                httpCollect.elapsedTime = eTime - sTime;
+                httpCollect.response.status = 0;
+                notify("fetch", httpCollect);
+                throw err;
+            });
+        };
+    });
+}
+
+var domPlugins = {
+    name: "dom",
+    monitor: function (notify) {
+        if (!('document' in _global))
+            return;
+        var clickThrottle = throttle(notify, this.options.throttleDelayTime);
+        on(_global.document, 'click', function () {
+            clickThrottle("dom", {
+                category: 'click',
+                data: this
+            });
+        }, true);
+    },
+    transform: function (collectedData) {
+        var htmlString = htmlElementAsString(collectedData.data.activeElement);
+        var breadcrumb = this.breadcrumb;
+        if (htmlString) {
+            breadcrumb.push({
+                type: "UI.Click",
+                category: getBreadcrumbCategoryInBrowser("UI.Click"),
+                data: htmlString,
+                level: Severity.Info
+            });
+        }
+    },
+    consumer: function () { }
+};
+
+var errorPlugin = {
+    name: "error",
+    monitor: function (notify) {
+        on(_global, 'error', function (e) {
+            notify("error", e);
+        }, true);
+    },
+    transform: function (errorEvent) {
+        var target = errorEvent.target;
+        if (target.localName) {
+            return resourceTransform(errorEvent.target);
+        }
+        return codeErrorTransform(errorEvent);
+    },
+    consumer: function (transformedData) {
+        var type = transformedData.type === "RESOURCE" ? "Resource" : "Code Error";
+        var breadcrumbStack = this.breadcrumb.push({
+            type: type,
+            category: "exception",
+            data: transformedData,
+            level: Severity.Error
+        });
+        this.transport.send(transformedData, breadcrumbStack);
+    }
+};
+var resourceMap = {
+    img: '图片',
+    script: 'js脚本'
+};
+function resourceTransform(target) {
+    return {
+        type: "RESOURCE",
+        url: getLocationHref(),
+        message: '资源地址: ' + (interceptStr(target.src, 120) || interceptStr(target.href, 120)),
+        level: Severity.Low,
+        time: getTimestamp(),
+        name: (resourceMap[target.localName] || target.localName) + "\u52A0\u8F7D\u5931\u8D25"
+    };
+}
+function codeErrorTransform(errorEvent) {
+    var message = errorEvent.message, filename = errorEvent.filename, lineno = errorEvent.lineno, colno = errorEvent.colno, error = errorEvent.error;
+    var result;
+    if (error && isError(error)) {
+        result = extractErrorStack(error, Severity.Normal);
+    }
+    result || (result = handleNotErrorInstance(message, filename, lineno, colno));
+    result.type = "JAVASCRIPT";
+    return result;
+}
+function handleNotErrorInstance(message, filename, lineno, colno) {
+    var name = "UNKNOWN";
+    var url = filename || getLocationHref();
+    var msg = message;
+    var matches = message.match(ERROR_TYPE_RE);
+    if (matches[1]) {
+        name = matches[1];
+        msg = matches[2];
+    }
+    var element = {
+        url: url,
+        func: "UNKNOWN_FUNCTION",
+        args: "UNKNOWN",
+        line: lineno,
+        col: colno
+    };
+    return {
+        url: url,
+        name: name,
+        message: msg,
+        level: Severity.Normal,
+        time: getTimestamp(),
+        stack: [element]
+    };
+}
+
+var hashRoutePlugin = {
+    name: "hashchange",
+    monitor: function (notify) {
+        if (!isExistProperty(_global, 'onpopstate')) {
+            on(_global, "hashchange", function (e) {
+                var from = e.oldURL, to = e.newURL;
+                notify("hashchange", { from: from, to: to });
+            });
+        }
+    },
+    transform: function (collectedData) {
+        return routeTransform(collectedData);
+    },
+    consumer: function (transformedData) {
+        routeTransformedConsumer.call(this, transformedData);
+    }
+};
+function routeTransform(collectedData) {
+    var from = collectedData.from, to = collectedData.to;
+    var parsedFrom = parseUrlToObj(from).relative;
+    var parsedTo = parseUrlToObj(to).relative;
+    return {
+        from: parsedFrom ? parsedFrom : '/',
+        to: parsedTo ? parsedTo : '/'
+    };
+}
+function routeTransformedConsumer(transformedData) {
+    if (transformedData.from === transformedData.to)
+        return;
+    this.breadcrumb.push({
+        type: "Route",
+        category: getBreadcrumbCategoryInBrowser("Route"),
+        data: transformedData,
+        level: Severity.Info
+    });
+}
+
+var historyRoutePlugin = {
+    name: "history",
+    monitor: function (notify) {
+        var lastHref;
+        if (!supportsHistory())
+            return;
+        var oldOnpopstate = _global.onpopstate;
+        _global.onpopstate = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var to = getLocationHref();
+            var from = lastHref;
+            lastHref = to;
+            notify("history", {
+                from: from,
+                to: to
+            });
+            oldOnpopstate && oldOnpopstate.apply(this, args);
+        };
+        function historyReplaceFn(originalHistoryFn) {
+            return function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                var url = args.length > 2 ? args[2] : undefined;
+                if (url) {
+                    var from = lastHref;
+                    var to = String(url);
+                    lastHref = to;
+                    notify("history", {
+                        from: from,
+                        to: to
+                    });
+                }
+                return originalHistoryFn.apply(this, args);
+            };
+        }
+        replaceOld(_global.history, 'pushState', historyReplaceFn);
+        replaceOld(_global.history, 'replaceState', historyReplaceFn);
+    },
+    transform: function (collectedData) {
+        return routeTransform(collectedData);
+    },
+    consumer: function (transformedData) {
+        routeTransformedConsumer.call(this, transformedData);
+    }
+};
+
+var consolePlugin = {
+    name: "console",
+    monitor: function (notify) {
+        if (!('console' in _global)) {
+            return;
+        }
+        var logType = ['log', 'debug', 'info', 'warn', 'error', 'assert'];
+        logType.forEach(function (level) {
+            if (!(level in _global.console))
+                return;
+            replaceOld(_global.console, level, function (originalConsole) {
+                return function () {
+                    var args = [];
+                    for (var _i = 0; _i < arguments.length; _i++) {
+                        args[_i] = arguments[_i];
+                    }
+                    if (originalConsole) {
+                        notify("console", { args: args, level: level });
+                        originalConsole.apply(_global.console, args);
+                    }
+                };
+            });
+        });
+    },
+    transform: function (collectedData) {
+        return collectedData;
+    },
+    consumer: function (transformedData) {
+        if (globalVar.isLogAddBreadcrumb) {
+            this.breadcrumb.push({
+                type: "Console",
+                category: getBreadcrumbCategoryInBrowser("Console"),
+                data: transformedData,
+                level: Severity.fromString(transformedData.level)
+            });
+        }
+    }
+};
+
+var name = "unhandledrejection";
+var unhandlerejectionPlugin = {
+    name: name,
+    monitor: function (notify) {
+        on(_global, name, function (ev) {
+            notify(name, ev);
+        });
+    },
+    transform: function (collectedData) {
+        var data = {
+            type: "PROMISE",
+            message: unknownToString(collectedData.reason),
+            url: getLocationHref(),
+            name: collectedData.type,
+            time: getTimestamp(),
+            level: Severity.Low
+        };
+        if (isError(collectedData.reason)) {
+            data = __assign(__assign({}, data), extractErrorStack(collectedData.reason, Severity.Low));
+        }
+        return data;
+    },
+    consumer: function (transformedData) {
+        var breadcrumbStack = this.breadcrumb.push({
+            type: "Unhandledrejection",
+            category: getBreadcrumbCategoryInBrowser("Unhandledrejection"),
+            data: transformedData,
+            level: Severity.Error
+        });
+        this.transport.send(transformedData, breadcrumbStack);
+    }
+};
+
+function createBrowserInstance(options, plugins) {
+    if (options === void 0) { options = {}; }
+    if (plugins === void 0) { plugins = []; }
+    var browserClient = new BrowserClient(options);
+    var browserPlugins = [
+        fetchPlugin,
+        xhrPlugin,
+        domPlugins,
+        errorPlugin,
+        hashRoutePlugin,
+        historyRoutePlugin,
+        consolePlugin,
+        unhandlerejectionPlugin
+    ];
+    browserClient.use(__spreadArray(__spreadArray([], browserPlugins, true), plugins, true));
+    return browserClient;
+}
+var init = createBrowserInstance;
+
+exports.BrowserClient = BrowserClient;
+exports.createBrowserInstance = createBrowserInstance;
 exports.init = init;
 /* follow me on Github! @cjinhuo */
-//# sourceMappingURL=wx-mini.js.map
+//# sourceMappingURL=browser.js.map

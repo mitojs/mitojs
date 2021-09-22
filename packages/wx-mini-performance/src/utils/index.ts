@@ -6,7 +6,7 @@ export function noop() {}
 // wx
 
 export function getDeviceId(): string {
-  let deviceId: string = wx.getStorageSync(STORAGE_KEY.deviceId)
+  const deviceId: string = wx.getStorageSync(STORAGE_KEY.deviceId)
   if (!deviceId) {
     const deviceId = generateUUID()
     wx.setStorageSync(STORAGE_KEY.deviceId, deviceId)

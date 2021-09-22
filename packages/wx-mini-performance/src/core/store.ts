@@ -1,5 +1,5 @@
 import { noop, getPageUrl, getDeviceId } from '../utils'
-import { generateUUID, validateOption, toStringValidateOption } from '@mitojs/utils'
+import { generateUUID, toStringValidateOption } from '@mitojs/utils'
 import { WxPerformanceDataType, WxPerformanceItemType } from '../constant'
 import Event from './event'
 import {
@@ -10,6 +10,7 @@ import {
   WxPerformanceItem,
   WxPerformanceEntryObj
 } from '../types/index'
+import { ToStringTypes } from '@mitojs/shared'
 
 class Store extends Event {
   appId: string
@@ -31,7 +32,7 @@ class Store extends Event {
   wxLaunchTime: number
 
   // 首次点击标志位
-  private firstAction: boolean = false
+  private firstAction = false
 
   // 路由跳转start时间记录
   private navigationMap: WxPerformanceAnyObj = {}
@@ -39,12 +40,12 @@ class Store extends Event {
   constructor(options: WxPerformanceInitOptions) {
     super()
     const { appId, report, maxBreadcrumbs, immediately, ignoreUrl } = options
-    validateOption(appId, 'appId', 'string') && (this.appId = appId)
-    validateOption(maxBreadcrumbs, 'maxBreadcrumbs', 'number') && (this.maxBreadcrumbs = maxBreadcrumbs)
-    toStringValidateOption(ignoreUrl, 'ignoreUrl', '[object RegExp]') && (this.ignoreUrl = ignoreUrl)
-    validateOption(immediately, 'immediately', 'boolean') && (this.immediately = immediately)
+    toStringValidateOption(appId, 'appId', ToStringTypes.String) && (this.appId = appId)
+    toStringValidateOption(maxBreadcrumbs, 'maxBreadcrumbs', ToStringTypes.Number) && (this.maxBreadcrumbs = maxBreadcrumbs)
+    toStringValidateOption(ignoreUrl, 'ignoreUrl', ToStringTypes.RegExp) && (this.ignoreUrl = ignoreUrl)
+    toStringValidateOption(immediately, 'immediately', ToStringTypes.Boolean) && (this.immediately = immediately)
 
-    this.report = validateOption(report, 'report', 'function') ? report : noop
+    this.report = toStringValidateOption(report, 'report', ToStringTypes.Function) ? report : noop
     this.stack = []
   }
 
@@ -118,13 +119,13 @@ class Store extends Event {
   }
 
   async simpleHandle(type: WxPerformanceDataType, data: WxPerformanceItem) {
-    let d = await this._createPerformanceData(type as WxPerformanceDataType, [data])
+    const d = await this._createPerformanceData(type as WxPerformanceDataType, [data])
     this._pushData([d])
   }
 
   // 内存警告会立即上报
   async handleMemoryWarning(data: WechatMiniprogram.OnMemoryWarningCallbackResult) {
-    let d = await this._createPerformanceData(WxPerformanceDataType.MEMORY_WARNING, [
+    const d = await this._createPerformanceData(WxPerformanceDataType.MEMORY_WARNING, [
       { ...data, itemType: WxPerformanceItemType.MemoryWarning, timestamp: Date.now() }
     ])
     this.report([d])
@@ -138,20 +139,20 @@ class Store extends Event {
   }
 
   async handleWxPerformance(data: Array<WxPerformanceItem> = []) {
-    let _data: Array<WxPerformanceItem> = data.map((d) => {
+    const _data: Array<WxPerformanceItem> = data.map((d) => {
       this.buildNavigationStart(d)
       d.itemType = WxPerformanceItemType.Performance
       d.timestamp = Date.now()
       return d
     })
-    let item = await this._createPerformanceData(WxPerformanceDataType.WX_PERFORMANCE, _data)
+    const item = await this._createPerformanceData(WxPerformanceDataType.WX_PERFORMANCE, _data)
     this._pushData([item])
   }
 
   // 只统计首次点击
   async handleWxAction(data: WxPerformanceItem) {
     if (!this.firstAction) {
-      let d = await this._createPerformanceData(WxPerformanceDataType.WX_USER_ACTION, [data])
+      const d = await this._createPerformanceData(WxPerformanceDataType.WX_USER_ACTION, [data])
       this._pushData([d])
       this.firstAction = true
     }

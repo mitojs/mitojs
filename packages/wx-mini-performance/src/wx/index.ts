@@ -56,7 +56,7 @@ export function initWxHideReport(store: Store, immediately: boolean, onAppHideRe
 
 // 网络请求性能和点击时间
 export function initWxNetwork(store: Store) {
-  for (let k in HandleEvents) {
+  for (const k in HandleEvents) {
     store.on(k as WxPerformanceItemType, HandleEvents[k])
   }
   replaceApp(store)

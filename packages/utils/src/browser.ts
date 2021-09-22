@@ -1,5 +1,5 @@
 import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes } from '@mitojs/shared'
-import { getLocationHref, getTimestamp } from './helpers'
+import { getTimestamp, getUrlWithEnv } from './helpers'
 import { Severity } from './Severity'
 
 /**
@@ -88,7 +88,7 @@ export function getBreadcrumbCategoryInBrowser(type: BrowserBreadcrumbTypes) {
 export function extractErrorStack(ex: any, level: Severity) {
   const normal = {
     time: getTimestamp(),
-    url: getLocationHref(),
+    url: getUrlWithEnv(),
     name: ex.name,
     level,
     message: ex.message

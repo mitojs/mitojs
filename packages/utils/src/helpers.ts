@@ -2,24 +2,30 @@ import { IAnyObject } from '@mitojs/types'
 import { globalVar, HTTP_CODE, ToStringTypes } from '@mitojs/shared'
 import { logger } from './logger'
 import { nativeToString, variableTypeDetection } from './is'
+import { isWxMiniEnv, isBrowserEnv } from './global'
 
 export function getLocationHref(): string {
   if (typeof document === 'undefined' || document.location == null) return ''
   return document.location.href
 }
 
-// 用到所有事件名称
+export function getUrlWithEnv(): string {
+  if (isWxMiniEnv) return getCurrentRoute()
+  if (isBrowserEnv) return getLocationHref()
+  return ''
+}
+
+// 用到所有事件的名称
 type TotalEventName = keyof GlobalEventHandlersEventMap | keyof XMLHttpRequestEventTargetEventMap | keyof WindowEventMap
 
 /**
  * 添加事件监听器
  *
- * ../export
- * ../param {{ addEventListener: Function }} target
- * ../param {keyof TotalEventName} eventName
- * ../param {Function} handler
- * ../param {(boolean | Object)} opitons
- * ../returns
+ * @export
+ * @param {{ addEventListener: Function }} target
+ * @param {TotalEventName} eventName
+ * @param {Function} handler
+ * @param {(boolean | unknown)} [opitons=false]
  */
 export function on(
   target: { addEventListener: Function },
