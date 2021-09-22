@@ -92,7 +92,7 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
    * @return {*}
    * @memberof BaseTransport
    */
-  async send(data: any, breadcrumb: BreadcrumbPushData[]): Promise<void> {
+  async send(data: any, breadcrumb: BreadcrumbPushData[] = []): Promise<void> {
     const errorId = createErrorId(data, this.apikey, this.maxDuplicateCount)
     if (!errorId) return
     data.errorId = errorId

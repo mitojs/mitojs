@@ -1,5 +1,5 @@
 import { ToStringTypes } from '@mitojs/shared'
-import { toStringValidateOption } from '@mitojs/utils'
+import { toStringValidateOption, _support } from '@mitojs/utils'
 import { ReportDataType } from '@mitojs/types'
 import { BaseTransport } from '@mitojs/core'
 import { WxOptionsFieldsTypes } from './types'
@@ -34,7 +34,8 @@ export class WxTransport extends BaseTransport<WxOptionsFieldsTypes> {
   getTransportData(data: ReportDataType) {
     return {
       authInfo: this.getAuthInfo(),
-      data
+      data,
+      deviceInfo: _support.deviceInfo
     }
   }
   bindOptions(options: WxOptionsFieldsTypes = {}) {

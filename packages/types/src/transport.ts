@@ -1,7 +1,7 @@
 import { ErrorTypes } from '@mitojs/shared'
 import { BreadcrumbPushData } from './breadcrumb'
 import { HttpTransformedType } from './http'
-import { DeviceInfo } from './wxTrack'
+import { DeviceInfo } from './wx'
 
 /**
  * SDK版本信息、apikey、trackerId

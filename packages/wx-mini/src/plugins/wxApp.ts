@@ -8,10 +8,11 @@ import {
   parseErrorString,
   replaceOld,
   Severity,
-  unknownToString
+  unknownToString,
+  _support
 } from '@mitojs/utils'
 import { WxLifeCycleBreadcrumb } from '../types'
-import { addBreadcrumbInWx } from '../utils'
+import { addBreadcrumbInWx, getWxMiniDeviceInfo } from '../utils'
 import { WxClient } from '../wxClient'
 
 type WxAppPluginMapType = Map<WxAppEvents, Partial<BasePluginType<WxEventTypes, WxClient>>>
@@ -42,7 +43,8 @@ wxAppPluginMap.set(WxAppEvents.AppOnShow, {
     }
     return data
   },
-  consumer(data: WxLifeCycleBreadcrumb) {
+  async consumer(data: WxLifeCycleBreadcrumb) {
+    _support.deviceInfo = await getWxMiniDeviceInfo()
     addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW)
   }
 })

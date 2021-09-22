@@ -906,6 +906,43 @@ function targetAsString(e) {
     });
     return "<element " + id + " " + dataSets.join(' ') + "/>";
 }
+function getWxMiniDeviceInfo() {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, pixelRatio, screenHeight, screenWidth, netType;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = wx.getSystemInfoSync(), pixelRatio = _a.pixelRatio, screenHeight = _a.screenHeight, screenWidth = _a.screenWidth;
+                    return [4, getWxMiniNetWrokType()];
+                case 1:
+                    netType = _b.sent();
+                    return [2, {
+                            ratio: pixelRatio,
+                            clientHeight: screenHeight,
+                            clientWidth: screenWidth,
+                            netType: netType
+                        }];
+            }
+        });
+    });
+}
+function getWxMiniNetWrokType() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2, new Promise(function (resolve) {
+                    wx.getNetworkType({
+                        success: function (res) {
+                            resolve(res.networkType);
+                        },
+                        fail: function (err) {
+                            console.error("\u83B7\u53D6\u5FAE\u4FE1\u5C0F\u7A0B\u5E8F\u7F51\u7EDC\u7C7B\u578B\u5931\u8D25:" + err);
+                            resolve('getNetWrokType failed');
+                        }
+                    });
+                })];
+        });
+    });
+}
 function addBreadcrumbInWx(data, type, level) {
     if (level === void 0) { level = Severity.Info; }
     return this.breadcrumb.push({
@@ -942,7 +979,20 @@ wxAppPluginMap.set(WxAppEvents.AppOnShow, {
         return data;
     },
     consumer: function (data) {
-        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = _support;
+                        return [4, getWxMiniDeviceInfo()];
+                    case 1:
+                        _a.deviceInfo = _b.sent();
+                        addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW);
+                        return [2];
+                }
+            });
+        });
     }
 });
 wxAppPluginMap.set(WxAppEvents.AppOnHide, {
@@ -1548,6 +1598,7 @@ var BaseTransport = (function () {
         toStringValidateOption(configReportUrl, 'configReportUrl', "Function") && (this.configReportUrl = configReportUrl);
     };
     BaseTransport.prototype.send = function (data, breadcrumb) {
+        if (breadcrumb === void 0) { breadcrumb = []; }
         return __awaiter(this, void 0, void 0, function () {
             var errorId, transportData, dsn;
             return __generator(this, function (_a) {
@@ -1667,7 +1718,8 @@ var WxTransport = (function (_super) {
     WxTransport.prototype.getTransportData = function (data) {
         return {
             authInfo: this.getAuthInfo(),
-            data: data
+            data: data,
+            deviceInfo: _support.deviceInfo
         };
     };
     WxTransport.prototype.bindOptions = function (options) {

@@ -1,4 +1,4 @@
-import { BaseOptionsFieldsIntegrationType, BaseOptionsType } from './baseOptionsType'
+import { BaseOptionsFieldsIntegrationType } from './baseOptionsType'
 
 export interface BaseClientType<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> {
   /**
