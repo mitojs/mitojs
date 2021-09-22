@@ -1,4 +1,13 @@
-import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes, HttpTypes, MethodTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
+import {
+  BREADCRUMBCATEGORYS,
+  BrowserBreadcrumbTypes,
+  ErrorTypes,
+  HttpTypes,
+  MethodTypes,
+  MitoLog,
+  SDK_NAME,
+  SDK_VERSION
+} from '@mitojs/shared'
 import puppeteer from 'puppeteer'
 import { BreadcrumbPushData, ReportDataType, TransportDataType } from '@mitojs/types'
 import { SpanStatus, Severity } from '@mitojs/utils'
@@ -197,7 +206,7 @@ describe('Native JS e2e:', () => {
         expect(stack[1].level).toBe(Severity.Error)
         const { data } = JSON.parse(request.postData()) as TransportDataType
         expect((data as ReportDataType).customTag).toBe('测试')
-        expect((data as ReportDataType).name).toBe('MITO.log')
+        expect((data as ReportDataType).name).toBe(MitoLog)
         expect((data as ReportDataType).type).toBe(ErrorTypes.LOG)
         expect((data as ReportDataType).level).toBe(Severity.Critical)
         expect((data as ReportDataType).message).toBe(JSON.stringify({ one: 111 }))

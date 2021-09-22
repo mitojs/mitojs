@@ -1,18 +1,10 @@
-import { BaseOptionsFieldsIntegrationType, VueInstance } from '@mitojs/types'
+import { BaseOptionsFieldsIntegrationType } from '@mitojs/types'
 
 export interface BrowserOptionsFieldsTypes extends BrowsersilentOptionsType, BaseOptionsFieldsIntegrationType, BrowserOptionsHooksType {
   /**
    * 使用img上报的方式，默认为false，默认是xhr的上报方式
    */
   useImgUpload?: boolean
-
-  /**
-   *
-   * Vue根实例（写在 ）
-   * @type {VueInstance}
-   * @memberof BrowserOptionsFieldsTypes
-   */
-  vue?: VueInstance
 }
 
 /**

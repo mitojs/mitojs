@@ -1,19 +1,11 @@
-import {
-  silentConsoleScope,
-  Severity,
-  getTimestamp,
-  variableTypeDetection,
-  getBigVersion,
-  getBreadcrumbCategoryInBrowser,
-  getUrlWithEnv
-} from '@mitojs/utils'
+import { silentConsoleScope, Severity, getTimestamp, variableTypeDetection, getBigVersion, getUrlWithEnv } from '@mitojs/utils'
 import { vue2VmHandler, vue3VmHandler } from './helper'
-import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes } from '@mitojs/shared'
+import { BaseBreadcrumbTypes, BaseEventTypes, BREADCRUMBCATEGORYS, ErrorTypes } from '@mitojs/shared'
 import { BasePluginType, ReportDataType, ViewModel } from '@mitojs/types'
-import { BrowserClient } from '@mitojs/browser'
+import { BaseClient } from '@mitojs/core'
 
-const vuePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
-  name: BrowserEventTypes.VUE,
+const vuePlugin: BasePluginType<BaseEventTypes, BaseClient> = {
+  name: BaseEventTypes.VUE,
   monitor(notify) {
     const Vue = this.options.vue
     if (Vue && Vue.config) {
@@ -28,7 +20,7 @@ const vuePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
           stack: err.stack || [],
           time: getTimestamp()
         }
-        notify(BrowserEventTypes.VUE, { data, vm })
+        notify(BaseEventTypes.VUE, { data, vm })
         const hasConsole = typeof console !== 'undefined'
         if (hasConsole && !Vue.config.silent) {
           silentConsoleScope(() => {
@@ -55,8 +47,8 @@ const vuePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   },
   consumer(data: ReportDataType) {
     const breadcrumbStack = this.breadcrumb.push({
-      type: BrowserBreadcrumbTypes.VUE,
-      category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.VUE),
+      type: BaseBreadcrumbTypes.VUE,
+      category: BREADCRUMBCATEGORYS.EXCEPTION,
       data,
       level: Severity.Error
     })

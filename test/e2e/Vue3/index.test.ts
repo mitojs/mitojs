@@ -1,6 +1,6 @@
 import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
 import { vue3Url } from '@/test/config'
-import { TransportDataType, BreadcrumbPushData, ReportDataType } from '@mitojs/types'
+import { TransportDataType, ReportDataType } from '@mitojs/types'
 import { Severity } from '@mitojs/utils'
 import puppeteer from 'puppeteer'
 import {} from '@mitojs/types'

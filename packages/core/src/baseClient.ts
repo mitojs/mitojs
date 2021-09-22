@@ -1,6 +1,7 @@
 import { EventTypes, SDK_VERSION } from '@mitojs/shared'
 import { BaseClientType, BaseOptionsFieldsIntegrationType, BasePluginType, LogTypes } from '@mitojs/types'
 import { logger } from '@mitojs/utils'
+import { BaseTransport, Breadcrumb } from '.'
 import { Subscrib } from './subscribe'
 
 /**
@@ -14,10 +15,16 @@ import { Subscrib } from './subscribe'
  * @template O
  * @template E
  */
-export abstract class BaseClient<O extends BaseOptionsFieldsIntegrationType, E extends EventTypes> implements BaseClientType {
+export abstract class BaseClient<
+  O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType,
+  E extends EventTypes = EventTypes
+> implements BaseClientType
+{
   SDK_NAME: string
   SDK_VERSION = SDK_VERSION
   options: BaseOptionsFieldsIntegrationType
+  abstract breadcrumb: Breadcrumb
+  abstract transport: BaseTransport
   constructor(options: O) {
     this.options = options
     logger.bindOptions(options.debug)

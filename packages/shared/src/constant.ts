@@ -20,7 +20,12 @@ export const enum ErrorTypes {
 /**
  * 用户行为栈事件类型
  */
-export type BreadcrumbTypes = BrowserBreadcrumbTypes | WxBreadcrumbTypes
+export type BreadcrumbTypes = BrowserBreadcrumbTypes | WxBreadcrumbTypes | BaseBreadcrumbTypes
+
+export const enum BaseBreadcrumbTypes {
+  VUE = 'Vue',
+  REACT = 'React'
+}
 
 /**
  * 用户行为类型
@@ -36,11 +41,15 @@ export const enum BREADCRUMBCATEGORYS {
 /**
  * 所有重写事件类型整合
  */
-export type EventTypes = BrowserEventTypes | WxEventTypes
+export type EventTypes = BrowserEventTypes | WxEventTypes | BaseEventTypes
 
 export const MitoLog = 'Mito.log'
 export const MitoLogEmptyMsg = 'empty.msg'
 export const MitoLogEmptyTag = 'empty.tag'
+
+export const enum BaseEventTypes {
+  VUE = 'vue'
+}
 
 export const enum HttpTypes {
   XHR = 'xhr',

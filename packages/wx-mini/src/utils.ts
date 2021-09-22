@@ -1,7 +1,8 @@
-import { getBreadcrumbCategoryInWx, setUrlQuery, Severity, variableTypeDetection } from '@mitojs/utils'
+import { getBreadcrumbCategoryInBrowser, getBreadcrumbCategoryInWx, setUrlQuery, Severity, variableTypeDetection } from '@mitojs/utils'
 import { DeviceInfo } from '@mitojs/types'
 import { WxClient } from './wxClient'
-import { WxBreadcrumbTypes } from 'packages/shared/src/wx'
+import { BrowserClient } from '@mitojs/browser'
+import { BrowserBreadcrumbTypes, WxBreadcrumbTypes } from '@mitojs/shared'
 
 /**
  * 后退时需要计算当前页面地址

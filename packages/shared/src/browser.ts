@@ -13,9 +13,7 @@ export const enum BrowserEventTypes {
   ERROR = 'error',
   HASHCHANGE = 'hashchange',
   UNHANDLEDREJECTION = 'unhandledrejection',
-  VUE = 'vue',
-  CUSTOMER = 'Customer',
-  REACT = 'react'
+  CUSTOMER = 'Customer'
 }
 
 export const enum BrowserBreadcrumbTypes {
@@ -25,8 +23,6 @@ export const enum BrowserBreadcrumbTypes {
   XHR = 'Xhr',
   FETCH = 'Fetch',
   UNHANDLEDREJECTION = 'Unhandledrejection',
-  VUE = 'Vue',
-  REACT = 'React',
   RESOURCE = 'Resource',
   CODE_ERROR = 'Code Error',
   CUSTOMER = 'Customer'

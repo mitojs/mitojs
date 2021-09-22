@@ -1,4 +1,4 @@
-import { BreadcrumbPushData, TransportDataType } from '@mitojs/types'
+import { BreadcrumbPushData, TransportDataType, VueInstance } from '@mitojs/types'
 import { Breadcrumb } from '@mitojs/core'
 type CANCEL = null | undefined | boolean
 
@@ -65,6 +65,13 @@ export interface BaseOptionsFieldsType {
    * 最多可重复上报同一个错误的次数
    */
   maxDuplicateCount?: number
+  /**
+   *
+   * Vue根实例（写在 ）
+   * @type {VueInstance}
+   * @memberof BrowserOptionsFieldsTypes
+   */
+  vue?: VueInstance
 }
 
 export interface BaseOptionsHooksType {

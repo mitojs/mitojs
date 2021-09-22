@@ -55,26 +55,13 @@ export function getBreadcrumbCategoryInBrowser(type: BrowserBreadcrumbTypes) {
       return BREADCRUMBCATEGORYS.HTTP
     case BrowserBreadcrumbTypes.CLICK:
     case BrowserBreadcrumbTypes.ROUTE:
-      // case BreadcrumbTypes.TAP:
-      // case BreadcrumbTypes.TOUCHMOVE:
       return BREADCRUMBCATEGORYS.USER
     case BrowserBreadcrumbTypes.CUSTOMER:
     case BrowserBreadcrumbTypes.CONSOLE:
       return BREADCRUMBCATEGORYS.DEBUG
-    // case BreadcrumbTypes.APP_ON_LAUNCH:
-    // case BreadcrumbTypes.APP_ON_SHOW:
-    // case BreadcrumbTypes.APP_ON_HIDE:
-    // case BreadcrumbTypes.PAGE_ON_SHOW:
-    // case BreadcrumbTypes.PAGE_ON_HIDE:
-    // case BreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE:
-    // case BreadcrumbTypes.PAGE_ON_SHARE_TIMELINE:
-    // case BreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP:
-    // return BREADCRUMBCATEGORYS.LIFECYCLE
     case BrowserBreadcrumbTypes.UNHANDLEDREJECTION:
     case BrowserBreadcrumbTypes.CODE_ERROR:
     case BrowserBreadcrumbTypes.RESOURCE:
-    case BrowserBreadcrumbTypes.VUE:
-    case BrowserBreadcrumbTypes.REACT:
     default:
       return BREADCRUMBCATEGORYS.EXCEPTION
   }

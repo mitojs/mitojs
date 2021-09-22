@@ -1,14 +1,14 @@
-import { BrowserBreadcrumbTypes, ErrorTypes } from '@mitojs/shared'
+import { BaseClient } from '@mitojs/core'
+import { BaseBreadcrumbTypes, BREADCRUMBCATEGORYS, ErrorTypes } from '@mitojs/shared'
 import { ReportDataType } from '@mitojs/types'
-import { extractErrorStack, getBreadcrumbCategoryInBrowser, Severity } from '@mitojs/utils'
-import { BrowserClient } from '@mitojs/browser'
+import { extractErrorStack, Severity } from '@mitojs/utils'
 import { PureComponent, ReactNode, ErrorInfo, ComponentType, FC } from 'react'
 import { MitoContext } from './provider'
 
 interface ErrorBoundaryProps {
   fallback?: ReactNode
   onError?: (error: Error, componentStack: string) => void
-  MitoInstance?: BrowserClient
+  MitoInstance?: BaseClient
 }
 
 interface ErrorBoundaryState {
@@ -29,9 +29,9 @@ class ErrorBoundaryWrapped extends PureComponent<ErrorBoundaryProps, ErrorBounda
     reactError.type = ErrorTypes.REACT
     // mito handler
     const breadcrumbStack = MitoInstance.breadcrumb.push({
-      type: BrowserBreadcrumbTypes.REACT,
+      type: BaseBreadcrumbTypes.REACT,
       data: reactError,
-      category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.REACT),
+      category: BREADCRUMBCATEGORYS.EXCEPTION,
       level: Severity.Error
     })
     onError?.(error, componentStack)
