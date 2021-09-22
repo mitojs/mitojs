@@ -5,7 +5,6 @@
 |              Name              | Type      | Default    | Description                                                  |
 | :----------------------------: | --------- | ---------- | ------------------------------------------------------------ |
 |             `dsn`              | `string`  | `""`       | dsn服务地址，上报接口的地址，post方法，可选`useImgUpload`方式   |
-|           `trackDsn`           | `string`  | `""`       | trackDsn服务地址，埋点上报接口的地址，为空时不上报，post方法                 |
 |           `disabled`           | `boolean` | `false`    | 默认是开启状态，为true时，会将sdk禁用                        |
 |            `apikey`            | `string`  | `""`       | 每个项目对应一个apikey，用于存放错误集合的唯一标识           |
 |            `debug`             | `boolean` | `false`    | 默认不会在控制台打印用户行为和错误信息，为true时将会在控台打印，推荐本地调试时置为true |

@@ -37,6 +37,7 @@ export abstract class BaseClient<
    * @memberof BaseClient
    */
   use(plugins: BasePluginType<E>[]) {
+    if (this.options.disabled) return
     const subscrib = new Subscrib<E>()
     plugins.forEach((item) => {
       if (!this.isPluginEnable(item.name)) return
