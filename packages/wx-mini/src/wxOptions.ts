@@ -1,22 +1,49 @@
 import { BaseOptions } from '@mitojs/core'
 import { ToStringTypes } from '@mitojs/shared'
-import { toStringValidateOption } from '@mitojs/utils'
+import { validateOptionsAndSet } from '@mitojs/utils'
 import { WxOptionsFieldsTypes } from './types'
 
 export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
-  // wx-mini
+  // wx-mini lifecycle
+  // App
   appOnLaunch: Function = () => {}
   appOnShow: Function = () => {}
   appOnHide: Function = () => {}
-  onPageNotFound: Function = () => {}
+  //Page
   pageOnLoad: Function = () => {}
   pageOnShow: Function = () => {}
   pageOnReady: Function = () => {}
   pageOnHide: Function = () => {}
   pageOnUnload: Function = () => {}
+  onPageNotFound: Function = () => {}
   onShareAppMessage: Function = () => {}
   onShareTimeline: Function = () => {}
   onTabItemTap: Function = () => {}
+  // silent options
+  /**
+   * 静默监控Xhr事件
+   */
+  silentRequest: boolean
+  /**
+   * 静默监控console事件
+   */
+  silentConsole: boolean
+  /**
+   * 静默监控Dom事件
+   */
+  silentDom: boolean
+  /**
+   * 静默监控小小程序Route切换
+   */
+  silentMiniRoute: boolean
+  /**
+   * 静默监控error事件
+   */
+  silentError: boolean
+  /**
+   * 静默监控unhandledrejection事件
+   */
+  silentUnhandledrejection: boolean
   // need return opitons，so defaul value is undefined
   wxNavigateToMiniProgram: Function
   triggerWxEvent: Function = () => {}
@@ -41,24 +68,43 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
       onShareTimeline,
       onTabItemTap,
       wxNavigateToMiniProgram,
-      triggerWxEvent
+      triggerWxEvent,
+      silentRequest,
+      silentConsole,
+      silentDom,
+      silentMiniRoute,
+      silentError,
+      silentUnhandledrejection
     } = options
-    toStringValidateOption(beforeAppAjaxSend, 'beforeAppAjaxSend', ToStringTypes.Function) && (this.beforeAppAjaxSend = beforeAppAjaxSend)
-    // wx-mini hooks
-    toStringValidateOption(appOnLaunch, 'appOnLaunch', ToStringTypes.Function) && (this.appOnLaunch = appOnLaunch)
-    toStringValidateOption(appOnShow, 'appOnShow', ToStringTypes.Function) && (this.appOnShow = appOnShow)
-    toStringValidateOption(appOnHide, 'appOnHide', ToStringTypes.Function) && (this.appOnHide = appOnHide)
-    toStringValidateOption(pageOnLoad, 'pageOnLoad', ToStringTypes.Function) && (this.pageOnLoad = pageOnLoad)
-    toStringValidateOption(pageOnReady, 'pageOnReady', ToStringTypes.Function) && (this.pageOnReady = pageOnReady)
-    toStringValidateOption(pageOnShow, 'pageOnShow', ToStringTypes.Function) && (this.pageOnShow = pageOnShow)
-    toStringValidateOption(pageOnUnload, 'pageOnUnload', ToStringTypes.Function) && (this.pageOnUnload = pageOnUnload)
-    toStringValidateOption(pageOnHide, 'pageOnHide', ToStringTypes.Function) && (this.pageOnHide = pageOnHide)
-    toStringValidateOption(onPageNotFound, 'onPageNotFound', ToStringTypes.Function) && (this.onPageNotFound = onPageNotFound)
-    toStringValidateOption(onShareAppMessage, 'onShareAppMessage', ToStringTypes.Function) && (this.onShareAppMessage = onShareAppMessage)
-    toStringValidateOption(onShareTimeline, 'onShareTimeline', ToStringTypes.Function) && (this.onShareTimeline = onShareTimeline)
-    toStringValidateOption(onTabItemTap, 'onTabItemTap', ToStringTypes.Function) && (this.onTabItemTap = onTabItemTap)
-    toStringValidateOption(wxNavigateToMiniProgram, 'wxNavigateToMiniProgram', ToStringTypes.Function) &&
-      (this.wxNavigateToMiniProgram = wxNavigateToMiniProgram)
-    toStringValidateOption(triggerWxEvent, 'triggerWxEvent', ToStringTypes.Function) && (this.triggerWxEvent = triggerWxEvent)
+    // silent type
+    const booleanOptions = [
+      [silentRequest, 'silentRequest'],
+      [silentConsole, 'silentConsole'],
+      [silentDom, 'silentDom'],
+      [silentMiniRoute, 'silentMiniRoute'],
+      [silentError, 'silentError'],
+      [silentUnhandledrejection, 'silentUnhandledrejection']
+    ]
+    validateOptionsAndSet.call(this, booleanOptions, ToStringTypes.Boolean)
+    const functionOptions = [
+      // mito hooks
+      [beforeAppAjaxSend, 'beforeAppAjaxSend'],
+      // wx-mini hooks
+      [appOnLaunch, 'appOnLaunch'],
+      [appOnShow, 'appOnShow'],
+      [appOnHide, 'appOnHide'],
+      [pageOnLoad, 'pageOnLoad'],
+      [pageOnReady, 'pageOnReady'],
+      [pageOnShow, 'pageOnShow'],
+      [pageOnUnload, 'pageOnUnload'],
+      [pageOnHide, 'pageOnHide'],
+      [onPageNotFound, 'onPageNotFound'],
+      [onShareAppMessage, 'onShareAppMessage'],
+      [onShareTimeline, 'onShareTimeline'],
+      [onTabItemTap, 'onTabItemTap'],
+      [wxNavigateToMiniProgram, 'wxNavigateToMiniProgram'],
+      [triggerWxEvent, 'triggerWxEvent']
+    ]
+    validateOptionsAndSet.call(this, functionOptions, ToStringTypes.Function)
   }
 }

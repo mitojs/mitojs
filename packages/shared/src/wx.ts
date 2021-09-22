@@ -65,7 +65,7 @@ export enum WxRouteEvents {
  *  const@enum {number}
  */
 export enum WxBaseEventTypes {
-  XHR = 'xhr',
+  REQUEST = 'request',
   CONSOLE = 'console',
   ERROR = 'error',
   UNHANDLEDREJECTION = 'unhandledrejection',

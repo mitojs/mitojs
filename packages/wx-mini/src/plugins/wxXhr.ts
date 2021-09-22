@@ -6,24 +6,16 @@ import {
   HTTP_CODE,
   MethodTypes,
   WxEventTypes,
-  BREADCRUMBCATEGORYS
+  BREADCRUMBCATEGORYS,
+  WxBaseEventTypes
 } from '@mitojs/shared'
-import {
-  fromHttpStatus,
-  getBreadcrumbCategoryInWx,
-  getCurrentRoute,
-  getRealPath,
-  getTimestamp,
-  Severity,
-  SpanStatus,
-  variableTypeDetection
-} from '@mitojs/utils'
+import { fromHttpStatus, getCurrentRoute, getRealPath, getTimestamp, Severity, SpanStatus, variableTypeDetection } from '@mitojs/utils'
 import { BasePluginType, HttpCollectedType, HttpTransformedType } from '@mitojs/types'
 import { WxClient } from '../wxClient'
 import { addBreadcrumbInWx } from '../utils'
 
 const wxXhrPlugin: BasePluginType<WxEventTypes, WxClient> = {
-  name: WxEventTypes.XHR,
+  name: WxBaseEventTypes.REQUEST,
   monitor(notify) {
     monitorWxXhr.call(this, notify)
   },
@@ -104,7 +96,7 @@ function monitorWxXhr(this: WxClient, notify: (eventName: WxEventTypes, data: an
           httpCollect.elapsedTime = endTime - httpCollect.time
           httpCollect.response.status = res.statusCode
           httpCollect.errMsg = res.errMsg
-          notify(WxEventTypes.XHR, httpCollect)
+          notify(WxBaseEventTypes.REQUEST, httpCollect)
           if (typeof options.success === 'function') {
             return options.success(res)
           }
@@ -119,7 +111,7 @@ function monitorWxXhr(this: WxClient, notify: (eventName: WxEventTypes, data: an
           httpCollect.elapsedTime = endTime - httpCollect.time
           httpCollect.errMsg = err.errMsg
           httpCollect.response.status = 0
-          notify(WxEventTypes.XHR, httpCollect)
+          notify(WxBaseEventTypes.REQUEST, httpCollect)
           if (variableTypeDetection.isFunction(_fail)) {
             return _fail(err)
           }

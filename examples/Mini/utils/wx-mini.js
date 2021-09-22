@@ -140,7 +140,7 @@ var WxRouteEvents;
 })(WxRouteEvents || (WxRouteEvents = {}));
 var WxBaseEventTypes;
 (function (WxBaseEventTypes) {
-    WxBaseEventTypes["XHR"] = "xhr";
+    WxBaseEventTypes["REQUEST"] = "request";
     WxBaseEventTypes["CONSOLE"] = "console";
     WxBaseEventTypes["ERROR"] = "error";
     WxBaseEventTypes["UNHANDLEDREJECTION"] = "unhandledrejection";
@@ -403,6 +403,13 @@ function firstStrtoUppercase(str) {
 function firstStrtoLowerCase(str) {
     return str.replace(/\b(\w)(\w*)/g, function ($0, $1, $2) {
         return "" + $1.toLowerCase() + $2;
+    });
+}
+function validateOptionsAndSet(targetArr, expectType) {
+    var _this = this;
+    targetArr.forEach(function (_a) {
+        var target = _a[0], targetName = _a[1];
+        return toStringValidateOption(target, targetName, expectType) && (_this[targetName] = target);
     });
 }
 
@@ -1585,12 +1592,12 @@ var WxOptions = (function (_super) {
         _this.appOnLaunch = function () { };
         _this.appOnShow = function () { };
         _this.appOnHide = function () { };
-        _this.onPageNotFound = function () { };
         _this.pageOnLoad = function () { };
         _this.pageOnShow = function () { };
         _this.pageOnReady = function () { };
         _this.pageOnHide = function () { };
         _this.pageOnUnload = function () { };
+        _this.onPageNotFound = function () { };
         _this.onShareAppMessage = function () { };
         _this.onShareTimeline = function () { };
         _this.onTabItemTap = function () { };
@@ -1600,23 +1607,34 @@ var WxOptions = (function (_super) {
         return _this;
     }
     WxOptions.prototype.bindOptions = function (options) {
-        var beforeAppAjaxSend = options.beforeAppAjaxSend, appOnLaunch = options.appOnLaunch, appOnShow = options.appOnShow, appOnHide = options.appOnHide, pageOnLoad = options.pageOnLoad, pageOnReady = options.pageOnReady, pageOnShow = options.pageOnShow, pageOnUnload = options.pageOnUnload, pageOnHide = options.pageOnHide, onPageNotFound = options.onPageNotFound, onShareAppMessage = options.onShareAppMessage, onShareTimeline = options.onShareTimeline, onTabItemTap = options.onTabItemTap, wxNavigateToMiniProgram = options.wxNavigateToMiniProgram, triggerWxEvent = options.triggerWxEvent;
-        toStringValidateOption(beforeAppAjaxSend, 'beforeAppAjaxSend', "Function") && (this.beforeAppAjaxSend = beforeAppAjaxSend);
-        toStringValidateOption(appOnLaunch, 'appOnLaunch', "Function") && (this.appOnLaunch = appOnLaunch);
-        toStringValidateOption(appOnShow, 'appOnShow', "Function") && (this.appOnShow = appOnShow);
-        toStringValidateOption(appOnHide, 'appOnHide', "Function") && (this.appOnHide = appOnHide);
-        toStringValidateOption(pageOnLoad, 'pageOnLoad', "Function") && (this.pageOnLoad = pageOnLoad);
-        toStringValidateOption(pageOnReady, 'pageOnReady', "Function") && (this.pageOnReady = pageOnReady);
-        toStringValidateOption(pageOnShow, 'pageOnShow', "Function") && (this.pageOnShow = pageOnShow);
-        toStringValidateOption(pageOnUnload, 'pageOnUnload', "Function") && (this.pageOnUnload = pageOnUnload);
-        toStringValidateOption(pageOnHide, 'pageOnHide', "Function") && (this.pageOnHide = pageOnHide);
-        toStringValidateOption(onPageNotFound, 'onPageNotFound', "Function") && (this.onPageNotFound = onPageNotFound);
-        toStringValidateOption(onShareAppMessage, 'onShareAppMessage', "Function") && (this.onShareAppMessage = onShareAppMessage);
-        toStringValidateOption(onShareTimeline, 'onShareTimeline', "Function") && (this.onShareTimeline = onShareTimeline);
-        toStringValidateOption(onTabItemTap, 'onTabItemTap', "Function") && (this.onTabItemTap = onTabItemTap);
-        toStringValidateOption(wxNavigateToMiniProgram, 'wxNavigateToMiniProgram', "Function") &&
-            (this.wxNavigateToMiniProgram = wxNavigateToMiniProgram);
-        toStringValidateOption(triggerWxEvent, 'triggerWxEvent', "Function") && (this.triggerWxEvent = triggerWxEvent);
+        var beforeAppAjaxSend = options.beforeAppAjaxSend, appOnLaunch = options.appOnLaunch, appOnShow = options.appOnShow, appOnHide = options.appOnHide, pageOnLoad = options.pageOnLoad, pageOnReady = options.pageOnReady, pageOnShow = options.pageOnShow, pageOnUnload = options.pageOnUnload, pageOnHide = options.pageOnHide, onPageNotFound = options.onPageNotFound, onShareAppMessage = options.onShareAppMessage, onShareTimeline = options.onShareTimeline, onTabItemTap = options.onTabItemTap, wxNavigateToMiniProgram = options.wxNavigateToMiniProgram, triggerWxEvent = options.triggerWxEvent, silentRequest = options.silentRequest, silentConsole = options.silentConsole, silentDom = options.silentDom, silentMiniRoute = options.silentMiniRoute, silentError = options.silentError, silentUnhandledrejection = options.silentUnhandledrejection;
+        var booleanOptions = [
+            [silentRequest, 'silentRequest'],
+            [silentConsole, 'silentConsole'],
+            [silentDom, 'silentDom'],
+            [silentMiniRoute, 'silentMiniRoute'],
+            [silentError, 'silentError'],
+            [silentUnhandledrejection, 'silentUnhandledrejection']
+        ];
+        validateOptionsAndSet.call(this, booleanOptions, "Boolean");
+        var functionOptions = [
+            [beforeAppAjaxSend, 'beforeAppAjaxSend'],
+            [appOnLaunch, 'appOnLaunch'],
+            [appOnShow, 'appOnShow'],
+            [appOnHide, 'appOnHide'],
+            [pageOnLoad, 'pageOnLoad'],
+            [pageOnReady, 'pageOnReady'],
+            [pageOnShow, 'pageOnShow'],
+            [pageOnUnload, 'pageOnUnload'],
+            [pageOnHide, 'pageOnHide'],
+            [onPageNotFound, 'onPageNotFound'],
+            [onShareAppMessage, 'onShareAppMessage'],
+            [onShareTimeline, 'onShareTimeline'],
+            [onTabItemTap, 'onTabItemTap'],
+            [wxNavigateToMiniProgram, 'wxNavigateToMiniProgram'],
+            [triggerWxEvent, 'triggerWxEvent']
+        ];
+        validateOptionsAndSet.call(this, functionOptions, "Function");
     };
     return WxOptions;
 }(BaseOptions));
@@ -1673,6 +1691,7 @@ var WxClient = (function (_super) {
     }
     WxClient.prototype.isPluginEnable = function (name) {
         var silentField = "silent" + firstStrtoUppercase(name);
+        console.log('silentField', silentField);
         return !this.options[silentField];
     };
     WxClient.prototype.log = function (data) {

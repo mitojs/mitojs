@@ -9,11 +9,34 @@ export interface WxRouteCollectType {
 
 export interface WxOptionsFieldsTypes extends WxSilentOptionsType, WxHookOptionsType, BaseOptionsFieldsIntegrationType {}
 
-export interface WxSilentOptionsType {
-  slientRequest?: boolean
-}
-
 export type IWxPageInstance = WechatMiniprogram.Page.Instance<WechatMiniprogram.IAnyObject, WechatMiniprogram.IAnyObject>
+
+export interface WxSilentOptionsType {
+  /**
+   * 静默监控Xhr事件
+   */
+  silentRequest?: boolean
+  /**
+   * 静默监控console事件
+   */
+  silentConsole?: boolean
+  /**
+   * 静默监控Dom事件
+   */
+  silentDom?: boolean
+  /**
+   * 静默监控Route切换事件
+   */
+  silentMiniRoute?: boolean
+  /**
+   * 静默监控error事件
+   */
+  silentError?: boolean
+  /**
+   * 静默监控unhandledrejection事件
+   */
+  silentUnhandledrejection?: boolean
+}
 
 export interface WxHookOptionsType {
   /**

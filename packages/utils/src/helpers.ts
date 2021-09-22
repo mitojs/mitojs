@@ -293,3 +293,7 @@ export function getObjectWithForIn<T = object>(obj: object): T {
   }
   return result as T
 }
+
+export function validateOptionsAndSet(this: any, targetArr: [any, string][], expectType: ToStringTypes) {
+  targetArr.forEach(([target, targetName]) => toStringValidateOption(target, targetName, expectType) && (this[targetName] = target))
+}

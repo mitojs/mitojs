@@ -34,6 +34,7 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
    */
   isPluginEnable(name: BrowserEventTypes): boolean {
     const silentField = `silent${firstStrtoUppercase(name)}`
+    console.log('silentField', silentField)
     return !this.options[silentField]
   }
   log(data: LogTypes) {

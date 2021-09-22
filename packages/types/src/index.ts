@@ -1,5 +1,4 @@
 export * from './breadcrumb'
-export * from './replace'
 export * from './transport'
 export * from './common'
 export * from './wxTrack'
