@@ -5,24 +5,23 @@
 ### yarn
 
 ``` bash
-yarn add @mitojs/react
+yarn add @mitojs/react @mitojs/browser
 ```
 
 ### npm
 
 ``` bash
-npm install @mitojs/react
+npm install @mitojs/react @mitojs/browser
 ```
 
 ## usage
 
-## Configure
+### Configure
 
 
 ```js
 import React from 'react'
-import * as Mito from '@mitojs/react'
-import { init, MitoProvider } from '@mitojs/react'
+import { init } from '@mitojs/browser'
 
 const MitoInstance = init({
   dsn: '/upload',
@@ -40,7 +39,9 @@ If you're using React 16 or above, you can use [ErrorBoundary](https://reactjs.o
 ```tsx
 import React from 'react'
 import App from './App'
-import { init, MitoProvider } from '@mitojs/react'
+import { MitoProvider } from '@mitojs/react'
+import { init } from '@mitojs/browser'
+
 
 const MitoInstance = init({
   dsn: 'https://test.com/yourServer',
@@ -87,7 +88,9 @@ export default function OtherComponent() {
 ```js
 import React from 'react'
 import App from './App'
-import { init, MitoProvider } from '@mitojs/react'
+import { MitoProvider } from '@mitojs/react'
+import { init } from '@mitojs/browser'
+
 
 const MitoInstance_one = init({
   dsn: 'https://test.com/yourServer_one',
@@ -113,15 +116,44 @@ const APP: React.FC = () => {
 }
 ```
 
-## Using CDN
+## Use in wx-mini
+If you want to use in Weixin miniprogram,just replace `@mitojs/browser` to `@mitojs/wx-mini`.Just like this:
 
-CDN way is **not recommended**.Because `@mitojs/react` commonjs file is include `jsxRuntime` code,so it's size is larger than else package.
+**install**
+```bash
+yarn add @mitojs/react @mitojs/wx-mini
+```
+
+```typescript
+import React from 'react'
+import App from './App'
+import { MitoProvider } from '@mitojs/react'
+import { init } from '@mitojs/wx-mini'
+
+
+const MitoInstance = init({
+  dsn: 'https://test.com/yourServer',
+  maxBreadcrumbs: 100,
+})
+
+const APP: React.FC = () => {
+  return (
+    <MitoProvider MitoInstance={MitoInstance}>
+        <App />
+    </MitoProvider>
+  )
+}
+```
+
+
+## Using CDN in Browser
+CDN way is **not recommended**.Because `@mitojs/web` commonjs file is include `jsxRuntime` code,so it's size is larger than else package.
 
 **index.html**
 
 ```html
 <header>
-  <script src="https://cdn.jsdelivr.net/npm/@mitojs/react/dist/react.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mitojs/web/dist/web.min.js"></script>
   <script>
     MITO.init({
 		  dsn: 'https://test.com/yourServer',

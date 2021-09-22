@@ -19,7 +19,7 @@ export function noNetworkType<T extends WechatMiniprogram.GetNetworkTypeOption =
   return Promise.resolve({
     networkType: 'unknown',
     signalStrength: 0
-  })
+  }) as unknown as WechatMiniprogram.PromisifySuccessResult<T, WechatMiniprogram.GetNetworkTypeOption>
 }
 export function initNetworkInfo(store: Store, need: boolean): void {
   store.getNetworkType = need ? wx.getNetworkType : noNetworkType

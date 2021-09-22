@@ -43,8 +43,9 @@ If you are developing a native WeChat miniprogram，it's recommended to download
 
 
 ## uni-app
+<!-- to vue url -->
 
 
 
-## taro
-
+## remax
+<!-- to react url -->
