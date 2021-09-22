@@ -1801,6 +1801,7 @@ function createWxInstance(options) {
 }
 var init = createWxInstance;
 
+exports.WxClient = WxClient;
 exports.init = init;
 /* follow me on Github! @cjinhuo */
 //# sourceMappingURL=wx-mini.js.map

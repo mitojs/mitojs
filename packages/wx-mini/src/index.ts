@@ -15,4 +15,4 @@ function createWxInstance(options: WxOptionsFieldsTypes) {
 }
 
 const init = createWxInstance
-export { init }
+export { init, WxClient }
