@@ -159,6 +159,12 @@ export function toStringValidateOption(target: any, targetName: string, expectTy
   return false
 }
 
+/**
+ * 如果用户输入console，并且logger是打开的会造成无限递归，执行callback前，会把监听console的行为关掉
+ *
+ * @export
+ * @param {Function} callback
+ */
 export function silentConsoleScope(callback: Function) {
   globalVar.isLogAddBreadcrumb = false
   callback()
