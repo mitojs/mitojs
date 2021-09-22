@@ -1,5 +1,13 @@
 import { Breadcrumb, BaseClient } from '@mitojs/core'
-import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes, EventTypes, MitoLog } from '@mitojs/shared'
+import {
+  BrowserBreadcrumbTypes,
+  BrowserEventTypes,
+  ErrorTypes,
+  EventTypes,
+  MitoLog,
+  MitoLogEmptyMsg,
+  MitoLogEmptyTag
+} from '@mitojs/shared'
 import {
   extractErrorStack,
   firstStrtoUppercase,
@@ -34,11 +42,10 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
    */
   isPluginEnable(name: BrowserEventTypes): boolean {
     const silentField = `silent${firstStrtoUppercase(name)}`
-    console.log('silentField', silentField)
     return !this.options[silentField]
   }
   log(data: LogTypes) {
-    const { message = 'empty', tag = '', level = Severity.Critical, ex = '' } = data
+    const { message = MitoLogEmptyMsg, tag = MitoLogEmptyTag, level = Severity.Critical, ex = '' } = data
     let errorInfo = {}
     if (isError(ex)) {
       errorInfo = extractErrorStack(ex, level)

@@ -78,6 +78,8 @@ var SDK_NAME = 'mitojs';
 var SDK_VERSION = version;
 
 var MitoLog = 'Mito.log';
+var MitoLogEmptyMsg = 'empty.msg';
+var MitoLogEmptyTag = 'empty.tag';
 var globalVar = {
     isLogAddBreadcrumb: true,
     crossOriginThreshold: 1000
@@ -293,10 +295,6 @@ function getLocationHref() {
     if (typeof document === 'undefined' || document.location == null)
         return '';
     return document.location.href;
-}
-function on(target, eventName, handler, opitons) {
-    if (opitons === void 0) { opitons = false; }
-    target.addEventListener(eventName, handler, opitons);
 }
 function replaceOld(source, name, replacement, isForced) {
     if (isForced === void 0) { isForced = false; }
@@ -778,111 +776,6 @@ function getBreadcrumbCategoryInWx(type) {
     }
 }
 
-var xhrPlugin = {
-    name: "xhr",
-    monitor: function (notify) {
-        monitorXhr.call(this, notify);
-    },
-    transform: function (collectedData) {
-        return httpTransform(collectedData);
-    },
-    consumer: function (transformedData) {
-        httpTransformedDataConsumer.call(this, transformedData);
-    }
-};
-function monitorXhr(notify) {
-    var _a = this, options = _a.options, transport = _a.transport;
-    if (!('XMLHttpRequest' in _global)) {
-        return;
-    }
-    var originalXhrProto = XMLHttpRequest.prototype;
-    replaceOld(originalXhrProto, 'open', function (originalOpen) {
-        return function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            this.httpCollect = {
-                request: {
-                    httpType: "xhr",
-                    method: variableTypeDetection.isString(args[0]) ? args[0].toUpperCase() : args[0],
-                    url: args[1]
-                },
-                response: {},
-                time: getTimestamp()
-            };
-            originalOpen.apply(this, args);
-        };
-    });
-    replaceOld(originalXhrProto, 'send', function (originalSend) {
-        return function () {
-            var _this = this;
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            var request = this.httpCollect.request;
-            var method = request.method, url = request.url;
-            options.setTraceId(url, function (headerFieldName, traceId) {
-                request.traceId = traceId;
-                _this.setRequestHeader(headerFieldName, traceId);
-            });
-            options.beforeAppAjaxSend && options.beforeAppAjaxSend({ method: method, url: url }, this);
-            on(this, 'loadend', function () {
-                var isBlock = transport.isSelfDsn(url) || options.isFilterHttpUrl(url);
-                if (isBlock)
-                    return;
-                var _a = this, responseType = _a.responseType, response = _a.response, status = _a.status;
-                request.data = args[0];
-                var eTime = getTimestamp();
-                if (['', 'json', 'text'].indexOf(responseType) !== -1) {
-                    this.httpCollect.response.data = typeof response === 'object' ? JSON.stringify(response) : response;
-                }
-                this.httpCollect.response.status = status;
-                this.httpCollect.elapsedTime = eTime - this.httpCollect.time;
-                notify("xhr", this.httpCollect);
-            });
-            originalSend.apply(this, args);
-        };
-    });
-}
-function httpTransform(httpCollectedData) {
-    var message = '';
-    var _a = httpCollectedData.request, httpType = _a.httpType, method = _a.method, url = _a.url, status = httpCollectedData.response.status, elapsedTime = httpCollectedData.elapsedTime;
-    var name = httpType + "--" + method;
-    if (status === 0) {
-        message =
-            elapsedTime <= globalVar.crossOriginThreshold ? 'http请求失败，失败原因：跨域限制或域名不存在' : 'http请求失败，失败原因：超时';
-    }
-    else {
-        message = fromHttpStatus(status);
-    }
-    message = message === "ok" ? message : message + " " + getRealPath(url);
-    return __assign(__assign({}, httpCollectedData), { type: "HTTP", url: getLocationHref(), level: Severity.Low, message: message, name: name });
-}
-function httpTransformedDataConsumer(transformedData) {
-    var type = transformedData.request.httpType === "fetch" ? "Fetch" : "Xhr";
-    var status = transformedData.response.status, time = transformedData.time;
-    var isError = status === 0 || status === 400 || status > 401;
-    this.breadcrumb.push({
-        type: type,
-        category: getBreadcrumbCategoryInBrowser(type),
-        data: __assign({}, transformedData),
-        level: Severity.Info,
-        time: time
-    });
-    if (isError) {
-        this.breadcrumb.push({
-            type: type,
-            category: "exception",
-            data: __assign({}, transformedData),
-            level: Severity.Error,
-            time: time
-        });
-        this.transport.send(transformedData, this.breadcrumb.getStack());
-    }
-}
-
 function getNavigateBackTargetUrl(delta) {
     if (!variableTypeDetection.isFunction(getCurrentPages)) {
         return '';
@@ -1332,6 +1225,141 @@ function invokeCallbackInReplaceBehavior(callback) {
     };
 }
 
+var wxRequestPlugin = {
+    name: WxBaseEventTypes.REQUEST,
+    monitor: function (notify) {
+        monitorWxXhr.call(this, notify);
+    },
+    transform: function (collectedData) {
+        return httpTransform(collectedData);
+    },
+    consumer: function (transformedData) {
+        httpTransformedDataConsumer.call(this, transformedData);
+    }
+};
+function monitorWxXhr(notify) {
+    var hookMethods = ['request', 'downloadFile', 'uploadFile'];
+    var that = this;
+    var wxOptions = this.options;
+    hookMethods.forEach(function (hook) {
+        var originRequest = wx[hook];
+        Object.defineProperty(wx, hook, {
+            writable: true,
+            enumerable: true,
+            configurable: true,
+            value: function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                var options = args[0];
+                var method;
+                if (options.method) {
+                    method = options.method;
+                }
+                else if (hook === 'downloadFile') {
+                    method = "GET";
+                }
+                else {
+                    method = "POST";
+                }
+                var url = options.url;
+                var header = options.header;
+                !header && (header = {});
+                if ((method === "POST" && that.transport.isSelfDsn(url)) || wxOptions.isFilterHttpUrl(url)) {
+                    return originRequest.call(this, options);
+                }
+                var reqData = undefined;
+                if (hook === 'request') {
+                    reqData = options.data;
+                }
+                else if (hook === 'downloadFile') {
+                    reqData = {
+                        filePath: options.filePath
+                    };
+                }
+                else {
+                    reqData = {
+                        filePath: options.filePath,
+                        name: options.name
+                    };
+                }
+                var httpCollect = {
+                    request: {
+                        httpType: "xhr",
+                        url: url,
+                        method: method,
+                        data: reqData
+                    },
+                    response: {},
+                    time: getTimestamp()
+                };
+                wxOptions.setTraceId(url, function (headerFieldName, traceId) {
+                    httpCollect.request.traceId = traceId;
+                    header[headerFieldName] = traceId;
+                });
+                function setRequestHeader(key, value) {
+                    header[key] = value;
+                }
+                wxOptions.beforeAppAjaxSend && wxOptions.beforeAppAjaxSend({ method: method, url: url }, { setRequestHeader: setRequestHeader });
+                var successHandler = function (res) {
+                    var endTime = getTimestamp();
+                    httpCollect.response.data = (variableTypeDetection.isString(res.data) || variableTypeDetection.isObject(res.data)) && res.data;
+                    httpCollect.elapsedTime = endTime - httpCollect.time;
+                    httpCollect.response.status = res.statusCode;
+                    httpCollect.errMsg = res.errMsg;
+                    notify(WxBaseEventTypes.REQUEST, httpCollect);
+                    if (typeof options.success === 'function') {
+                        return options.success(res);
+                    }
+                };
+                var _fail = options.fail;
+                var failHandler = function (err) {
+                    var endTime = getTimestamp();
+                    httpCollect.elapsedTime = endTime - httpCollect.time;
+                    httpCollect.errMsg = err.errMsg;
+                    httpCollect.response.status = 0;
+                    notify(WxBaseEventTypes.REQUEST, httpCollect);
+                    if (variableTypeDetection.isFunction(_fail)) {
+                        return _fail(err);
+                    }
+                };
+                var actOptions = __assign(__assign({}, options), { success: successHandler, fail: failHandler });
+                return originRequest.call(this, actOptions);
+            }
+        });
+    });
+}
+function httpTransform(httpCollectedData) {
+    var message = '';
+    var _a = httpCollectedData.request, httpType = _a.httpType, method = _a.method, url = _a.url, status = httpCollectedData.response.status, elapsedTime = httpCollectedData.elapsedTime;
+    var name = httpType + "--" + method;
+    if (status === 0) {
+        message =
+            elapsedTime <= globalVar.crossOriginThreshold ? 'http请求失败，失败原因：跨域限制或域名不存在' : 'http请求失败，失败原因：超时';
+    }
+    else {
+        message = fromHttpStatus(status);
+    }
+    message = message === "ok" ? message : message + " " + getRealPath(url);
+    return __assign(__assign({}, httpCollectedData), { type: "HTTP", url: getCurrentRoute(), level: Severity.Low, message: message, name: name });
+}
+function httpTransformedDataConsumer(transformedData) {
+    var type = WxBreadcrumbTypes.XHR;
+    var status = transformedData.response.status;
+    var isError = status === 0 || status === 400 || status > 401;
+    addBreadcrumbInWx.call(this, transformedData, type);
+    if (isError) {
+        var breadcrumbStack = this.breadcrumb.push({
+            type: type,
+            category: "exception",
+            data: __assign({}, transformedData),
+            level: Severity.Error
+        });
+        this.transport.send(transformedData, breadcrumbStack);
+    }
+}
+
 var wxRoutePlugin = {
     name: WxBaseEventTypes.MINI_ROUTE,
     monitor: function (notify) {
@@ -1742,11 +1770,10 @@ var WxClient = (function (_super) {
     }
     WxClient.prototype.isPluginEnable = function (name) {
         var silentField = "silent" + firstStrtoUppercase(name);
-        console.log('silentField', silentField);
         return !this.options[silentField];
     };
     WxClient.prototype.log = function (data) {
-        var _a = data.message, message = _a === void 0 ? 'empty' : _a, _b = data.tag, tag = _b === void 0 ? '' : _b, _c = data.level, level = _c === void 0 ? Severity.Critical : _c, _d = data.ex, ex = _d === void 0 ? '' : _d;
+        var _a = data.message, message = _a === void 0 ? MitoLogEmptyMsg : _a, _b = data.tag, tag = _b === void 0 ? MitoLogEmptyTag : _b, _c = data.level, level = _c === void 0 ? Severity.Critical : _c, _d = data.ex, ex = _d === void 0 ? '' : _d;
         var errorInfo = {};
         if (isError(ex)) {
             errorInfo = extractErrorStack(ex, level);
@@ -1768,7 +1795,7 @@ var WxClient = (function (_super) {
 
 function createWxInstance(options) {
     var wxClient = new WxClient(options);
-    var plugins = __spreadArray(__spreadArray([xhrPlugin, wxRoutePlugin, wxConsolePlugin, wxDomPlugin], wxAppPlugins, true), wxPagePlugins, true);
+    var plugins = __spreadArray(__spreadArray([wxRequestPlugin, wxRoutePlugin, wxConsolePlugin, wxDomPlugin], wxAppPlugins, true), wxPagePlugins, true);
     wxClient.use(plugins);
     return wxClient;
 }

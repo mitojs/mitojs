@@ -1,5 +1,5 @@
 import { BrowserBreadcrumbTypes, BrowserEventTypes } from './browser'
-import { WxAppEvents, WxBreadcrumbTypes, WxEventTypes, WxPageEvents, WxRouteEvents } from './wx'
+import { WxBreadcrumbTypes, WxEventTypes } from './wx'
 
 /**
  * 上报错误类型
@@ -18,19 +18,9 @@ export const enum ErrorTypes {
 }
 
 /**
- * 微信小程序钩子重写类型整合
- */
-export type WxEvents = WxAppEvents | WxPageEvents | WxRouteEvents
-
-/**
  * 用户行为栈事件类型
  */
 export type BreadcrumbTypes = BrowserBreadcrumbTypes | WxBreadcrumbTypes
-
-// export const BreadcrumbTypes = {
-//   ...BrowserBreadcrumbTypes,
-//   ...WxBreadcrumbTypes
-// }
 
 /**
  * 用户行为类型
@@ -49,6 +39,8 @@ export const enum BREADCRUMBCATEGORYS {
 export type EventTypes = BrowserEventTypes | WxEventTypes
 
 export const MitoLog = 'Mito.log'
+export const MitoLogEmptyMsg = 'empty.msg'
+export const MitoLogEmptyTag = 'empty.tag'
 
 export const enum HttpTypes {
   XHR = 'xhr',

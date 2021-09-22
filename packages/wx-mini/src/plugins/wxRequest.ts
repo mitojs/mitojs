@@ -14,7 +14,7 @@ import { BasePluginType, HttpCollectedType, HttpTransformedType } from '@mitojs/
 import { WxClient } from '../wxClient'
 import { addBreadcrumbInWx } from '../utils'
 
-const wxXhrPlugin: BasePluginType<WxEventTypes, WxClient> = {
+const wxRequestPlugin: BasePluginType<WxEventTypes, WxClient> = {
   name: WxBaseEventTypes.REQUEST,
   monitor(notify) {
     monitorWxXhr.call(this, notify)
@@ -155,8 +155,7 @@ export function httpTransform(httpCollectedData: HttpCollectedType): HttpTransfo
 export function httpTransformedDataConsumer(this: WxClient, transformedData: HttpTransformedType) {
   const type = WxBreadcrumbTypes.XHR
   const {
-    response: { status },
-    time
+    response: { status }
   } = transformedData
   const isError = status === 0 || status === HTTP_CODE.BAD_REQUEST || status > HTTP_CODE.UNAUTHORIZED
   addBreadcrumbInWx.call(this, transformedData, type)
@@ -165,11 +164,10 @@ export function httpTransformedDataConsumer(this: WxClient, transformedData: Htt
       type,
       category: BREADCRUMBCATEGORYS.EXCEPTION,
       data: { ...transformedData },
-      level: Severity.Error,
-      time
+      level: Severity.Error
     })
     this.transport.send(transformedData, breadcrumbStack)
   }
 }
 
-export default wxXhrPlugin
+export default wxRequestPlugin
