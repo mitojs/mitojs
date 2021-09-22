@@ -1,3 +1,5 @@
+[中文文档](./README.zh_CN.md)
+
 # @mitojs/wx-mini
 
 ## Install
