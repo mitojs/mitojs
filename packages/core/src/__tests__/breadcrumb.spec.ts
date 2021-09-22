@@ -53,7 +53,5 @@ describe('breadcrumb.ts', () => {
     expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CODE_ERROR)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
     expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.UNHANDLEDREJECTION)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
     expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.RESOURCE)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.VUE)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.REACT)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
   })
 })

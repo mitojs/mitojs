@@ -1,4 +1,4 @@
-import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
+import { BaseBreadcrumbTypes, BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
 import { vue3Url } from '@/test/config'
 import { TransportDataType, ReportDataType } from '@mitojs/types'
 import { Severity } from '@mitojs/utils'
@@ -51,7 +51,7 @@ describe('Vue3 e2e', () => {
         // breadcrumb valid
         const stack = await getStack()
         expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.VUE)
+        expect(stack[1].type).toBe(BaseBreadcrumbTypes.VUE)
         expect(stack[1].level).toBe(Severity.Error)
         // upload
         const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
