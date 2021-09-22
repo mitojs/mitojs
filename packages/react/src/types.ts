@@ -1,4 +1,5 @@
-import { BrowserClient } from '@mitojs/browser'
+import { BaseClient } from '@mitojs/core'
+
 export interface MitoContextValueType {
-  MitoInstance: BrowserClient
+  MitoInstance: BaseClient
 }
