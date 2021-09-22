@@ -1,6 +1,13 @@
 import { logger, Queue, isInclude, toStringValidateOption, createErrorId, isEmpty } from '@mitojs/utils'
 import { SDK_NAME, SDK_VERSION, ToStringTypes } from '@mitojs/shared'
-import { AuthInfo, BaseOptionsFieldsIntegrationType, BreadcrumbPushData, ReportDataType, TransportDataType } from '@mitojs/types'
+import {
+  AuthInfo,
+  BaseOptionsFieldsIntegrationType,
+  BreadcrumbPushData,
+  ReportDataType,
+  TrackReportDataType,
+  TransportDataType
+} from '@mitojs/types'
 
 /**
  * 传输数据抽象类
@@ -93,9 +100,12 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
    * @memberof BaseTransport
    */
   async send(data: any, breadcrumb: BreadcrumbPushData[] = []): Promise<void> {
-    const errorId = createErrorId(data, this.apikey, this.maxDuplicateCount)
-    if (!errorId) return
-    data.errorId = errorId
+    // 如果是埋点则不需要生成errorId
+    if (!data.isTrack) {
+      const errorId = createErrorId(data, this.apikey, this.maxDuplicateCount)
+      if (!errorId) return
+      data.errorId = errorId
+    }
     let transportData = {
       ...this.getTransportData(data),
       breadcrumb
@@ -106,7 +116,7 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
     }
     let dsn = this.dsn
     if (isEmpty(dsn)) {
-      logger.error('dsn为空，没有传入监控错误上报的dsn地址，请在init中传入')
+      logger.error('dsn is empty,pass in when initializing please')
       return
     }
     if (typeof this.configReportUrl === 'function') {
@@ -115,6 +125,7 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
     }
     return this.sendToServer(transportData, dsn)
   }
+
   /**
    * post方式，子类需要重写
    *

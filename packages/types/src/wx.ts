@@ -1,4 +1,4 @@
-import { TrackActionType } from 'packages/shared/src/track'
+import { TrackActionType } from '@mitojs/shared'
 
 export interface DeviceInfo {
   //网络类型: 4g,3g,5g,wifi
@@ -29,6 +29,8 @@ export interface TrackReportDataType {
   durationTime?: number
   // 上报时间
   trackTime?: number
+  // 不需要重写，默认为true，表示埋点类型的上报，不用进行errorId生成
+  isTrack?: boolean
   // anything for developer
   [key: string]: any
 }

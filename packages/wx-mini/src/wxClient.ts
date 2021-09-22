@@ -76,6 +76,12 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
    * @memberof WxClient
    */
   trackSend(trackData: TrackReportDataType): void {
-    this.transport.send(trackData, this.breadcrumb.getStack())
+    this.transport.send(
+      {
+        isTrack: true,
+        ...trackData
+      },
+      this.breadcrumb.getStack()
+    )
   }
 }

@@ -162,6 +162,16 @@ var LinstenerTypes;
 })(LinstenerTypes || (LinstenerTypes = {}));
 Object.assign({}, WxAppEvents, WxPageEvents, WxBaseEventTypes);
 
+var TrackActionType;
+(function (TrackActionType) {
+    TrackActionType["PAGE"] = "PAGE";
+    TrackActionType["EVENT"] = "EVENT";
+    TrackActionType["VIEW"] = "VIEW";
+    TrackActionType["DURATION"] = "DURATION";
+    TrackActionType["DURATION_VIEW"] = "DURATION_VIEW";
+    TrackActionType["OTHER"] = "OTHER";
+})(TrackActionType || (TrackActionType = {}));
+
 var nativeToString = Object.prototype.toString;
 function isType(type) {
     return function (value) {
@@ -1632,10 +1642,12 @@ var BaseTransport = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        errorId = createErrorId(data, this.apikey, this.maxDuplicateCount);
-                        if (!errorId)
-                            return [2];
-                        data.errorId = errorId;
+                        if (!data.isTrack) {
+                            errorId = createErrorId(data, this.apikey, this.maxDuplicateCount);
+                            if (!errorId)
+                                return [2];
+                            data.errorId = errorId;
+                        }
                         transportData = __assign(__assign({}, this.getTransportData(data)), { breadcrumb: breadcrumb });
                         if (!(typeof this.beforeDataReport === 'function')) return [3, 2];
                         return [4, this.beforeDataReport(transportData)];
@@ -1647,7 +1659,7 @@ var BaseTransport = (function () {
                     case 2:
                         dsn = this.dsn;
                         if (isEmpty(dsn)) {
-                            logger.error('dsn为空，没有传入监控错误上报的dsn地址，请在init中传入');
+                            logger.error('dsn is empty,pass in when initializing please');
                             return [2];
                         }
                         if (typeof this.configReportUrl === 'function') {
@@ -1788,7 +1800,7 @@ var WxClient = (function (_super) {
         this.transport.send(reportData, breadcrumbStack);
     };
     WxClient.prototype.trackSend = function (trackData) {
-        this.transport.send(trackData, this.breadcrumb.getStack());
+        this.transport.send(__assign({ isTrack: true }, trackData), this.breadcrumb.getStack());
     };
     return WxClient;
 }(BaseClient));
