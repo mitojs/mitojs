@@ -198,9 +198,9 @@ MITO.init({
 ```typescript
 MITO.init({
   ...
-  beforeAppAjaxSend({method, url}, setRequestHeader){
+  beforeAppAjaxSend({method, url}, config){
   	if (method === 'GET') {
-  		setRequestHeader('Content-Type', 'text/plain;charset=UTF-8')
+  		config.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8')
   	}
 	}
 })
