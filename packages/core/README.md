@@ -1,13 +1,11 @@
 # @mitojs/core
-
-provider some core class、base abstract class and base options for [@mitojs](https://github.com/mitojs/mitojs)
-
+给[@mitojs](https://github.com/mitojs/mitojs)下面的库提供核心类、基础抽象类和基础配置
 
 
 
-**以下是基础的配置，[@mitojs/browser](../browser/README.md) 和 [@mitojs/wx-mini](../wx-mini/README.md)都能传入**
+**以下是基础的配置，[@mitojs/browser](../browser/README.md) 和 [@mitojs/wx-mini](../wx-mini/README.md)都能传入😎**
 
-## BaseOptionsFieldsType
+## BaseOptionsFieldsType - 属性
 
 
 上报接口的地址
@@ -40,7 +38,7 @@ Vue根实例
 
 
 
-## BaseOptionsHooksType
+## BaseOptionsHooksType - 钩子函数
 
 
 ```js
