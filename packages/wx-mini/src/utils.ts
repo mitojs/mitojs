@@ -67,11 +67,12 @@ export async function getWxMiniNetWrokType(): Promise<string> {
   })
 }
 
-export function addBreadcrumbInWx(this: WxClient, data: any, type: WxBreadcrumbTypes, level = Severity.Info) {
+export function addBreadcrumbInWx(this: WxClient, data: any, type: WxBreadcrumbTypes, level = Severity.Info, params = {}) {
   return this.breadcrumb.push({
     type,
     data,
     category: getBreadcrumbCategoryInWx(type),
-    level
+    level,
+    ...params
   })
 }

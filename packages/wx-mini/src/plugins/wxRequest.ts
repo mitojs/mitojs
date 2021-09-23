@@ -154,17 +154,20 @@ export function httpTransform(httpCollectedData: HttpCollectedType): HttpTransfo
 
 export function httpTransformedDataConsumer(this: WxClient, transformedData: HttpTransformedType) {
   const type = WxBreadcrumbTypes.XHR
+  // time 是为了保持顺序，紧跟在点击事件后面
   const {
-    response: { status }
+    response: { status },
+    time
   } = transformedData
   const isError = status === 0 || status === HTTP_CODE.BAD_REQUEST || status > HTTP_CODE.UNAUTHORIZED
-  addBreadcrumbInWx.call(this, transformedData, type)
+  addBreadcrumbInWx.call(this, transformedData, type, Severity.Info, { time })
   if (isError) {
     const breadcrumbStack = this.breadcrumb.push({
       type,
       category: BREADCRUMBCATEGORYS.EXCEPTION,
       data: { ...transformedData },
-      level: Severity.Error
+      level: Severity.Error,
+      time
     })
     this.transport.send(transformedData, breadcrumbStack)
   }
