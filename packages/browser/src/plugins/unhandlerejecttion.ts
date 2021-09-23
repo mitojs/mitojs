@@ -12,7 +12,7 @@ import {
 } from '@mitojs/utils'
 import { BasePluginType, HttpTransformedType, ReportDataType } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
-import { httpTransformedDataConsumer } from './xhr'
+import { addBreadcrumbInBrowser } from '../utils'
 
 const name = BrowserEventTypes.UNHANDLEDREJECTION
 const unhandlerejectionPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
@@ -41,12 +41,7 @@ const unhandlerejectionPlugin: BasePluginType<BrowserEventTypes, BrowserClient> 
     return data
   },
   consumer(transformedData: HttpTransformedType) {
-    const breadcrumbStack = this.breadcrumb.push({
-      type: BrowserBreadcrumbTypes.UNHANDLEDREJECTION,
-      category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.UNHANDLEDREJECTION),
-      data: transformedData,
-      level: Severity.Error
-    })
+    const breadcrumbStack = addBreadcrumbInBrowser.call(this, transformedData, BrowserBreadcrumbTypes.UNHANDLEDREJECTION, Severity.Error)
     this.transport.send(transformedData, breadcrumbStack)
   }
 }

@@ -1,7 +1,8 @@
 import { BrowserBreadcrumbTypes, BrowserEventTypes } from '@mitojs/shared'
-import { getBreadcrumbCategoryInBrowser, isExistProperty, on, parseUrlToObj, Severity, _global } from '@mitojs/utils'
+import { isExistProperty, on, parseUrlToObj, _global } from '@mitojs/utils'
 import { BasePluginType, RouteChangeCollectType } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
+import { addBreadcrumbInBrowser } from '../utils'
 
 const hashRoutePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.HASHCHANGE,
@@ -33,12 +34,7 @@ export function routeTransform(collectedData: RouteChangeCollectType): RouteChan
 
 export function routeTransformedConsumer(this: BrowserClient, transformedData: RouteChangeCollectType) {
   if (transformedData.from === transformedData.to) return
-  this.breadcrumb.push({
-    type: BrowserBreadcrumbTypes.ROUTE,
-    category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.ROUTE),
-    data: transformedData,
-    level: Severity.Info
-  })
+  addBreadcrumbInBrowser.call(this, transformedData, BrowserBreadcrumbTypes.ROUTE)
 }
 
 export default hashRoutePlugin

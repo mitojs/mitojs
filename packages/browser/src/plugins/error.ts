@@ -1,7 +1,8 @@
-import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes, ERROR_TYPE_RE } from '@mitojs/shared'
+import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes, ERROR_TYPE_RE } from '@mitojs/shared'
 import { extractErrorStack, getLocationHref, getTimestamp, interceptStr, isError, on, Severity, _global } from '@mitojs/utils'
 import { BasePluginType, ReportDataType } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
+import { addBreadcrumbInBrowser } from '../utils'
 
 export interface ResourceErrorTarget {
   src?: string
@@ -32,12 +33,7 @@ const errorPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   },
   consumer(transformedData: ReportDataType) {
     const type = transformedData.type === ErrorTypes.RESOURCE ? BrowserBreadcrumbTypes.RESOURCE : BrowserBreadcrumbTypes.CODE_ERROR
-    const breadcrumbStack = this.breadcrumb.push({
-      type,
-      category: BREADCRUMBCATEGORYS.EXCEPTION,
-      data: transformedData,
-      level: Severity.Error
-    })
+    const breadcrumbStack = addBreadcrumbInBrowser.call(this, transformedData, type, Severity.Error)
     this.transport.send(transformedData, breadcrumbStack)
   }
 }

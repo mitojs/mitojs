@@ -1,7 +1,8 @@
 import { BrowserBreadcrumbTypes, BrowserEventTypes, globalVar } from '@mitojs/shared'
-import { getBreadcrumbCategoryInBrowser, replaceOld, Severity, _global } from '@mitojs/utils'
+import { replaceOld, Severity, _global } from '@mitojs/utils'
 import { BasePluginType, ConsoleCollectType } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
+import { addBreadcrumbInBrowser } from '../utils'
 const consolePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.CONSOLE,
   monitor(notify) {
@@ -26,12 +27,7 @@ const consolePlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   },
   consumer(transformedData: ConsoleCollectType) {
     if (globalVar.isLogAddBreadcrumb) {
-      this.breadcrumb.push({
-        type: BrowserBreadcrumbTypes.CONSOLE,
-        category: getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CONSOLE),
-        data: transformedData,
-        level: Severity.fromString(transformedData.level)
-      })
+      addBreadcrumbInBrowser.call(this, transformedData, BrowserBreadcrumbTypes.CONSOLE, Severity.fromString(transformedData.level))
     }
   }
 }

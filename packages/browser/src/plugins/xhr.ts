@@ -14,6 +14,7 @@ import {
 } from '@mitojs/utils'
 import { BasePluginType, HttpCollectedType, HttpTransformedType, MITOXMLHttpRequest, voidFun } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
+import { addBreadcrumbInBrowser } from '../utils'
 
 const xhrPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.XHR,
@@ -107,22 +108,16 @@ export function httpTransformedDataConsumer(this: BrowserClient, transformedData
     time
   } = transformedData
   const isError = status === 0 || status === HTTP_CODE.BAD_REQUEST || status > HTTP_CODE.UNAUTHORIZED
-  this.breadcrumb.push({
-    type,
-    category: getBreadcrumbCategoryInBrowser(type),
-    data: { ...transformedData },
-    level: Severity.Info,
-    time
-  })
+  addBreadcrumbInBrowser.call(this, transformedData, type, Severity.Info, { time })
   if (isError) {
-    this.breadcrumb.push({
+    const breadcrumStack = this.breadcrumb.push({
       type,
       category: BREADCRUMBCATEGORYS.EXCEPTION,
-      data: { ...transformedData },
+      data: transformedData,
       level: Severity.Error,
       time
     })
-    this.transport.send(transformedData, this.breadcrumb.getStack())
+    this.transport.send(transformedData, breadcrumStack)
   }
 }
 
