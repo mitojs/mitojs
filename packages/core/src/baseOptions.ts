@@ -1,6 +1,6 @@
 import { ToStringTypes } from '@mitojs/shared'
-import { BaseOptionsFieldsIntegrationType, BaseOptionsType } from '@mitojs/types'
-import { generateUUID, toStringValidateOption } from '@mitojs/utils'
+import { BaseOptionsFieldsIntegrationType, BaseOptionsType, VueInstance } from '@mitojs/types'
+import { generateUUID, toStringValidateOption, validateOptionsAndSet } from '@mitojs/utils'
 
 /**
  * 公用的基础配置项绑定
@@ -16,19 +16,23 @@ export class BaseOptions<O extends BaseOptionsFieldsIntegrationType = BaseOption
   includeHttpUrlTraceIdRegExp = /.*/
   traceIdFieldName = 'Trace-Id'
   throttleDelayTime = 0
-  maxDuplicateCount = 5
   beforeAppAjaxSend = null
+  vue: VueInstance = null
   constructor() {}
   bindOptions(options: O) {
-    const { enableTraceId, filterXhrUrlRegExp, traceIdFieldName, throttleDelayTime, includeHttpUrlTraceIdRegExp, beforeAppAjaxSend } =
+    const { enableTraceId, vue, filterXhrUrlRegExp, traceIdFieldName, throttleDelayTime, includeHttpUrlTraceIdRegExp, beforeAppAjaxSend } =
       options
-    toStringValidateOption(enableTraceId, 'enableTraceId', ToStringTypes.Boolean) && (this.enableTraceId = enableTraceId)
-    toStringValidateOption(traceIdFieldName, 'traceIdFieldName', ToStringTypes.String) && (this.traceIdFieldName = traceIdFieldName)
-    toStringValidateOption(throttleDelayTime, 'throttleDelayTime', ToStringTypes.Number) && (this.throttleDelayTime = throttleDelayTime)
-    toStringValidateOption(filterXhrUrlRegExp, 'filterXhrUrlRegExp', ToStringTypes.RegExp) && (this.filterXhrUrlRegExp = filterXhrUrlRegExp)
-    toStringValidateOption(includeHttpUrlTraceIdRegExp, 'includeHttpUrlTraceIdRegExp', ToStringTypes.RegExp) &&
-      (this.includeHttpUrlTraceIdRegExp = includeHttpUrlTraceIdRegExp)
-    toStringValidateOption(beforeAppAjaxSend, 'beforeAppAjaxSend', ToStringTypes.Function) && (this.beforeAppAjaxSend = beforeAppAjaxSend)
+    const optionArr = [
+      [enableTraceId, 'enableTraceId', ToStringTypes.Boolean],
+      [traceIdFieldName, 'traceIdFieldName', ToStringTypes.String],
+      [throttleDelayTime, 'throttleDelayTime', ToStringTypes.Number],
+      [filterXhrUrlRegExp, 'filterXhrUrlRegExp', ToStringTypes.RegExp],
+      [includeHttpUrlTraceIdRegExp, 'includeHttpUrlTraceIdRegExp', ToStringTypes.RegExp],
+      [beforeAppAjaxSend, 'beforeAppAjaxSend', ToStringTypes.Function]
+    ]
+    validateOptionsAndSet.call(this, optionArr)
+    // for vue
+    this.vue = vue
   }
   isFilterHttpUrl(url: string): boolean {
     return this.filterXhrUrlRegExp && this.filterXhrUrlRegExp.test(url)

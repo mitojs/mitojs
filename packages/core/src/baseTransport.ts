@@ -1,4 +1,4 @@
-import { logger, Queue, isInclude, toStringValidateOption, createErrorId, isEmpty } from '@mitojs/utils'
+import { logger, Queue, isInclude, toStringValidateOption, createErrorId, isEmpty, validateOptionsAndSet } from '@mitojs/utils'
 import { SDK_NAME, SDK_VERSION, ToStringTypes } from '@mitojs/shared'
 import { AuthInfo, BaseOptionsFieldsIntegrationType, BreadcrumbPushData, ReportDataType, TransportDataType } from '@mitojs/types'
 
@@ -76,12 +76,16 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
    */
   bindOptions(options: Partial<O> = {}): void {
     const { dsn, beforeDataReport, apikey, maxDuplicateCount, backTrackerId, configReportUrl } = options
-    toStringValidateOption(apikey, 'apikey', ToStringTypes.String) && (this.apikey = apikey)
-    toStringValidateOption(dsn, 'dsn', ToStringTypes.String) && (this.dsn = dsn)
-    toStringValidateOption(maxDuplicateCount, 'maxDuplicateCount', ToStringTypes.Number) && (this.maxDuplicateCount = maxDuplicateCount)
-    toStringValidateOption(beforeDataReport, 'beforeDataReport', ToStringTypes.Function) && (this.beforeDataReport = beforeDataReport)
-    toStringValidateOption(backTrackerId, 'backTrackerId', ToStringTypes.Function) && (this.backTrackerId = backTrackerId)
-    toStringValidateOption(configReportUrl, 'configReportUrl', ToStringTypes.Function) && (this.configReportUrl = configReportUrl)
+    const functionType = ToStringTypes.Function
+    const optionArr = [
+      [apikey, 'apikey', ToStringTypes.String],
+      [dsn, 'dsn', ToStringTypes.String],
+      [maxDuplicateCount, 'maxDuplicateCount', ToStringTypes.Number],
+      [beforeDataReport, 'beforeDataReport', , functionType],
+      [backTrackerId, 'backTrackerId', functionType],
+      [configReportUrl, 'configReportUrl', functionType]
+    ]
+    validateOptionsAndSet.call(this, optionArr)
   }
 
   /**

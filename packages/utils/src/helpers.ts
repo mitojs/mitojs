@@ -155,7 +155,7 @@ export function toStringAny(target: any, type: ToStringTypes): boolean {
 
 export function toStringValidateOption(target: any, targetName: string, expectType: ToStringTypes): boolean {
   if (toStringAny(target, expectType)) return true
-  typeof target !== 'undefined' && logger.error(`${targetName}期望传入${expectType}类型，当前是${nativeToString.call(target)}类型`)
+  typeof target !== 'undefined' && logger.error(`${targetName}期望传入:${expectType}类型，当前是:${nativeToString.call(target)}类型`)
   return false
 }
 
@@ -306,6 +306,8 @@ export function getObjectWithForIn<T = object>(obj: object): T {
   return result as T
 }
 
-export function validateOptionsAndSet(this: any, targetArr: [any, string][], expectType: ToStringTypes) {
-  targetArr.forEach(([target, targetName]) => toStringValidateOption(target, targetName, expectType) && (this[targetName] = target))
+export function validateOptionsAndSet(this: any, targetArr: [any, string, ToStringTypes][]) {
+  targetArr.forEach(
+    ([target, targetName, expectType]) => toStringValidateOption(target, targetName, expectType) && (this[targetName] = target)
+  )
 }

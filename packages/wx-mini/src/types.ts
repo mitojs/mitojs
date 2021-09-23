@@ -56,7 +56,11 @@ export interface WxSilentOptionsType {
 
 export interface WxHookOptionsType {
   /**
-   * wx小程序上报时的wx.request配置
+   * 配置wx小程序上报时的wx.request配置
+   *
+   * @param {(TransportDataType | any)} event
+   * @return {*}  {Partial<WechatMiniprogram.RequestOption>}
+   * @memberof WxHookOptionsType
    */
   configReportWxRequest?(event: TransportDataType | any): Partial<WechatMiniprogram.RequestOption>
   /**
@@ -88,7 +92,7 @@ export interface WxHookOptionsType {
    */
   pageOnReady?(page: IWxPageInstance): void
   /**
-   * wx小程序的App下的pageOnUnload执行完后再执行以下hook
+   * 先wx小程序的App下的pageOnUnload执行完后再执行以下hook
    */
   pageOnUnload?(page: IWxPageInstance): void
   /**

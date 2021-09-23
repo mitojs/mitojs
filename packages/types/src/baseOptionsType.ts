@@ -25,30 +25,30 @@ export interface BaseOptionsFieldsType {
    */
   dsn?: string
   /**
-   * 为true时，整个sdk将禁用
+   * 默认关闭，为true时，整个sdk将禁用
    */
   disabled?: boolean
   /**
-   * 每个项目有一个唯一key，给监控的dsn用的
+   * 每个项目都应有一个唯一key
    */
   apikey?: string
   /**
-   * 默认为关闭，为true是会打印一些信息：breadcrumb
+   * 默认为关闭，为true
    */
   debug?: boolean
   /**
-   * 默认是关闭traceId，开启时，页面的所有请求都会生成一个unique id，放入请求头中
+   * 默认关闭traceId，开启时，页面的所有请求都会生成一个unique id，放入请求头中
    */
   enableTraceId?: boolean
+  /**
+   * 当开启enableTraceId时，traceId放入请求头中的key，默认是Trace-Id，也可以手动配置
+   */
+  traceIdFieldName?: string
   /**
    * 如果开启了enableTraceId,也需要配置该配置项，includeHttpUrlTraceIdRegExp.test(xhr.url)为true时，才会在该请求头中添加traceId
    * 由于考虑部分接口如果随便加上多余的请求头会造成跨域，所以这边用的是包含关系的正则
    */
   includeHttpUrlTraceIdRegExp?: RegExp
-  /**
-   * traceId放入请求头中的key，默认是Trace-Id
-   */
-  traceIdFieldName?: string
   /**
    * 默认为空，所有ajax都会被监听，不为空时，filterXhrUrlRegExp.test(xhr.url)为true时过滤
    */
@@ -58,7 +58,7 @@ export interface BaseOptionsFieldsType {
    */
   maxBreadcrumbs?: number
   /**
-   * 按钮点击和微信触摸事件节流时间，默认是0
+   * 默认是0，表示按钮点击和微信触摸事件节流时间
    */
   throttleDelayTime?: number
   /**
@@ -66,10 +66,7 @@ export interface BaseOptionsFieldsType {
    */
   maxDuplicateCount?: number
   /**
-   *
-   * Vue根实例（写在 ）
-   * @type {VueInstance}
-   * @memberof BrowserOptionsFieldsTypes
+   * Vue根实例
    */
   vue?: VueInstance
 }

@@ -1,7 +1,6 @@
 import { BaseOptions } from '@mitojs/core'
 import { ToStringTypes } from '@mitojs/shared'
-import { toStringValidateOption } from '@mitojs/utils'
-import { VueInstance } from 'packages/types/src'
+import { validateOptionsAndSet } from '@mitojs/utils'
 import { BrowserOptionsFieldsTypes } from './types'
 
 export class BrowserOptions extends BaseOptions<BrowserOptionsFieldsTypes> {
@@ -37,14 +36,6 @@ export class BrowserOptions extends BaseOptions<BrowserOptionsFieldsTypes> {
    * 静默监控hashchange事件
    */
   silentHashchange: boolean
-
-  /**
-   * 传入Vue根实例
-   *
-   * @type {VueInstance}
-   * @memberof BrowserOptions
-   */
-  vue: VueInstance = null
   useImgUpload: boolean
   configReportXhr: unknown = null
   constructor(options: BrowserOptionsFieldsTypes) {
@@ -63,20 +54,21 @@ export class BrowserOptions extends BaseOptions<BrowserOptionsFieldsTypes> {
       silentHashchange,
       silentUnhandledrejection,
       useImgUpload,
-      configReportXhr,
-      vue
+      configReportXhr
     } = options
-    toStringValidateOption(silentXhr, 'silentXhr', ToStringTypes.Boolean) && (this.silentXhr = silentXhr)
-    toStringValidateOption(silentFetch, 'silentFetch', ToStringTypes.Boolean) && (this.silentFetch = silentFetch)
-    toStringValidateOption(silentConsole, 'silentConsole', ToStringTypes.Boolean) && (this.silentConsole = silentConsole)
-    toStringValidateOption(silentDom, 'silentDom', ToStringTypes.Boolean) && (this.silentDom = silentDom)
-    toStringValidateOption(silentHistory, 'silentHistory', ToStringTypes.Boolean) && (this.silentHistory = silentHistory)
-    toStringValidateOption(silentError, 'silentError', ToStringTypes.Boolean) && (this.silentError = silentError)
-    toStringValidateOption(silentHashchange, 'silentHashchange', ToStringTypes.Boolean) && (this.silentHashchange = silentXhr)
-    toStringValidateOption(silentUnhandledrejection, 'silentUnhandledrejection', ToStringTypes.Boolean) &&
-      (this.silentUnhandledrejection = silentUnhandledrejection)
-    toStringValidateOption(useImgUpload, 'useImgUpload', ToStringTypes.Boolean) && (this.useImgUpload = useImgUpload)
-    this.vue = vue
-    toStringValidateOption(configReportXhr, 'configReportXhr', ToStringTypes.Function) && (this.configReportXhr = configReportXhr)
+    const booleanType = ToStringTypes.Boolean
+    const optionArr = [
+      [silentXhr, 'silentXhr', booleanType],
+      [silentFetch, 'silentFetch', booleanType],
+      [silentConsole, 'silentConsole', booleanType],
+      [silentDom, 'silentDom', booleanType],
+      [silentHistory, 'silentHistory', booleanType],
+      [silentError, 'silentError', booleanType],
+      [silentHashchange, 'silentHashchange', booleanType],
+      [silentUnhandledrejection, 'silentUnhandledrejection', booleanType],
+      [useImgUpload, 'useImgUpload', booleanType],
+      [configReportXhr, 'configReportXhr', ToStringTypes.Function]
+    ]
+    validateOptionsAndSet.call(this, optionArr)
   }
 }
