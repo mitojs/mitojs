@@ -1,5 +1,5 @@
 import { BrowserBreadcrumbTypes, BrowserEventTypes } from '@mitojs/shared'
-import { getBreadcrumbCategoryInBrowser, htmlElementAsString, on, Severity, throttle, _global } from '@mitojs/utils'
+import { htmlElementAsString, on, throttle, _global } from '@mitojs/utils'
 import { BasePluginType } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
 import { addBreadcrumbInBrowser } from '../utils'

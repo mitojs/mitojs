@@ -4,7 +4,6 @@ import {
   replaceOld,
   Severity,
   _global,
-  getBreadcrumbCategoryInBrowser,
   variableTypeDetection,
   on,
   fromHttpStatus,

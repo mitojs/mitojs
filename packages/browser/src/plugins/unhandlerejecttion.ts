@@ -1,15 +1,5 @@
 import { BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes } from '@mitojs/shared'
-import {
-  extractErrorStack,
-  getBreadcrumbCategoryInBrowser,
-  getLocationHref,
-  getTimestamp,
-  isError,
-  on,
-  Severity,
-  unknownToString,
-  _global
-} from '@mitojs/utils'
+import { extractErrorStack, getLocationHref, getTimestamp, isError, on, Severity, unknownToString, _global } from '@mitojs/utils'
 import { BasePluginType, HttpTransformedType, ReportDataType } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
 import { addBreadcrumbInBrowser } from '../utils'
