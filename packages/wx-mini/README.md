@@ -85,7 +85,7 @@ npm i @mitojs/wx-mini @mitojs/react
 |              Name              | Type      | Default    | Description                                                  |
 | :----------------------------: | --------- | ---------- | ------------------------------------------------------------ |
 |          `silentRequest`          | `boolean` | `false`    | 默认会监控微信小程序的wx.request（接口&下载），为true时，将不再监控                  |
-|        `silentConsole`         | `boolean` | `false`    | 默认会监控微信小程序的wx.console，为true时，将不再监控                   |
+|        `silentConsole`         | `boolean` | `false`    | 默认会监控微信小程序的wx.console，为true时，将不再监控，由于是重写了wx.console，所以原生的console会被覆盖，建议在测试环境设置成true，在生产环境设置成false |
 |          `silentDom`           | `boolean` | `false`    | 默认会监控微信小程序的tab、touch事件，当用户touch的标签有id或者class，就会被b捕捉到放入breadcrumb，为true，将不在监听 |
 | `silentRoute` | `boolean` | `false` | 默认会监控微信小程序App的路由跳转，为true时，将不在监控 |
 |         `silentAppOnError`         | `boolean` | `false`    | 默认会监控微信小程序的error，为true时，将不在监控                        |
