@@ -1,3 +1,3 @@
 # @mitojs/types
 
-一些公用的声明类型
+provider some common types for [@mitojs](https://github.com/mitojs/mitojs)

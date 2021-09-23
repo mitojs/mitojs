@@ -4,14 +4,13 @@
     </a>
     <p>A Lite SDK For Monitor Web</p>
 
-[![npm version](https://img.shields.io/npm/v/@mitojs/web.svg?style=flat-square)](https://www.npmjs.com/package/@mitojs/web)
-[![license](https://img.shields.io/github/license/mitojs/mitojs)](https://github.com/mitojs/mitojs/blob/dev/LICENSE)
-[![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![GitHub last commit](https://img.shields.io/github/last-commit/mitojs/mitojs.svg?style=flat-square)](https://github.com/mitojs/mitojs/commits/master)
-[![build status](https://img.shields.io/travis/mitojs/mitojs/master.svg?style=flat-square)](https://travis-ci.com/github/mitojs/mitojs)
+[![npm version](https://img.shields.io/npm/v/@mitojs/web.svg?style=flat)](https://www.npmjs.com/package/@mitojs/web)
+[![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
+[![GitHub last commit](https://img.shields.io/github/last-commit/mitojs/mitojs.svg?style=flat)](https://github.com/mitojs/mitojs/commits/master)
+[![build status](https://img.shields.io/travis/mitojs/mitojs/master.svg?style=flat)](https://travis-ci.com/github/mitojs/mitojs)
 [![codecov](https://codecov.io/gh/mitojs/mitojs/branch/master/graph/badge.svg?token=W7JP5GDOM7)](https://codecov.io/gh/mitojs/mitojs)
-
-<!-- [![npm downloads](https://img.shields.io/npm/dm/@zyf2e/mitojs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@zyf2e/mitojs) -->
+[![npm downloads](https://img.shields.io/npm/dm/@mitojs/core.svg?style=flat)](http://npm-stat.com/charts.html?package=@mitojs/browser)
+[![license](https://img.shields.io/github/license/mitojs/mitojs?style=flat)](https://github.com/mitojs/mitojs/blob/dev/LICENSE)
 
 </div>
 
