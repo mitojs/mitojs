@@ -1,19 +1,15 @@
 # @mitojs/wx-mini
 
-## 安装
+## 🛠️ 安装
 
-### 使用Npm
 ```bash
+# 使用Npm
 npm i @mitojs/wx-mini
-```
-
-### 使用Yarn
-
-```bash
+# 使用Yarn
 yarn add @mitojs/wx-mini
 ```
 
-### 使用方法
+### 🥳 使用
 ```typescript
 // main.js
 import { init } from '@mitojs/wx-mini'
@@ -25,27 +21,27 @@ const MitoInstance = init({
 })
 ```
 
-### 使用手动上报
-你可以在任何地方用`mito`的实例调用`log`
 
-```js
-MitoInstance.log({
-  message: 'some msg',
-  tag: 'your tag',
-})
-```
 
-### 使用本地文件
+# 📁 使用本地文件
+
 如果你是原生微信小程序的开发者，建议将这个url:[https://cdn.jsdelivr.net/npm/@mitojs/wx-mini/dist/wx-mini.js](https://cdn.jsdelivr.net/npm/@mitojs/wx-mini/dist/wx-mini.js)，下载下来作为一个js文件。然后导入到`app.js`，就像下面这样：
 ![wx-mini-local-file](https://tva1.sinaimg.cn/large/008i3skNly1gupnrax29kj612z0u0dik02.jpg)
 
 
 
-## uni-app
-### 安装
+## uni-app（Vue框架）
+
+支持所有vue框架，例如uni-app等等
+
+### 🛠️ 安装
 ```bash
 npm i @mitojs/wx-mini @mitojs/vue
 ```
+
+
+
+### 使用
 
 ```typescript
 import { init } from '@mitojs/wx-mini'
@@ -65,15 +61,21 @@ const MitoInstance = init({
 },[vuePlugin])
 ```
 
-
 更多关于`@mitojs/vue`的用法[点击这里](../vue/README.md)
 
-## remax
+
+
+## remax（react框架）
+
+### 🛠️ 安装
+
 ```bash
 npm i @mitojs/wx-mini @mitojs/react
 ```
 
 更多关于`@mitojs/react`的用法[click here](../react/README.md)
+
+
 
 
 ## options 

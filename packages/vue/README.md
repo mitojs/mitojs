@@ -1,17 +1,23 @@
 # @mitojs/vue
 
-## browser
-## Install
-### Using npm
+# ⚠️ attention
+
+**If you want to import in weixin miniprograme,please replace `@mitojs/browser` to `@miotjs/wx-mini`**
+
+
+
+# 🛠️ Install
+
 ```bash
+# using npm
 npm i @mitojs/vue @mitojs/browser
-```
-
-### Using yarn
-
-```bash
+# using yarn
 yarn add @mitojs/vue @mitojs/browser
 ```
+
+
+
+# 🥳 Usage
 
 ### Vue2.X
 
@@ -44,18 +50,4 @@ const MitoInstance = init({
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100
 },[vuePlugin])
-```
-
-
-### wx-mini(uni-app)
-<!-- todo -->
-
-## use log
-you can call `log` function in anywhere with mito instance
-
-```js
-MitoInstance.log({
-  message: 'some msg',
-  tag: 'your tag',
-})
 ```

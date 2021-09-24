@@ -4,7 +4,12 @@ import { variableTypeDetection } from './is'
 const allErrorNumber: unknown = {}
 /**
  * generate error unique Id
- * @param data
+ *
+ * @export
+ * @param {ReportDataType} data 上报的数据结构
+ * @param {string} apikey 项目的唯一key
+ * @param {number} maxDuplicateCount init配置项，最多可重复上报同一个错误的次数
+ * @return {*}  {(number | null)}
  */
 export function createErrorId(data: ReportDataType, apikey: string, maxDuplicateCount: number): number | null {
   let id: any
@@ -40,7 +45,7 @@ export function createErrorId(data: ReportDataType, apikey: string, maxDuplicate
   return id
 }
 /**
- * 如果是UNHANDLEDREJECTION，则按照项目主域名来生成
+ * 如果是UNHANDLEDREJECTION，则按照项目apikey来生成
  * 如果是其他的，按照当前页面来生成
  * @param data
  * @param originUrl
@@ -82,10 +87,12 @@ function objectOrder(reason: any) {
 }
 
 /**
- * http://.../project?id=1#a => http://.../project
- * http://.../id/123=> http://.../id/{param}
  *
- * @param url
+ * 获取去掉query后的地主
+ * @export
+ * @param {string} url 地址
+ * @return {*}  {string}
+ * @example http://.../project?id=1#a => http://.../project  http://.../id/123=> http://.../id/{param}
  */
 export function getRealPath(url: string): string {
   return url.replace(/[\?#].*$/, '').replace(/\/\d+([\/]*$)/, '{param}$1')
@@ -113,6 +120,13 @@ export function removeHashPath(url: string): string {
   return url.replace(/(\S+)(\/#\/)(\S*)/, `$1`)
 }
 
+/**
+ * 根据字符串生成hashcode
+ *
+ * @export
+ * @param {string} str
+ * @return {*}  {number} 可为正数和负数
+ */
 export function hashCode(str: string): number {
   let hash = 0
   if (str.length == 0) return hash

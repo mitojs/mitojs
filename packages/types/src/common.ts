@@ -40,7 +40,7 @@ export interface LocalStorageValue<T = any> {
 }
 
 export interface LogTypes {
-  message: TNumStrObj
+  message?: TNumStrObj
   tag?: TNumStrObj
   level?: Severity
   ex?: Error | any

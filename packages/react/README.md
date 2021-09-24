@@ -1,20 +1,25 @@
 # @mitojs/react
 
-## install
+# ⚠️ attention
 
-### yarn
+**If you want to import in weixin miniprograme,please replace `@mitojs/browser` to `@miotjs/wx-mini`**
+
+
+
+
+
+## 🛠️ Install
 
 ``` bash
+# using npm
+npm install @mitojs/react @mitojs/browser
+# using yarn
 yarn add @mitojs/react @mitojs/browser
 ```
 
-### npm
 
-``` bash
-npm install @mitojs/react @mitojs/browser
-```
 
-## usage
+## 🥳 Usage
 
 ### Configure
 
@@ -27,8 +32,11 @@ const MitoInstance = init({
   dsn: '/upload',
   maxBreadcrumbs: 100,
 })
-
 ```
+
+
+
+
 
 ### Add ErrorBoundary
 
