@@ -81,7 +81,7 @@ $api.getPayStatus().then(res => {
 })
 ```
 
-It's also can statistical PV and UV of uses of each function.Such as the following example is track in ActivePage function,UV statistics need to rely on `trackerId`[trackerId详细配置](https://github.com/mitojs/mitojs/blob/master/docs/option.md#backtrackerid)
+It's also can statistical PV and UV of uses of each function.Such as the following example is track in ActivePage function,UV statistics need to rely on `trackerId`[trackerId configuration](https://github.com/mitojs/mitojs/blob/master/docs/option.md#backtrackerid)
 ```js
 /**
  * react hook component:ActivePage
