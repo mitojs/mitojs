@@ -141,7 +141,7 @@ MITO.init({
 ### appOnLaunch(options: WechatMiniprogram.App.LaunchShowOption): void
 
 
-**示例：**在App的onLaunch中打印并输出入参`
+**示例：**在`App`的`onLaunch`中打印并输出入参`
 ```js
 MITO.init({
   ...
@@ -170,7 +170,7 @@ MITO.init({
 
 ### appOnShow(options: WechatMiniprogram.App.LaunchShowOption): void
 
-  **示例：**在App的onShow中打印并输出入参`
+  **示例：**在`App`的`onShow`中打印并输出入参`
 ```js
 MITO.init({
   ...
@@ -188,29 +188,69 @@ MITO.init({
   /**
    * 钩子函数：wx小程序的App下的OnHide执行完后再执行以下hook
    *
-   * @param {IWxPageInstance} page
    * @memberof WxHookOptionsType
    */
   ```
-### appOnHide(page: IWxPageInstance): void
+### appOnHide(): void
+
+**示例：**在`App`的`appOnHide`中打印`
+```js
+MITO.init({
+  ...
+  appOnHide(){
+  	console.log('mito appOnHide', options)
+  }
+})
+```
+
+--------
+
+
   ```js
   /**
-   * 钩子函数：wx小程序的App下的onPageNotFound执行完后再执行以下hook
+   * 钩子函数：先执行下的onPageNotFound执行完后再执行以下hook
    *
    * @param {WechatMiniprogram.OnPageNotFoundCallbackResult} data
    * @memberof WxHookOptionsType
    */
   ```
 ### onPageNotFound(data: WechatMiniprogram.OnPageNotFoundCallbackResult): void
+
+**示例：**在`Page`的`onPageNotFound`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  onPageNotFound(data){
+  	console.log('mito onPageNotFound', data)
+  }
+})
+```
+
+-----------
+
+
   ```js
   /**
-   * 钩子函数：先执行hook:pageOnLoad再执行wx小程序的Page下的onShow
+   * 钩子函数：先执行hook:pageOnLoad再执行wx小程序的Page下的pageOnLoad
    *
    * @param {IWxPageInstance} page
    * @memberof WxHookOptionsType
    */
   ```
 ### pageOnLoad(page: IWxPageInstance): void
+
+**示例：**在`Page`的`pageOnLoad`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  pageOnLoad(page){
+  	console.log('mito pageOnLoad', page)
+  }
+})
+```
+
+-----------
+
   ```js
   /**
    * 钩子函数：先执行hook:pageOnShow再执行wx小程序的Page下的onShow
@@ -220,15 +260,41 @@ MITO.init({
    */
   ```
 ### pageOnShow(page: IWxPageInstance): void
+
+**示例：**在`Page`的`pageOnShow`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  pageOnShow(page){
+  	console.log('mito pageOnShow', page)
+  }
+})
+```
+
+-----------
+
   ```js
   /**
-   * 钩子函数：先执行hook:pageOnReady再执行wx小程序的Page下的onShow
+   * 钩子函数：先执行hook:pageOnReady再执行wx小程序的Page下的pageOnReady
    *
    * @param {IWxPageInstance} page
    * @memberof WxHookOptionsType
    */
   ```
 ### pageOnReady(page: IWxPageInstance): void
+
+**示例：**在`Page`的`pageOnReady`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  pageOnReady(page){
+  	console.log('mito pageOnReady', page)
+  }
+})
+```
+
+-----------
+
   ```js
   /**
    *  钩子函数：先wx小程序的App下的pageOnUnload执行完后再执行以下hook
@@ -238,6 +304,19 @@ MITO.init({
    */
   ```
 ### pageOnUnload(page: IWxPageInstance): void
+
+**示例：**在`Page`的`pageOnUnload`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  pageOnUnload(page){
+  	console.log('mito pageOnUnload', page)
+  }
+})
+```
+
+-----------
+
   ```js
   /**
    * 钩子函数：先执行hook:pageOnHide再执行wx小程序的Page下的onHide
@@ -247,6 +326,19 @@ MITO.init({
    */
   ```
 ### pageOnHide(page: IWxPageInstance): void
+
+**示例：**在`Page`的`pageOnHide`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  pageOnHide(page){
+  	console.log('mito pageOnHide', page)
+  }
+})
+```
+
+-----------
+
   ```js
   /**
    * 先执行hook:onShareAppMessage再执行wx小程序的Page下的onShareAppMessage
@@ -256,6 +348,20 @@ MITO.init({
    */
   ```
 ### onShareAppMessage(options: WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance): void
+
+**示例：**在`Page`的`onShareAppMessage`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  onShareAppMessage(options){
+  	console.log('mito onShareAppMessage', options)
+  }
+})
+```
+
+-----------
+
+
   ```js
   /**
    * 先执行hook:onShareTimeline再执行wx小程序的Page下的onShareTimeline
@@ -265,6 +371,19 @@ MITO.init({
    */
   ```
 ### onShareTimeline(page: IWxPageInstance): void
+
+**示例：**在`Page`的`onShareTimeline`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  onShareTimeline(page){
+  	console.log('mito onShareTimeline', page)
+  }
+})
+```
+
+-----------
+
   ```js
   /**
    * 先执行hook:onTabItemTap再执行wx小程序的Page下的onTabItemTap
@@ -274,6 +393,20 @@ MITO.init({
    */
   ```
 ### onTabItemTap(options: WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance): void
+
+**示例：**在`Page`的`onTabItemTap`中打印并输出入参`
+```js
+MITO.init({
+  ...
+  onTabItemTap(options){
+  	console.log('mito onTabItemTap', options)
+  }
+})
+```
+
+-----------
+
+
   ```js
   /**
    * 钩子函数：重写wx.NavigateToMiniProgram将里面的参数抛出来，便于在跳转时更改query和extraData
@@ -284,11 +417,27 @@ MITO.init({
    */
   ```
 ### wxNavigateToMiniProgram(options: WechatMiniprogram.NavigateToMiniProgramOption): WechatMiniprogram.NavigateToMiniProgramOption
+
+
+**示例：**在用`wxNavigateToMiniProgram`触发跳转小程序时，可以对传入的参数进行覆盖，如下面对query参数进行追加参数
+```js
+MITO.init({
+  ...
+  wxNavigateToMiniProgram(options){
+    options.path = `${options.path}?time=${Date.now()}`
+    return options
+  }
+})
+```
+
+-----------
+
+
   ```js
   /**
    * 钩子函数：代理Action中所有函数，拿到第一个参数并抛出
    *
-   * 可用来判断e.target.type是否等于tap
+   * 可用来判断e.type是否等于tap
    *
    * @param {WechatMiniprogram.BaseEvent} e 拿到事件e
    * @memberof WxHookOptionsType
@@ -296,3 +445,18 @@ MITO.init({
   ```
 ### triggerWxEvent(e: WechatMiniprogram.BaseEvent): void
 
+**示例：**截取tap的回调函数，并输出`currentTarget`对象
+```js
+MITO.init({
+  ...
+  triggerWxEvent(e){
+    // 当然也可以对touchmove等等事件做判断
+    if (e.type === 'tap'){
+      // 当前函数就是tap的回调函数，可拿到currentTarget的dataset，里面包含class、id等等属性
+      console.log(e.currentTarget)
+    }
+  }
+})
+```
+
+-----------
