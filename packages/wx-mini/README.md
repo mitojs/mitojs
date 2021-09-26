@@ -82,7 +82,7 @@ npm i @mitojs/wx-mini @mitojs/react
 
 ## options
 
-[基础配置项]()
+[基础配置项](../core/README.md)
 
 ### WxSilentOptionsType
 
@@ -458,5 +458,3 @@ MITO.init({
   }
 })
 ```
-
------------
