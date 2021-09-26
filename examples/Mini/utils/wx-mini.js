@@ -1,4 +1,4 @@
-/* @mitojs/wx-mini version ' + 2.1.26 */
+/* @mitojs/wx-mini version ' + 2.1.27 */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -72,7 +72,7 @@ function __spreadArray(to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 }
 
-var version = "2.1.26";
+var version = "2.1.27";
 
 var SDK_NAME = 'mitojs';
 var SDK_VERSION = version;
@@ -154,9 +154,7 @@ var WxBaseEventTypes;
 (function (WxBaseEventTypes) {
     WxBaseEventTypes["REQUEST"] = "request";
     WxBaseEventTypes["CONSOLE"] = "console";
-    WxBaseEventTypes["ERROR"] = "error";
-    WxBaseEventTypes["UNHANDLEDREJECTION"] = "unhandledrejection";
-    WxBaseEventTypes["MINI_ROUTE"] = "miniRoute";
+    WxBaseEventTypes["ROUTE"] = "route";
     WxBaseEventTypes["DOM"] = "dom";
     WxBaseEventTypes["MINI_PERFORMANCE"] = "miniPerformance";
     WxBaseEventTypes["MINI_MEMORY_WARNING"] = "miniMemoryWarning";
@@ -360,7 +358,7 @@ function toStringAny(target, type) {
 function toStringValidateOption(target, targetName, expectType) {
     if (toStringAny(target, expectType))
         return true;
-    typeof target !== 'undefined' && logger.error(targetName + "\u671F\u671B\u4F20\u5165" + expectType + "\u7C7B\u578B\uFF0C\u5F53\u524D\u662F" + nativeToString.call(target) + "\u7C7B\u578B");
+    typeof target !== 'undefined' && logger.error(targetName + "\u671F\u671B\u4F20\u5165:" + expectType + "\u7C7B\u578B\uFF0C\u5F53\u524D\u662F:" + nativeToString.call(target) + "\u7C7B\u578B");
     return false;
 }
 function silentConsoleScope(callback) {
@@ -420,10 +418,10 @@ function firstStrtoLowerCase(str) {
         return "" + $1.toLowerCase() + $2;
     });
 }
-function validateOptionsAndSet(targetArr, expectType) {
+function validateOptionsAndSet(targetArr) {
     var _this = this;
     targetArr.forEach(function (_a) {
-        var target = _a[0], targetName = _a[1];
+        var target = _a[0], targetName = _a[1], expectType = _a[2];
         return toStringValidateOption(target, targetName, expectType) && (_this[targetName] = target);
     });
 }
@@ -833,14 +831,10 @@ function getWxMiniNetWrokType() {
         });
     });
 }
-function addBreadcrumbInWx(data, type, level) {
+function addBreadcrumbInWx(data, type, level, params) {
     if (level === void 0) { level = Severity.Info; }
-    return this.breadcrumb.push({
-        type: type,
-        data: data,
-        category: getBreadcrumbCategoryInWx(type),
-        level: level
-    });
+    if (params === void 0) { params = {}; }
+    return this.breadcrumb.push(__assign({ type: type, data: data, category: getBreadcrumbCategoryInWx(type), level: level }, params));
 }
 
 var wxAppPluginMap = new Map();
@@ -1343,22 +1337,23 @@ function httpTransform(httpCollectedData) {
 }
 function httpTransformedDataConsumer(transformedData) {
     var type = WxBreadcrumbTypes.XHR;
-    var status = transformedData.response.status;
+    var status = transformedData.response.status, time = transformedData.time;
     var isError = status === 0 || status === 400 || status > 401;
-    addBreadcrumbInWx.call(this, transformedData, type);
+    addBreadcrumbInWx.call(this, transformedData, type, Severity.Info, { time: time });
     if (isError) {
         var breadcrumbStack = this.breadcrumb.push({
             type: type,
             category: "exception",
             data: __assign({}, transformedData),
-            level: Severity.Error
+            level: Severity.Error,
+            time: time
         });
         this.transport.send(transformedData, breadcrumbStack);
     }
 }
 
 var wxRoutePlugin = {
-    name: WxBaseEventTypes.MINI_ROUTE,
+    name: WxBaseEventTypes.ROUTE,
     monitor: function (notify) {
         monitorWxRoute.call(this, notify);
     },
@@ -1413,14 +1408,14 @@ function monitorWxRoute(notify) {
                     from: getCurrentRoute(),
                     to: toUrl
                 };
-                notify(WxBaseEventTypes.MINI_ROUTE, data);
+                notify(WxBaseEventTypes.ROUTE, data);
                 if (variableTypeDetection.isFunction(options.complete) ||
                     variableTypeDetection.isFunction(options.success) ||
                     variableTypeDetection.isFunction(options.fail)) {
                     var _fail_1 = options.fail;
                     var failHandler = function (res) {
                         var failData = __assign(__assign({}, data), { isFail: true, message: res.errMsg });
-                        notify(WxBaseEventTypes.MINI_ROUTE, failData);
+                        notify(WxBaseEventTypes.ROUTE, failData);
                         if (variableTypeDetection.isFunction(_fail_1)) {
                             return _fail_1(res);
                         }
@@ -1553,18 +1548,21 @@ var BaseOptions = (function () {
         this.includeHttpUrlTraceIdRegExp = /.*/;
         this.traceIdFieldName = 'Trace-Id';
         this.throttleDelayTime = 0;
-        this.maxDuplicateCount = 5;
         this.beforeAppAjaxSend = null;
+        this.vue = null;
     }
     BaseOptions.prototype.bindOptions = function (options) {
-        var enableTraceId = options.enableTraceId, filterXhrUrlRegExp = options.filterXhrUrlRegExp, traceIdFieldName = options.traceIdFieldName, throttleDelayTime = options.throttleDelayTime, includeHttpUrlTraceIdRegExp = options.includeHttpUrlTraceIdRegExp, beforeAppAjaxSend = options.beforeAppAjaxSend;
-        toStringValidateOption(enableTraceId, 'enableTraceId', "Boolean") && (this.enableTraceId = enableTraceId);
-        toStringValidateOption(traceIdFieldName, 'traceIdFieldName', "String") && (this.traceIdFieldName = traceIdFieldName);
-        toStringValidateOption(throttleDelayTime, 'throttleDelayTime', "Number") && (this.throttleDelayTime = throttleDelayTime);
-        toStringValidateOption(filterXhrUrlRegExp, 'filterXhrUrlRegExp', "RegExp") && (this.filterXhrUrlRegExp = filterXhrUrlRegExp);
-        toStringValidateOption(includeHttpUrlTraceIdRegExp, 'includeHttpUrlTraceIdRegExp', "RegExp") &&
-            (this.includeHttpUrlTraceIdRegExp = includeHttpUrlTraceIdRegExp);
-        toStringValidateOption(beforeAppAjaxSend, 'beforeAppAjaxSend', "Function") && (this.beforeAppAjaxSend = beforeAppAjaxSend);
+        var enableTraceId = options.enableTraceId, vue = options.vue, filterXhrUrlRegExp = options.filterXhrUrlRegExp, traceIdFieldName = options.traceIdFieldName, throttleDelayTime = options.throttleDelayTime, includeHttpUrlTraceIdRegExp = options.includeHttpUrlTraceIdRegExp, beforeAppAjaxSend = options.beforeAppAjaxSend;
+        var optionArr = [
+            [enableTraceId, 'enableTraceId', "Boolean"],
+            [traceIdFieldName, 'traceIdFieldName', "String"],
+            [throttleDelayTime, 'throttleDelayTime', "Number"],
+            [filterXhrUrlRegExp, 'filterXhrUrlRegExp', "RegExp"],
+            [includeHttpUrlTraceIdRegExp, 'includeHttpUrlTraceIdRegExp', "RegExp"],
+            [beforeAppAjaxSend, 'beforeAppAjaxSend', "Function"]
+        ];
+        validateOptionsAndSet.call(this, optionArr);
+        this.vue = vue;
     };
     BaseOptions.prototype.isFilterHttpUrl = function (url) {
         return this.filterXhrUrlRegExp && this.filterXhrUrlRegExp.test(url);
@@ -1617,12 +1615,16 @@ var BaseTransport = (function () {
     BaseTransport.prototype.bindOptions = function (options) {
         if (options === void 0) { options = {}; }
         var dsn = options.dsn, beforeDataReport = options.beforeDataReport, apikey = options.apikey, maxDuplicateCount = options.maxDuplicateCount, backTrackerId = options.backTrackerId, configReportUrl = options.configReportUrl;
-        toStringValidateOption(apikey, 'apikey', "String") && (this.apikey = apikey);
-        toStringValidateOption(dsn, 'dsn', "String") && (this.dsn = dsn);
-        toStringValidateOption(maxDuplicateCount, 'maxDuplicateCount', "Number") && (this.maxDuplicateCount = maxDuplicateCount);
-        toStringValidateOption(beforeDataReport, 'beforeDataReport', "Function") && (this.beforeDataReport = beforeDataReport);
-        toStringValidateOption(backTrackerId, 'backTrackerId', "Function") && (this.backTrackerId = backTrackerId);
-        toStringValidateOption(configReportUrl, 'configReportUrl', "Function") && (this.configReportUrl = configReportUrl);
+        var functionType = "Function";
+        var optionArr = [
+            [apikey, 'apikey', "String"],
+            [dsn, 'dsn', "String"],
+            [maxDuplicateCount, 'maxDuplicateCount', "Number"],
+            [beforeDataReport, 'beforeDataReport', , functionType],
+            [backTrackerId, 'backTrackerId', functionType],
+            [configReportUrl, 'configReportUrl', functionType]
+        ];
+        validateOptionsAndSet.call(this, optionArr);
     };
     BaseTransport.prototype.send = function (data, breadcrumb) {
         if (breadcrumb === void 0) { breadcrumb = []; }
@@ -1686,34 +1688,34 @@ var WxOptions = (function (_super) {
         return _this;
     }
     WxOptions.prototype.bindOptions = function (options) {
-        var beforeAppAjaxSend = options.beforeAppAjaxSend, appOnLaunch = options.appOnLaunch, appOnShow = options.appOnShow, appOnHide = options.appOnHide, pageOnLoad = options.pageOnLoad, pageOnReady = options.pageOnReady, pageOnShow = options.pageOnShow, pageOnUnload = options.pageOnUnload, pageOnHide = options.pageOnHide, onPageNotFound = options.onPageNotFound, onShareAppMessage = options.onShareAppMessage, onShareTimeline = options.onShareTimeline, onTabItemTap = options.onTabItemTap, wxNavigateToMiniProgram = options.wxNavigateToMiniProgram, triggerWxEvent = options.triggerWxEvent, silentRequest = options.silentRequest, silentConsole = options.silentConsole, silentDom = options.silentDom, silentMiniRoute = options.silentMiniRoute, silentError = options.silentError, silentUnhandledrejection = options.silentUnhandledrejection;
-        var booleanOptions = [
-            [silentRequest, 'silentRequest'],
-            [silentConsole, 'silentConsole'],
-            [silentDom, 'silentDom'],
-            [silentMiniRoute, 'silentMiniRoute'],
-            [silentError, 'silentError'],
-            [silentUnhandledrejection, 'silentUnhandledrejection']
+        var beforeAppAjaxSend = options.beforeAppAjaxSend, appOnLaunch = options.appOnLaunch, appOnShow = options.appOnShow, appOnHide = options.appOnHide, pageOnLoad = options.pageOnLoad, pageOnReady = options.pageOnReady, pageOnShow = options.pageOnShow, pageOnUnload = options.pageOnUnload, pageOnHide = options.pageOnHide, onPageNotFound = options.onPageNotFound, onShareAppMessage = options.onShareAppMessage, onShareTimeline = options.onShareTimeline, onTabItemTap = options.onTabItemTap, wxNavigateToMiniProgram = options.wxNavigateToMiniProgram, triggerWxEvent = options.triggerWxEvent, silentRequest = options.silentRequest, silentConsole = options.silentConsole, silentDom = options.silentDom, silentRoute = options.silentRoute, silentAppOnError = options.silentAppOnError, silentAppOnUnhandledRejection = options.silentAppOnUnhandledRejection, silentAppOnPageNotFound = options.silentAppOnPageNotFound;
+        var booleanType = "Boolean";
+        var functionType = "Function";
+        var optionArr = [
+            [silentRequest, 'silentRequest', booleanType],
+            [silentConsole, 'silentConsole', booleanType],
+            [silentDom, 'silentDom', booleanType],
+            [silentRoute, 'silentRoute', booleanType],
+            [silentAppOnError, 'silentAppOnError', booleanType],
+            [silentAppOnUnhandledRejection, 'silentAppOnUnhandledRejection', booleanType],
+            [silentAppOnPageNotFound, 'silentAppOnPageNotFound', booleanType],
+            [beforeAppAjaxSend, 'beforeAppAjaxSend', functionType],
+            [appOnLaunch, 'appOnLaunch', functionType],
+            [appOnShow, 'appOnShow', functionType],
+            [appOnHide, 'appOnHide', functionType],
+            [pageOnLoad, 'pageOnLoad', functionType],
+            [pageOnReady, 'pageOnReady', functionType],
+            [pageOnShow, 'pageOnShow', functionType],
+            [pageOnUnload, 'pageOnUnload', functionType],
+            [pageOnHide, 'pageOnHide', functionType],
+            [onPageNotFound, 'onPageNotFound', functionType],
+            [onShareAppMessage, 'onShareAppMessage', functionType],
+            [onShareTimeline, 'onShareTimeline', functionType],
+            [onTabItemTap, 'onTabItemTap', functionType],
+            [wxNavigateToMiniProgram, 'wxNavigateToMiniProgram', functionType],
+            [triggerWxEvent, 'triggerWxEvent', functionType]
         ];
-        validateOptionsAndSet.call(this, booleanOptions, "Boolean");
-        var functionOptions = [
-            [beforeAppAjaxSend, 'beforeAppAjaxSend'],
-            [appOnLaunch, 'appOnLaunch'],
-            [appOnShow, 'appOnShow'],
-            [appOnHide, 'appOnHide'],
-            [pageOnLoad, 'pageOnLoad'],
-            [pageOnReady, 'pageOnReady'],
-            [pageOnShow, 'pageOnShow'],
-            [pageOnUnload, 'pageOnUnload'],
-            [pageOnHide, 'pageOnHide'],
-            [onPageNotFound, 'onPageNotFound'],
-            [onShareAppMessage, 'onShareAppMessage'],
-            [onShareTimeline, 'onShareTimeline'],
-            [onTabItemTap, 'onTabItemTap'],
-            [wxNavigateToMiniProgram, 'wxNavigateToMiniProgram'],
-            [triggerWxEvent, 'triggerWxEvent']
-        ];
-        validateOptionsAndSet.call(this, functionOptions, "Function");
+        validateOptionsAndSet.call(this, optionArr);
     };
     return WxOptions;
 }(BaseOptions));
@@ -1725,6 +1727,7 @@ var WxTransport = (function (_super) {
         var _this = _super.call(this) || this;
         _this.useImgUpload = false;
         _super.prototype.bindOptions.call(_this, options);
+        _this.bindOptions(options);
         return _this;
     }
     WxTransport.prototype.post = function (data, url) {
