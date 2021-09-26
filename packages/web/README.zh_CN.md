@@ -1,11 +1,11 @@
 # @mitojs/web
-The following three packages are integrated
+整合了下面三个包
 * [@mito/browser](https://github.com/mitojs/mitojs/tree/master/packages/browser)
 * [@mito/react](https://github.com/mitojs/mitojs/tree/master/packages/react)
 * [@mito/vue](https://github.com/mitojs/mitojs/tree/master/packages/vue)
 
 
-## Install
+## 安装
 ```bash
 # using npm
 npm i @mitojs/web
@@ -13,14 +13,15 @@ npm i @mitojs/web
 yarn add @mitojs/web
 ```
 
-## Usage
+## 使用
 ```js
 import { init,MitoProvider,ErrorBoundary,vuePlugin } from '@mitojs/web'
+...
 ```
-**go to **
 
-* [@mito/browser usage manual](https://github.com/mitojs/mitojs/tree/master/packages/browser)
-* [@mito/react usage manual](https://github.com/mitojs/mitojs/tree/master/packages/react)
-* [@mito/vue usage manual](https://github.com/mitojs/mitojs/tree/master/packages/vue)
+
+* [@mito/browser 使用指南](https://github.com/mitojs/mitojs/tree/master/packages/browser)
+* [@mito/react 使用指南](https://github.com/mitojs/mitojs/tree/master/packages/react)
+* [@mito/vue 使用指南](https://github.com/mitojs/mitojs/tree/master/packages/vue)
 
 

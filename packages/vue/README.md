@@ -29,6 +29,8 @@ import { vuePlugin } from '@mitojs/vue'
 
 // multiple instances
 const MitoInstance = init({
+  // set debug true to convenient debugger in dev,set false in prod
+  debug:true,
   vue: Vue,
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100
@@ -46,6 +48,8 @@ import { vuePlugin } from "@mitojs/vue";
 
 const app = createApp(App)
 const MitoInstance = init({
+  // set debug true to convenient debugger in dev,set false in prod
+  debug:true,
   vue: app,
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100

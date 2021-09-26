@@ -61,6 +61,8 @@ yarn add @mitojs/browser
 import { init } from '@mitojs/browser'
 
 const MitoInstance = init({
+  // set debug true to convenient debugger in dev,set false in prod
+  debug:true,
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100
 })

@@ -29,6 +29,8 @@ import React from 'react'
 import { init } from '@mitojs/browser'
 
 const MitoInstance = init({
+  // set debug true to convenient debugger in dev,set false in prod
+  debug:true,
   dsn: '/upload',
   maxBreadcrumbs: 100,
 })

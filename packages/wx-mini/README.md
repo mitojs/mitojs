@@ -16,6 +16,8 @@ import { init } from '@mitojs/wx-mini'
 
 // 多实例
 const MitoInstance = init({
+  // 开发环境可以开启debug，生成环境改为false
+  debug:true,
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100,
     // 配置上报时的请求头
