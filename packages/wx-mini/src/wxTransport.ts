@@ -10,6 +10,7 @@ export class WxTransport extends BaseTransport<WxOptionsFieldsTypes> {
   constructor(options: Partial<WxOptionsFieldsTypes> = {}) {
     super()
     super.bindOptions(options)
+    this.bindOptions(options)
   }
   post(data: any, url: string) {
     const requestFun = (): void => {

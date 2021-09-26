@@ -73,5 +73,13 @@ const MitoInstance = init({
 ```
 ### configReportXhr?(xhr: XMLHttpRequest, reportData: any): void
 
-**示例：**设置上报时的请求头为
+**示例：**设置上报时的请求头为`'mito-header':'test123'`
+```js
+MITO.init({
+  ...
+  configReportXhr(xhr, reportData) {
+    xhr.setRequestHeader('mito-header', 'test123')
+  }
+})
+```
 

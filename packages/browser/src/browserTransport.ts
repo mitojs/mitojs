@@ -10,6 +10,7 @@ export class BrowserTransport extends BaseTransport<BrowserOptionsFieldsTypes> {
   constructor(options: BrowserOptionsFieldsTypes = {}) {
     super()
     super.bindOptions(options)
+    this.bindOptions(options)
   }
   post(data: any, url: string) {
     const requestFun = (): void => {
