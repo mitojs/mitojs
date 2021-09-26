@@ -19,11 +19,11 @@
 
 ## 👋 Features
 
-✔️ 🔨 monitor  Xhr、Fetch
+✔️ 🔨 monitor Xhr、Fetch、wx.request
 
-✔️ 🔨 monitor console
+✔️ 🔨 monitor console、wx.console
 
-✔️ 🔨 monitor route change(hashroute、browser route)
+✔️ 🔨 monitor route change(hashroute、browser route、wx route)
 
 ✔️ 🔨 monitor code error、resource load error
 
