@@ -116,7 +116,14 @@ wxAppPluginMap.set(WxAppEvents.AppOnUnhandledRejection, {
 
 function getWxAppPlugins() {
   if (!App) return []
-  const methodHooks = Object.values(WxAppEvents)
+  const methodHooks = [
+    WxAppEvents.AppOnLaunch,
+    WxAppEvents.AppOnShow,
+    WxAppEvents.AppOnHide,
+    WxAppEvents.AppOnPageNotFound,
+    WxAppEvents.AppOnError,
+    WxAppEvents.AppOnUnhandledRejection
+  ]
   const plugins = methodHooks.map((method) => {
     return {
       name: method,

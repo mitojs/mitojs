@@ -1,4 +1,4 @@
-export enum TrackActionType {
+export const enum TrackActionType {
   PAGE = 'PAGE',
   EVENT = 'EVENT',
   VIEW = 'VIEW',

@@ -118,7 +118,16 @@ wxPagePluginMap.set(WxPageEvents.PageOnTabItemTap, {
 
 function getWxPagePlugins() {
   if (!Page) return []
-  const pageHooks = Object.values(WxPageEvents)
+  const pageHooks = [
+    WxPageEvents.PageOnLoad,
+    WxPageEvents.PageOnReady,
+    WxPageEvents.PageOnShow,
+    WxPageEvents.PageOnUnload,
+    WxPageEvents.PageOnHide,
+    WxPageEvents.PageOnShareAppMessage,
+    WxPageEvents.PageOnShareTimeline,
+    WxPageEvents.PageOnTabItemTap
+  ]
   const plugins = pageHooks.map((hook) => {
     return {
       name: hook,

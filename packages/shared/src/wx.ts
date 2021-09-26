@@ -1,4 +1,4 @@
-export enum WxBreadcrumbTypes {
+export const enum WxBreadcrumbTypes {
   // platform
   VUE = 'Vue',
   REACT = 'React',
@@ -28,7 +28,7 @@ export enum WxBreadcrumbTypes {
   TOUCHMOVE = 'UI.Touchmove'
 }
 
-export enum WxAppEvents {
+export const enum WxAppEvents {
   AppOnLaunch = 'AppOnLaunch',
   AppOnShow = 'AppOnShow',
   AppOnHide = 'AppOnHide',
@@ -37,18 +37,18 @@ export enum WxAppEvents {
   AppOnUnhandledRejection = 'AppOnUnhandledRejection'
 }
 
-export enum WxPageEvents {
+export const enum WxPageEvents {
   PageOnLoad = 'PageOnLoad',
   PageOnShow = 'PageOnShow',
-  PageOnHide = 'PageOnHide',
   PageOnReady = 'PageOnReady',
   PageOnUnload = 'PageOnUnload',
+  PageOnHide = 'PageOnHide',
   PageOnShareAppMessage = 'PageOnShareAppMessage',
   PageOnShareTimeline = 'PageOnShareTimeline',
   PageOnTabItemTap = 'PageOnTabItemTap'
 }
 
-export enum WxRouteEvents {
+export const enum WxRouteEvents {
   SwitchTab = 'switchTab',
   ReLaunch = 'reLaunch',
   RedirectTo = 'redirectTo',
@@ -62,9 +62,9 @@ export enum WxRouteEvents {
  *微信小程序需要监听的事件类型
  *
  * @export
- *  const@enum {number}
+ *  const const@enum {number}
  */
-export enum WxBaseEventTypes {
+export const enum WxBaseEventTypes {
   REQUEST = 'request',
   CONSOLE = 'console',
   ROUTE = 'route',
@@ -76,13 +76,13 @@ export enum WxBaseEventTypes {
   MINI_BATTERY_INFO = 'miniBatteryInfo'
 }
 
-export enum LinstenerTypes {
+export const enum LinstenerTypes {
   Touchmove = 'touchmove',
   Tap = 'tap',
   Longtap = 'longtap',
   Longpress = 'longpress'
 }
 
-// merge enum
-export const WxEventTypes = Object.assign({}, WxAppEvents, WxPageEvents, WxBaseEventTypes)
+// merge const enum
+// export const WxEventTypes = Object.assign({}, WxAppEvents, WxPageEvents, WxBaseEventTypes)
 export type WxEventTypes = WxAppEvents | WxPageEvents | WxBaseEventTypes
