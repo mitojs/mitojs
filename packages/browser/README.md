@@ -25,6 +25,8 @@ const MitoInstance = init({
 })
 ```
 
+
+
 ## Using With CDN
 **index.html**
 
@@ -39,81 +41,37 @@ const MitoInstance = init({
 </header>
 ```
 
-### use log
-you can call `log` function in anywhere with mito instance
+
+## opitons
+
+### BrowserOptionsFieldsTypes
+
+|              Name              | Type      | Default    | Description                                                  |
+| :----------------------------: | --------- | ---------- | ------------------------------------------------------------ |
+| `useImgUpload` | `boolean` | `false` | 为true时，则使用img上报的方式，会在dsn后面追加data=encodeURIComponent(reportData)，在服务端接受时需要decodeURIComponent，默认为false。（小程序只能用wx.request上报的方式，也就是xhr，而且走img请求的话，url是有字符长度限制的，所以推荐走xhr） |
+|          `silentXhr`           | `boolean` | `false`    | 默认会监控xhr，为true时，将不再监控                          |
+|         `silentFetch`          | `boolean` | `false`    | 默认会监控fetch，为true时，将不再监控                        |
+|        `silentConsole`         | `boolean` | `false`    | 默认会监控console，为true时，将不再监控                      |
+|          `silentDom`           | `boolean` | `false`    | 默认会监听click事件，当用户点击的标签不是body时就会被放入breadcrumb，为true，将不在监听 |
+|        `silentHistory`         | `boolean` | `false`    | 默认会监控popstate、pushState、replaceState，为true时，将不再监控 |
+|         `silentError`          | `boolean` | `false`    | 默认会监控error，为true时，将不在监控                        |
+|   `silentUnhandledrejection`   | `boolean` | `false`    | 默认会监控unhandledrejection，为true时，将不在监控           |
+|       `silentHashchange`       | `boolean` | `false`    | 默认会监控hashchange，为true时，将不在监控                   |
+
+
+### BrowserOptionsHooksType
 
 ```js
-interface LogTypes {
-  message?: string | number | Object
-  tag?: string;
-  level?: Severity;
-  ex?: any;
-}
-MitoInstance.log(LogTypes)
+  /**
+   * 钩子函数，配置发送到服务端的xhr
+   * 可以对当前xhr实例做一些配置：xhr.setRequestHeader()、xhr.withCredentials
+   *
+   * @param {XMLHttpRequest} xhr XMLHttpRequest的实例
+   * @param {*} reportData 上报的数据
+   * @memberof BrowserOptionsHooksType
+   */
 ```
+### configReportXhr?(xhr: XMLHttpRequest, reportData: any): void
 
-```js
-MitoInstance.log({
-  message: 'some msg',
-  tag: 'your tag',
-})
-```
+**示例：**设置上报时的请求头为
 
-### log
-Sometime we need to report business information or track information in business code,then we can use `MitoInstance.log`.The following example is that report abnormal information if the http interface is abnoraml
-```js
-$api.getPayStatus().then(res => {
-  if (res.success) {
-    // http status normal
-  } else {
-    // abnormal report information
-    MitoInstance.log({
-      // error message
-      message: res.errMsg,
-      // optional,can understand as category
-      tag: 'payPage'
-      // optional,default is Severity.Critical
-      // level: '',
-      // optional,Error Object
-      // ex: ''
-    })
-  }
-})
-```
-
-It's also can statistical PV and UV of uses of each function.Such as the following example is track in ActivePage function,UV statistics need to rely on `trackerId`[trackerId configuration](https://github.com/mitojs/mitojs/blob/master/docs/option.md#backtrackerid)
-```js
-/**
- * react hook component:ActivePage
- */
-function ActivePage() {
-  useEffect(() => {
-    MitoInstance.log({
-      // optional
-      tag: 'ActivePage'
-    })
-  }, [])
-  return <div>This Is ActivePage</div>
-}
-```
-
-
-### generate errorId
-errorId source code [click here](https://github.com/mitojs/mitojs/blob/master/packages/utils/src/errorId.ts)
-
-It's generated according to the passed `tag` key,so will generate the same errorId when passed the same `tag` plus different `message`.Such as the follow:
-
-```js
-MitoInstance.log({
-  message: 'test_1',
-  tag: 'ActivePageStatistics'
-})
-```
-
-```js
-MitoInstance.log({
-  message: 'test_2',
-  tag: 'ActivePageStatistics'
-})
-```
-The two example will generated the same errorId.But if the `tag` key changed,it will be different

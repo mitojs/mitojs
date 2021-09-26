@@ -14,46 +14,47 @@ export interface BrowserOptionsFieldsTypes extends BrowsersilentOptionsType, Bas
  */
 export interface BrowsersilentOptionsType {
   /**
-   * 静默监控Xhr事件
+   * 默认会监控xhr，为true时，将不再监
    */
   silentXhr?: boolean
   /**
-   * 静默监控fetch事件
+   * 默认会监控fetch，为true时，将不再监
    */
   silentFetch?: boolean
   /**
-   * 静默监控console事件
+   * 默认会监控console，为true时，将不再监控
    */
   silentConsole?: boolean
   /**
-   * 静默监控Dom事件
+   * 默认会监听click事件，当用户点击的标签不是body时就会被放入breadcrumb，为true，将不在监听
    */
   silentDom?: boolean
   /**
-   * 静默监控history事件
+   * 默认会监控popstate、pushState、replaceState，为true时，将不再监控
    */
   silentHistory?: boolean
   /**
-   * 静默监控error事件
+   * 默认会监控hashchange，为true时，将不在监控
+   */
+  silentHashchange?: boolean
+  /**
+   * 默认会监控error，为true时，将不在监控
    */
   silentError?: boolean
   /**
-   * 静默监控unhandledrejection事件
+   * 默认会监控unhandledrejection，为true时，将不在监控
    */
   silentUnhandledrejection?: boolean
-  /**
-   * 静默监控hashchange事件
-   */
-  silentHashchange?: boolean
 }
 
 export interface BrowserOptionsHooksType {
   /**
    * 钩子函数，配置发送到服务端的xhr
    * 可以对当前xhr实例做一些配置：xhr.setRequestHeader()、xhr.withCredentials
-   * 会在xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8')、
-   * xhr.withCredentials = true,后面调用该函数
-   * ../param xhr XMLHttpRequest的实例
+   *
+   * @param {XMLHttpRequest} xhr XMLHttpRequest的实例
+   * @param {*} reportData 上报的数据
+   * @memberof BrowserOptionsHooksType
    */
   configReportXhr?(xhr: XMLHttpRequest, reportData: any): void
 }

@@ -135,7 +135,7 @@ const iifePackage = {
     ...common.output
   },
   // , terser()
-  plugins: [...common.plugins, terser()]
+  plugins: [...common.plugins]
 }
 const total = {
   esmPackage,

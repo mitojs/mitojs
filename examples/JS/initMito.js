@@ -1,3 +1,4 @@
+debugger
 const instance = MITO.init({
   debug: true,
   apikey: 'sdasda',
@@ -6,6 +7,10 @@ const instance = MITO.init({
   maxBreadcrumbs: 10,
   dsn: 'http://localhost:2021/errors/upload',
   throttleDelayTime: 0,
-  enableTraceId: true
+  enableTraceId: true,
+  configReportXhr(xhr, reportData) {
+    console.log('xhr', xhr, reportData)
+    xhr.setRequestHeader('mito-header', 'test123')
+  }
 })
 window._MITO_ = instance
