@@ -76,10 +76,9 @@ export interface WxHookOptionsType {
   /**
    * 钩子函数：wx小程序的App下的OnHide执行完后再执行以下hook
    *
-   * @param {IWxPageInstance} page
    * @memberof WxHookOptionsType
    */
-  appOnHide?(page: IWxPageInstance): void
+  appOnHide?(): void
   /**
    * 钩子函数：wx小程序的App下的onPageNotFound执行完后再执行以下hook
    *
