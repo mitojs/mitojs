@@ -5,13 +5,13 @@ const MitoInstance = MITO.init({
   silentConsole: true,
   debug: true,
   appOnLaunch(options) {
-    console.log('mito options appOnlauch',options)
+    console.log('mito options appOnlauch', options)
   },
   pageOnLoad(options) {
-    console.log('mito page onload',options)
+    console.log('mito page onload', options)
   },
   pageOnReady(options) {
-    console.log('mito page pageOnReady',options)
+    console.log('mito page pageOnReady', options)
   },
   configReportWxRequest() {
     return {
