@@ -49,13 +49,15 @@ import { vuePlugin } from '@mitojs/vue'
 import Vue from 'vue'
 const MitoInstance = init({
   dsn: 'https://test.com/yourInterface',
-  // 
   maxBreadcrumbs: 100,
   // 配置上报时的请求头
   configReportWxRequest(data) {
-    header: {
-         'Content-Type': 'application/json; charset=UTF-8'
-      }
+    return {
+      header: {
+        'Content-Type': 'text/plain; charset=UTF-8'
+      },
+      dataType: 'text'
+    }
   },
   vue:Vue
 },[vuePlugin])
@@ -78,7 +80,7 @@ npm i @mitojs/wx-mini @mitojs/react
 
 
 
-## options 
+## options
 
 [基础配置项]()
 
@@ -95,69 +97,202 @@ npm i @mitojs/wx-mini @mitojs/react
 |    `silentAppOnPageNotFound`    | `boolean` | `false`    | 默认会监控微信小程序的微信小程序App的onPageNotFound，为true时，将不在监控 |
 
 ### WxHookOptionsType
+  ```js
+  /**
+   * 配置wx小程序上报时的wx.request配置
+   *
+   * @param {(TransportDataType | any)} event 即将上报的数据
+   * @return {*}  {Partial<WechatMiniprogram.RequestOption>}
+   * @memberof WxHookOptionsType
+   */
+  ```
+### configReportWxRequest(event: TransportDataType | any): Partial<WechatMiniprogram.RequestOption>
 
-```typescript
+
+**示例：**配置上报时的请求头的`content-type`
+```js
+MITO.init({
+  ...
+  configReportWxRequest(breadcrumb, hint){
+  	return {
+      header: {
+        'Content-Type': 'text/plain; charset=UTF-8'
+      },
+      dataType: 'text'
+    }
+  }
+})
+```
+
+
+
+--------------
+
+
+
+  ```js
   /**
-   * wx小程序上报时的wx.request配置
+   * 钩子函数：wx小程序的App下的onLaunch执行完后再执行以下hook
+   *
+   * @param {WechatMiniprogram.App.LaunchShowOption} options
+   * @memberof WxHookOptionsType
    */
-  configReportWxRequest?(event: TransportDataType | any): Partial<WechatMiniprogram.RequestOption>
+  ```
+### appOnLaunch(options: WechatMiniprogram.App.LaunchShowOption): void
+
+
+**示例：**在App的onLaunch中打印并输出入参`
+```js
+MITO.init({
+  ...
+  appOnLaunch(options){
+  	console.log('mito appOnLaunch', options)
+  }
+})
+```
+
+
+
+----------
+
+
+
+  ```js
   /**
-   * wx小程序的App下的onLaunch执行完后再执行以下hook
+   * 钩子函数：wx小程序的App下的OnShow执行完后再执行以下hook
+   *
+   * @param {WechatMiniprogram.App.LaunchShowOption} options
+   * @memberof WxHookOptionsType
    */
-  appOnLaunch?(options: WechatMiniprogram.App.LaunchShowOption): void
+  ```
+
+
+
+### appOnShow(options: WechatMiniprogram.App.LaunchShowOption): void
+
+  **示例：**在App的onShow中打印并输出入参`
+```js
+MITO.init({
+  ...
+  appOnShow(options){
+  	console.log('mito appOnShow', options)
+  }
+})
+```
+
+--------
+
+
+
+  ```js
   /**
-   * wx小程序的App下的OnShow执行完后再执行以下hook
+   * 钩子函数：wx小程序的App下的OnHide执行完后再执行以下hook
+   *
+   * @param {IWxPageInstance} page
+   * @memberof WxHookOptionsType
    */
-  appOnShow?(options: WechatMiniprogram.App.LaunchShowOption): void
+  ```
+### appOnHide(page: IWxPageInstance): void
+  ```js
   /**
-   * wx小程序的App下的OnHide执行完后再执行以下hook
+   * 钩子函数：wx小程序的App下的onPageNotFound执行完后再执行以下hook
+   *
+   * @param {WechatMiniprogram.OnPageNotFoundCallbackResult} data
+   * @memberof WxHookOptionsType
    */
-  appOnHide?(page: IWxPageInstance): void
+  ```
+### onPageNotFound(data: WechatMiniprogram.OnPageNotFoundCallbackResult): void
+  ```js
   /**
-   * wx小程序的App下的onPageNotFound执行完后再执行以下hook
+   * 钩子函数：先执行hook:pageOnLoad再执行wx小程序的Page下的onShow
+   *
+   * @param {IWxPageInstance} page
+   * @memberof WxHookOptionsType
    */
-  onPageNotFound?(data: WechatMiniprogram.OnPageNotFoundCallbackResult): void
+  ```
+### pageOnLoad(page: IWxPageInstance): void
+  ```js
   /**
-   * 先执行hook:pageOnLoad再执行wx小程序的Page下的onShow
+   * 钩子函数：先执行hook:pageOnShow再执行wx小程序的Page下的onShow
+   *
+   * @param {IWxPageInstance} page
+   * @memberof WxHookOptionsType
    */
-  pageOnLoad?(page: IWxPageInstance): void
+  ```
+### pageOnShow(page: IWxPageInstance): void
+  ```js
   /**
-   * 先执行hook:pageOnShow再执行wx小程序的Page下的onShow
+   * 钩子函数：先执行hook:pageOnReady再执行wx小程序的Page下的onShow
+   *
+   * @param {IWxPageInstance} page
+   * @memberof WxHookOptionsType
    */
-  pageOnShow?(page: IWxPageInstance): void
+  ```
+### pageOnReady(page: IWxPageInstance): void
+  ```js
   /**
-   * 先执行hook:pageOnShow再执行wx小程序的Page下的onShow
+   *  钩子函数：先wx小程序的App下的pageOnUnload执行完后再执行以下hook
+   *
+   * @param {IWxPageInstance} page
+   * @memberof WxHookOptionsType
    */
-  pageOnReady?(page: IWxPageInstance): void
+  ```
+### pageOnUnload(page: IWxPageInstance): void
+  ```js
   /**
-   * wx小程序的App下的pageOnUnload执行完后再执行以下hook
+   * 钩子函数：先执行hook:pageOnHide再执行wx小程序的Page下的onHide
+   *
+   * @param {IWxPageInstance} page
+   * @memberof WxHookOptionsType
    */
-  pageOnUnload?(page: IWxPageInstance): void
-  /**
-   * 先执行hook:pageOnHide再执行wx小程序的Page下的onHide
-   */
-  pageOnHide?(page: IWxPageInstance): void
+  ```
+### pageOnHide(page: IWxPageInstance): void
+  ```js
   /**
    * 先执行hook:onShareAppMessage再执行wx小程序的Page下的onShareAppMessage
+   *
+   * @param {(WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance)} options
+   * @memberof WxHookOptionsType
    */
-  onShareAppMessage?(options: WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance): void
+  ```
+### onShareAppMessage(options: WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance): void
+  ```js
   /**
    * 先执行hook:onShareTimeline再执行wx小程序的Page下的onShareTimeline
+   *
+   * @param {IWxPageInstance} page
+   * @memberof WxHookOptionsType
    */
-  onShareTimeline?(page: IWxPageInstance): void
+  ```
+### onShareTimeline(page: IWxPageInstance): void
+  ```js
   /**
    * 先执行hook:onTabItemTap再执行wx小程序的Page下的onTabItemTap
+   *
+   * @param {(WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance)} options
+   * @memberof WxHookOptionsType
    */
-  onTabItemTap?(options: WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance): void
+  ```
+### onTabItemTap(options: WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance): void
+  ```js
   /**
-   * 重写wx.NavigateToMiniProgram将里面的参数抛出来，便于在跳转时更改query和extraData
-   * @param options
+   * 钩子函数：重写wx.NavigateToMiniProgram将里面的参数抛出来，便于在跳转时更改query和extraData
+   *
+   * @param {WechatMiniprogram.NavigateToMiniProgramOption} options
+   * @return {*}  {WechatMiniprogram.NavigateToMiniProgramOption}
+   * @memberof WxHookOptionsType
    */
-  wxNavigateToMiniProgram?(options: WechatMiniprogram.NavigateToMiniProgramOption): WechatMiniprogram.NavigateToMiniProgramOption
+  ```
+### wxNavigateToMiniProgram(options: WechatMiniprogram.NavigateToMiniProgramOption): WechatMiniprogram.NavigateToMiniProgramOption
+  ```js
   /**
-   * 代理Action中所有函数，拿到第一个参数并抛出成hook
-   * @param e
+   * 钩子函数：代理Action中所有函数，拿到第一个参数并抛出
+   *
+   * 可用来判断e.target.type是否等于tap
+   *
+   * @param {WechatMiniprogram.BaseEvent} e 拿到事件e
+   * @memberof WxHookOptionsType
    */
-  triggerWxEvent?(e: WechatMiniprogram.BaseEvent): void	
-```
+  ```
+### triggerWxEvent(e: WechatMiniprogram.BaseEvent): void
 
