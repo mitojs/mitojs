@@ -46,6 +46,8 @@ const MitoInstance = init({
 
 ## opitons
 
+base options and hooks [click here](../core/README.md)
+
 ### BrowserOptionsFieldsTypes
 
 |              Name              | Type      | Default    | Description                                                  |

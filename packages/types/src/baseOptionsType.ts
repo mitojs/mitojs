@@ -21,52 +21,53 @@ export type BaseOptionsFieldsIntegrationType = BaseOptionsFieldsType & BaseOptio
 
 export interface BaseOptionsFieldsType {
   /**
-   * 上报接口的地址
+   * report to server's url
    */
   dsn?: string
   /**
-   * 默认关闭，为true时，整个sdk将禁用
+   * default is closed,sdk all functions will be turned off when set ture
    */
   disabled?: boolean
   /**
-   * 每个项目都应有一个唯一key
+   * default is ''(empty string),it mean that every project has a unique key
    */
   apikey?: string
   /**
-   * 默认为关闭，为true
+   * default is closed,it will be print in Console when set true
    */
   debug?: boolean
   /**
-   * 默认关闭traceId，开启时，页面的所有请求都会生成一个unique id，放入请求头中
+   * default is closed,all page's http request will add a unique id in request header
    */
   enableTraceId?: boolean
   /**
-   * 当开启enableTraceId时，traceId放入请求头中的key，默认是Trace-Id，也可以手动配置
+   * Should config this field if you set `enableTraceId` true.Considering that random addition of redundant request headers maybe cause cross-domain error,so here is regular containing relationship
    */
   traceIdFieldName?: string
   /**
-   * 如果开启了enableTraceId,也需要配置该配置项，includeHttpUrlTraceIdRegExp.test(xhr.url)为true时，才会在该请求头中添加traceId
-   * 由于考虑部分接口如果随便加上多余的请求头会造成跨域，所以这边用的是包含关系的正则
+   * When set `enableTraceId` true,traceId will be added in request header, defaul value is `Trace-Id`.
+   * You can configure this field to appoint name
    */
   includeHttpUrlTraceIdRegExp?: RegExp
   /**
-   * 默认为空，所有ajax都会被监听，不为空时，filterXhrUrlRegExp.test(xhr.url)为true时过滤
+   * default value is null,mean all ajax http will be monitored.You can set some value to filter url.
+   * It will filter when `filterXhrUrlRegExp.test(xhr.url) === true`
    */
   filterXhrUrlRegExp?: RegExp
   /**
-   * 默认20，最大100，超过100还是设置成100
+   * defaul value is 20,it will be 100 if value more than 100.it mean breadcrumb stack length
    */
   maxBreadcrumbs?: number
   /**
-   * 默认是0，表示按钮点击和微信触摸事件节流时间
+   * defaul value is 0,it mean throttle delay time of button click event and weixin touch event
    */
   throttleDelayTime?: number
   /**
-   * 最多可重复上报同一个错误的次数
+   * default value is 2,it mean max report count of the same error
    */
   maxDuplicateCount?: number
   /**
-   * Vue根实例
+   * vue's root Instance
    */
   vue?: VueInstance
 }

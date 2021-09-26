@@ -1,53 +1,55 @@
-[中文文档](./README.zh_CN.md)
-
 # @mitojs/core
-provider some core class、base abstract class and base options for [@mitojs](https://github.com/mitojs/mitojs)
+给[@mitojs](https://github.com/mitojs/mitojs)下面的库提供核心类、基础抽象类和基础配置
 
 
-**The following is base options, both [@mitojs/browser](../browser/README.md) and [@mitojs/wx-mini](../wx-mini/README.md) can use 😎**
-## BaseOptionsFieldsType
+
+**以下是基础的配置，[@mitojs/browser](../browser/README.md) 和 [@mitojs/wx-mini](../wx-mini/README.md)都能传入😎**
+## BaseOptionsFieldsType -
 
 
-report to server's url
+上报接口的地址
 ### dsn?: string
 
-default is closed,sdk all functions will be turned off when set ture
+默认关闭，为true时，整个sdk将禁用
 ### disabled?: boolean
 
-default is ''(empty string),it mean that every project has a unique key
+每个项目都应有一个唯一key
 ### apikey?: string
 
-default is closed,it will be print in Console when set true
+默认关闭，为true时会在控制台打印用户行为栈
 ### debug?: boolean
 
-default is closed,all page's http request will add a unique id in request header
+默认关闭traceId，开启时，页面的所有请求都会生成一个unique id，放入请求头中
 ### enableTraceId?: boolean
 
-Should config this field if you set `enableTraceId` true.Considering that random addition of redundant request headers maybe cause cross-domain error,so here is regular containing relationship.It will be included When `includeHttpUrlTraceIdRegExp.test(xhr.url)` is `true`
+如果开启了enableTraceId,也需要配置该配置项，时，才会在该请求头中添加traceId
+由于
+当`enableTraceId`为时，考虑到接口如果随便加上多余的请求头会造成跨域，所以这边用的是包含关系的正则.当`includeHttpUrlTraceIdRegExp.test(xhr.url)`为`true`时，改url就会被添加`traceId`的请求头属性
 ### includeHttpUrlTraceIdRegExp?: RegExp
 
-When set `enableTraceId` true,traceId will be added in request header, defaul value is `Trace-Id`.You can configure this field to appoint name
+当`enableTraceId`为时，traceId放入请求头中的key，默认是Trace-Id，也可以手动配置
 ### traceIdFieldName?: string
 
 
-default value is null,mean all ajax http will be monitored.You can set some value to filter url.It will filter when `filterXhrUrlRegExp.test(xhr.url) === true`
+
+默认为空，所有ajax都会被监听，不为空时，filterXhrUrlRegExp.test(xhr.url)为true时过滤
 ### filterXhrUrlRegExp?: RegExp
 
-defaul value is 20,it will be 100 if value more than 100.it mean breadcrumb stack length
+默认20，最大100，超过100还是设置成100
 ### maxBreadcrumbs?: number
 
-defaul value is 0,it mean throttle delay time of button click event and weixin touch event
+默认是0，表示按钮点击和微信触摸事件节流时间
 ### throttleDelayTime?: number
 
-default value is 2,it mean max report count of the same error
+默认为2，最多可重复上报同一个错误的次数
 ### maxDuplicateCount?: number
 
-vue's root Instance
+Vue根实例
 ### vue?: VueInstance
 
 
 
-## BaseOptionsHooksType
+## BaseOptionsHooksType - 钩子函数
 
 
 ```js
@@ -236,7 +238,7 @@ $api.getPayStatus().then(res => {
 })
 ```
 
-It's also can statistical PV and UV of uses of each function.Such as the following example is track in ActivePage function,UV statistics need to rely on `trackerId`[trackerId configuration](#backtrackerid-string--number)
+It's also can statistical PV and UV of uses of each function.Such as the following example is track in ActivePage function,UV statistics need to rely on `trackerId`[trackerId configuration](https://github.com/mitojs/mitojs/blob/master/docs/option.md#backtrackerid)
 ```js
 /**
  * react hook component:ActivePage

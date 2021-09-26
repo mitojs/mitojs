@@ -25,7 +25,7 @@ const errorPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   transform(errorEvent: ErrorEvent) {
     const target = errorEvent.target as ResourceErrorTarget
     if (target.localName) {
-      // 资源加载错误
+      // resource error
       return resourceTransform(errorEvent.target as ResourceErrorTarget)
     }
     // code error
@@ -40,7 +40,7 @@ const errorPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
 
 const resourceMap = {
   img: '图片',
-  script: 'js脚本'
+  script: 'JS脚本'
 }
 
 function resourceTransform(target: ResourceErrorTarget) {

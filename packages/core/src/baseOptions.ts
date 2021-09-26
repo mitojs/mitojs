@@ -1,6 +1,6 @@
 import { ToStringTypes } from '@mitojs/shared'
 import { BaseOptionsFieldsIntegrationType, BaseOptionsType, VueInstance } from '@mitojs/types'
-import { generateUUID, toStringValidateOption, validateOptionsAndSet } from '@mitojs/utils'
+import { generateUUID, validateOptionsAndSet } from '@mitojs/utils'
 
 /**
  * 公用的基础配置项绑定

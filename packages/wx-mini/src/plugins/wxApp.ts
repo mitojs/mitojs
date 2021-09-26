@@ -95,7 +95,7 @@ wxAppPluginMap.set(WxAppEvents.AppOnUnhandledRejection, {
       type: ErrorTypes.PROMISE,
       message: unknownToString(ev.reason),
       url: getCurrentRoute(),
-      name: 'unhandledrejection', // 小程序当初onUnhandledRejection回调中无type参数，故写死
+      name: WxBreadcrumbTypes.UNHANDLEDREJECTION,
       time: getTimestamp(),
       level: Severity.Low
     }
