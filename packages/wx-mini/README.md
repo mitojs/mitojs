@@ -18,6 +18,15 @@ import { init } from '@mitojs/wx-mini'
 const MitoInstance = init({
   dsn: 'https://test.com/yourInterface',
   maxBreadcrumbs: 100,
+    // 配置上报时的请求头
+  configReportWxRequest(data) {
+    return {
+      header: {
+        'Content-Type': 'text/plain; charset=UTF-8'
+      },
+      dataType: 'text'
+    }
+  },
 })
 ```
 
