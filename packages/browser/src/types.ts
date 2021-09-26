@@ -2,7 +2,8 @@ import { BaseOptionsFieldsIntegrationType } from '@mitojs/types'
 
 export interface BrowserOptionsFieldsTypes extends BrowsersilentOptionsType, BaseOptionsFieldsIntegrationType, BrowserOptionsHooksType {
   /**
-   * 使用img上报的方式，默认为false，默认是xhr的上报方式
+   * 默认为false，默认是xhr的上报方式，
+   * 为true时，则使用img上报的方式，会在dsn后面追加data=encodeURIComponent(reportData)，在服务端接受时需要decodeURIComponent
    */
   useImgUpload?: boolean
 }
@@ -14,11 +15,11 @@ export interface BrowserOptionsFieldsTypes extends BrowsersilentOptionsType, Bas
  */
 export interface BrowsersilentOptionsType {
   /**
-   * 默认会监控xhr，为true时，将不再监
+   * 默认会监控xhr，为true时，将不再监控
    */
   silentXhr?: boolean
   /**
-   * 默认会监控fetch，为true时，将不再监
+   * 默认会监控fetch，为true时，将不再监控
    */
   silentFetch?: boolean
   /**

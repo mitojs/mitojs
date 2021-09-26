@@ -1,17 +1,16 @@
 # @mitojs/browser
 
+
+
 ## Install
 
-### Using npm
 ```bash
+# using npm
 npm i @mitojs/browser
-```
-
-### Using yarn
-
-```bash
+# using yarn
 yarn add @mitojs/browser
 ```
+
 
 ### usage
 
@@ -25,6 +24,8 @@ const MitoInstance = init({
   maxBreadcrumbs: 100
 })
 ```
+
+
 
 ## Using With CDN
 **index.html**
@@ -40,91 +41,45 @@ const MitoInstance = init({
 </header>
 ```
 
-### use log
-you can call `log` function in anywhere with mito instance
+
+## opitons
+
+### BrowserOptionsFieldsTypes
+
+|              Name              | Type      | Default    | Description                                                  |
+| :----------------------------: | --------- | ---------- | ------------------------------------------------------------ |
+| `useImgUpload` | `boolean` | `false` | 为true时，则使用img上报的方式，会在dsn后面追加data=encodeURIComponent(reportData)，在服务端接受时需要decodeURIComponent，默认为false。（小程序只能用wx.request上报的方式，也就是xhr，而且走img请求的话，url是有字符长度限制的，所以推荐走xhr） |
+|          `silentXhr`           | `boolean` | `false`    | 默认会监控xhr，为true时，将不再监控                          |
+|         `silentFetch`          | `boolean` | `false`    | 默认会监控fetch，为true时，将不再监控                        |
+|        `silentConsole`         | `boolean` | `false`    | 默认会监控console，为true时，将不再监控                      |
+|          `silentDom`           | `boolean` | `false`    | 默认会监听click事件，当用户点击的标签不是body时就会被放入breadcrumb，为true，将不在监听 |
+|        `silentHistory`         | `boolean` | `false`    | 默认会监控popstate、pushState、replaceState，为true时，将不再监控 |
+|         `silentError`          | `boolean` | `false`    | 默认会监控error，为true时，将不在监控                        |
+|   `silentUnhandledrejection`   | `boolean` | `false`    | 默认会监控unhandledrejection，为true时，将不在监控           |
+|       `silentHashchange`       | `boolean` | `false`    | 默认会监控hashchange，为true时，将不在监控                   |
+
+
+### BrowserOptionsHooksType
 
 ```js
-interface LogTypes {
-  message: string | number | Object
-  tag?: string;
-  level?: Severity;
-  ex?: any;
-}
-MitoInstance.log(LogTypes)
+  /**
+   * 钩子函数，配置发送到服务端的xhr
+   * 可以对当前xhr实例做一些配置：xhr.setRequestHeader()、xhr.withCredentials
+   *
+   * @param {XMLHttpRequest} xhr XMLHttpRequest的实例
+   * @param {*} reportData 上报的数据
+   * @memberof BrowserOptionsHooksType
+   */
 ```
+### configReportXhr?(xhr: XMLHttpRequest, reportData: any): void
 
+**示例：**设置上报时的请求头为`'mito-header':'test123'`
 ```js
-MitoInstance.log({
-  message: 'some msg',
-  tag: 'your tag',
-})
-```
-
-### MITO.log
-有时我们需要在某个业务代码中上报业务信息或者是埋点信息，这时可以用到`MITO.log`手动上报，下面这个例子就是在获取支付状态的接口是否异常，如果异常就上报异常信息。
-```js
-import * as MITO from '@mitojs/web'
-
-$api.getPayStatus().then(res => {
-  if (res.success) {
-    // 支付正常
-  } else {
-    // 支付异常 上报异常信息
-    MITO.log({
-      // 错误信息
-      message: res.errMsg,
-      // 标签 可以理解为种类
-      tag: '支付页面'
-      // 错误等级：可选，默认最高等级
-      // level: '',
-      // 错误信息 Error对象
-      // ex: ''
-    })
+MITO.init({
+  ...
+  configReportXhr(xhr, reportData) {
+    xhr.setRequestHeader('mito-header', 'test123')
   }
 })
 ```
-还可以统计每个功能的浏览次数（PV）、用户量（UV），比如下面代码中在活动页埋点，UV的统计需要依赖`trackerId`，[trackerId详细配置](https://github.com/mitojs/mitojs/blob/master/docs/option.md#backtrackerid)
-```js
-import * as MITO from '@mitojs/web'
-
-/**
- * react hook 活动页
- */
-function ActivePage() {
-  useEffect(() => {
-    //可统计PV、UV
-    MITO.log({
-      // 可选
-      // message: '统计',
-      // 可选
-      tag: '活动页统计'
-    })
-  }, [])
-  return <div>这是活动页</div>
-}
-```
-**生成errorId规则**
-主要是根据传入的`tag`来生成的，所以相同的`tag`加上不同的`message`生成相同的`errorId`，比如:
-```js
-MITO.log({
-  // 可选
-  message: '这是测试1',
-  // 可选
-  tag: '活动页统计'
-})
-```
-
-```js
-MITO.log({
-  // 可选
-  message: '这是测试2',
-  // 可选
-  tag: '活动页统计'
-})
-```
-上面两个`errorId`是相同的，但只要`tag`变一下两个`errorId`就不一样了
-
-
-<!-- ###  -->
-
 
