@@ -5,6 +5,7 @@ import {
   getCurrentRoute,
   getTimestamp,
   isError,
+  logger,
   parseErrorString,
   replaceOld,
   Severity,
@@ -60,14 +61,26 @@ wxAppPluginMap.set(WxAppEvents.AppOnHide, {
 })
 
 wxAppPluginMap.set(WxAppEvents.AppOnError, {
-  transform(error: string) {
-    const parsedError = parseErrorString(error)
-    const data: ReportDataType = {
-      ...parsedError,
+  transform(error: string | Error) {
+    let data: Partial<ReportDataType> = {
+      type: ErrorTypes.JAVASCRIPT,
       time: getTimestamp(),
       level: Severity.Normal,
-      url: getCurrentRoute(),
-      type: ErrorTypes.JAVASCRIPT
+      url: getCurrentRoute()
+    }
+    if (typeof error === 'string') {
+      const parsedError = parseErrorString(error)
+      data = {
+        ...parsedError,
+        ...data
+      }
+    } else if (isError(error)) {
+      data = {
+        ...extractErrorStack(error, Severity.Normal),
+        ...data
+      }
+    } else {
+      logger.error("AppOnError params isn't string or error")
     }
     return data
   },
