@@ -1,6 +1,6 @@
 {
   "name": "@mitojs/react",
-  "version": "2.1.27",
+  "version": "2.1.29",
   "description": "A SDK For Report React ErrorBoundary",
   "author": "cjinhuo",
   "license": "MIT",
@@ -28,8 +28,8 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@mitojs/core": "2.1.27",
-    "@mitojs/utils": "2.1.27",
-    "@mitojs/shared": "2.1.27"
+    "@mitojs/core": "2.1.29",
+    "@mitojs/utils": "2.1.29",
+    "@mitojs/shared": "2.1.29"
   }
 }

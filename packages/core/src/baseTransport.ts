@@ -81,7 +81,7 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
       [apikey, 'apikey', ToStringTypes.String],
       [dsn, 'dsn', ToStringTypes.String],
       [maxDuplicateCount, 'maxDuplicateCount', ToStringTypes.Number],
-      [beforeDataReport, 'beforeDataReport', , functionType],
+      [beforeDataReport, 'beforeDataReport', functionType],
       [backTrackerId, 'backTrackerId', functionType],
       [configReportUrl, 'configReportUrl', functionType]
     ]

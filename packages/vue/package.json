@@ -1,6 +1,6 @@
 {
   "name": "@mitojs/vue",
-  "version": "2.1.27",
+  "version": "2.1.29",
   "description": "A SDK for monitoring Vue errors",
   "author": "cjinhuo",
   "license": "MIT",
@@ -25,8 +25,8 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/utils": "2.1.27",
-    "@mitojs/shared": "2.1.27",
-    "@mitojs/types": "2.1.27"
+    "@mitojs/utils": "2.1.29",
+    "@mitojs/shared": "2.1.29",
+    "@mitojs/types": "2.1.29"
   }
 }
