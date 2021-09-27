@@ -10,6 +10,7 @@ const fetchPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
     monitorFetch.call(this, notify)
   },
   transform(collectedData: HttpCollectedType) {
+    console.log('transform', collectedData)
     return httpTransform(collectedData)
   },
   consumer(transformedData: HttpTransformedType) {
