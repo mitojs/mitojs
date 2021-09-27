@@ -21,6 +21,7 @@ describe('fetchPlugin', () => {
     window
       .fetch('https://www.baidu.com')
       .then((res) => {
+        console.log('res', res)
         setTimeout(() => {
           // not work in travis
           expect((fetchPlugin.transform as jest.Mock).mock.calls.length).toBe(1)
