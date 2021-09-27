@@ -69,6 +69,7 @@ export function getBreadcrumbCategoryInBrowser(type: BrowserBreadcrumbTypes) {
 
 /**
  * 解析error的stack，并返回args、column、line、func、url:
+ * wx AppOnError use too
  * @param ex
  * @param level
  */
