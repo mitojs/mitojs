@@ -14,6 +14,7 @@ const MitoInstance = MITO.init({
     console.log('mito page pageOnReady', options)
   },
   configReportWxRequest() {
+    console.log('configReportWxRequest')
     return {
       header: {
         'Content-Type': 'text/plain; charset=UTF-8'
@@ -23,25 +24,6 @@ const MitoInstance = MITO.init({
   }
 })
 wx.MitoInstance = MitoInstance
-
-function interceptRequest(params) {
-  Object.assign(wx, {
-    __MITO_REQUEST__: params
-  })
-  return params
-}
-
-let wxRequest = wx.request
-
-function newRequest(params) {
-  return wxRequest(interceptRequest(params))
-}
-
-Object.defineProperty(wx, 'request', {
-  value: newRequest,
-  writable: true,
-  configurable: true
-})
 
 App({
   onLaunch() {

@@ -1,7 +1,7 @@
 import { Severity } from '@mitojs/utils'
 import { ReportDataType } from './transport'
 import { TNumStrObj } from './common'
-import { BreadcrumbTypes } from '@mitojs/shared'
+import { BREADCRUMBCATEGORYS, BreadcrumbTypes } from '@mitojs/shared'
 import { ConsoleCollectType, RouteChangeCollectType } from './basePluginType'
 
 export interface BreadcrumbPushData {
@@ -14,7 +14,7 @@ export interface BreadcrumbPushData {
   /**
    * 分为user action、debug、http、
    */
-  category?: string
+  category?: BREADCRUMBCATEGORYS
   time?: number
   level: Severity
 }

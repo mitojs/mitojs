@@ -30,4 +30,9 @@
    这是触发UI.tab按钮
   </button>
  </view>
+<view class="cell">
+  <button class="btn" id="click-file-btn" type="primary" data-click="on-down-file" bindtap="onClickManualLog">
+   手动上报log
+  </button>
+ </view>
 </view>

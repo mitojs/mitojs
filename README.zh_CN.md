@@ -1,5 +1,3 @@
-<!-- [中文文档]() -->
-
 <div align="center">
     <a href="#" target="_blank">
     <img src="https://i.loli.net/2021/07/28/EvPwd4NjVH3tBfO.jpg" alt="mito-logo" height="90">

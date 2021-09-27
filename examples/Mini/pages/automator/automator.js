@@ -61,6 +61,12 @@ Page({
     })
   },
   onClickTab(e) {
-    console.log('e',e)
+    console.log('e', e)
+  },
+  onClickManualLog() {
+    wx.MitoInstance.log({
+      message: 'this is log msg',
+      tag: 'this is log tag'
+    })
   }
 })
