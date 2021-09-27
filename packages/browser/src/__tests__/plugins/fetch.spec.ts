@@ -22,13 +22,14 @@ describe('fetchPlugin', () => {
       .fetch('https://www.baidu.com')
       .then((res) => {
         setTimeout(() => {
+          // not work in travis
           expect((fetchPlugin.transform as jest.Mock).mock.calls.length).toBe(1)
           expect((fetchPlugin.consumer as jest.Mock).mock.calls.length).toBe(1)
           const stack = browserInstance.breadcrumb.getStack()
           expect(stack[0].category).toBe(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.FETCH))
           expect(stack.length).toBe(1)
           done()
-        }, 100)
+        }, 2000)
       })
       .catch((err) => {
         setTimeout(() => {
@@ -39,7 +40,7 @@ describe('fetchPlugin', () => {
           expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
           expect(stack.length).toBe(2)
           done()
-        }, 100)
+        }, 2000)
       })
   })
 })
