@@ -31,6 +31,7 @@ const wxDomPlugin: BasePluginType<WxBaseEventTypes, WxClient> = {
             function (originMethod: (args: any) => void) {
               return function (...args: any): void {
                 const e = args[0]
+                sdkOptions.triggerWxEvent(e)
                 if (e && e.type && e.currentTarget && !e.mitoWorked) {
                   if (linstenerTypes.indexOf(e.type) > -1) {
                     throttleGesturetrigger(e)
@@ -55,8 +56,6 @@ const wxDomPlugin: BasePluginType<WxBaseEventTypes, WxClient> = {
     })
   },
   transform(e: WechatMiniprogram.BaseEvent) {
-    const { options: sdkOptions } = this
-    sdkOptions.triggerWxEvent(e)
     let type = WxBreadcrumbTypes.TOUCHMOVE
     if (e.type === LinstenerTypes.Tap) {
       type = WxBreadcrumbTypes.TAP
