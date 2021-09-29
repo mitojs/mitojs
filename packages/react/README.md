@@ -4,10 +4,6 @@
 
 **If you want to import in weixin miniprograme,please replace `@mitojs/browser` to `@miotjs/wx-mini`**
 
-
-
-
-
 ## 🛠️ Install
 
 ``` bash
@@ -17,6 +13,7 @@ npm install @mitojs/react @mitojs/browser
 yarn add @mitojs/react @mitojs/browser
 ```
 
+read the [mito-doc](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction) to konw more info
 
 
 ## 🥳 Usage

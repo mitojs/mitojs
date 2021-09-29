@@ -33,6 +33,11 @@ const MitoInstance = init({
 ```
 
 
+更多信息关于`@mitojs/wx-mini`的使用点击[这里](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/wx-mini)
+
+
+
+
 
 # 📁 使用本地文件
 

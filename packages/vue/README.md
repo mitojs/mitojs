@@ -15,6 +15,7 @@ npm i @mitojs/vue @mitojs/browser
 yarn add @mitojs/vue @mitojs/browser
 ```
 
+read the [mito-doc](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction) to konw more info
 
 
 # 🥳 Usage

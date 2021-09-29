@@ -13,6 +13,10 @@ npm i @mitojs/web
 yarn add @mitojs/web
 ```
 
+read the [mito-doc](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction) to konw more info
+
+
+
 ## Usage
 ```js
 import { init,MitoProvider,ErrorBoundary,vuePlugin } from '@mitojs/web'
