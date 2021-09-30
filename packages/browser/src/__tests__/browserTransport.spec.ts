@@ -1,4 +1,5 @@
 import { Breadcrumb } from '@mitojs/core'
+import { sleepRun } from '@mitojs/utils'
 import { ErrorTypes } from 'packages/shared/src/constant'
 import { ReportDataType } from 'packages/types/src/transport'
 import { BrowserTransport } from '../browserTransport'
@@ -21,11 +22,7 @@ const logMockData: ReportDataType = {
   type: ErrorTypes.LOG,
   message: 'is mito.log'
 }
-function sleepRun(fn: () => void) {
-  setTimeout(() => {
-    fn()
-  }, 300)
-}
+
 describe('browserTransport.ts', () => {
   const browserTransport = new BrowserTransport({
     ...config

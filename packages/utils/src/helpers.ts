@@ -311,3 +311,9 @@ export function validateOptionsAndSet(this: any, targetArr: [any, string, ToStri
     ([target, targetName, expectType]) => toStringValidateOption(target, targetName, expectType) && (this[targetName] = target)
   )
 }
+
+export function sleepRun(fn: () => void, delay = 200) {
+  setTimeout(() => {
+    fn()
+  }, delay)
+}
