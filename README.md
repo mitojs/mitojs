@@ -29,22 +29,20 @@
 
 ✔️ 🔨 monitor click、wx:tab、wx:touchmove
 
-✔️ 👌 rich hooks and options
+✔️ 👌 rich hooks and options [configuration doc](https://mitojs.github.io/mito-doc/#/sdk/guide/basic-configuration)
 
-✔️ 👌 perfect test for web unit test、web e2e、wxmini e2e
+✔️ 👌 support web（>= IE8） [@mitojs/browser](./packages/browser/README.md)
 
-✔️ 👌 support web（>= IE8） [@mitojs/browser](https://github.com/mitojs/mitojs/tree/master/packages/browser)
+✔️ 👌 support framework with Vue3、Vue2.6[@mitojs/vue](./packages/vue/README.md)、React@latest[@mitojs/react](./packages/react/README.md)
 
-✔️ 👌 support framework with Vue3、Vue2.6[@mitojs/vue](https://github.com/mitojs/mitojs/tree/master/packages/vue)、React@latest[@mitojs/react](https://github.com/mitojs/mitojs/tree/master/packages/react)
-
-✔️ 👌 support native wxmini、uni-app、remax framework etc [@mitojs/wx-mini](https://github.com/mitojs/mitojs/tree/master/packages/wx-mini)
+✔️ 👌 support native wxmini、uni-app、remax framework etc [@mitojs/wx-mini](./packages/wx-mini/README.md)
 
 ✔️ 🔥 keep iterating~
 
-## docs
-Be organizing documents~~~waiting a moment
-
 ## 😎 Get Started
+
+here is [document](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction)
+
 Build your first demo in 2 min or less:
 
 ### browser
@@ -68,13 +66,12 @@ const MitoInstance = init({
 })
 ```
 
-more usage info of `@mitojs/browser` [click here](./packages/browser/README.md)
+more usage info of `@mitojs/browser` [click here](https://mitojs.github.io/mito-doc/#/sdk/guide/browser)
 
 ### support list
 * [react usage manual](./packages/react/README.md)
 * [vue usage manual](./packages/vue/README.md)
 * [wx-mini usage manual](./packages/wx-mini/README.md)
-
 
 
 ## 🧐 Demo for SDK
@@ -85,23 +82,7 @@ more usage info of `@mitojs/browser` [click here](./packages/browser/README.md)
 
 [vue3-sdk-demo](https://mitojs.github.io/vue3-sdk-demo):Use @mitojs/vue in Vue3.x
 
-[vue2-sdk-demo](https://mitojs.github.io/vue2-sdk-demo):Use @mitojs/vue in Vue2.x
-
 <!-- ![mito-在线demo](https://tva1.sinaimg.cn/large/008eGmZEly1gmxgn4y1sag315g0m2hdt.gif)： -->
-
-## 😃 monitoring platform
-
-**here are some examples for sdk of reporting to admin(there is mock data)**
-
-<!-- ![react-example](https://tva1.sinaimg.cn/large/008eGmZEly1gmxggqptzwg30u00hoe84.gif) -->
-
-[vue-admin-demo](https://mitojs.github.io/mito-admin-demo/#/errors/1/info): show a HTTP_ERROR in vue platform
-
-[react-admin-demo](https://mitojs.github.io/mito-admin-demo/#/errors/2/info): show a JAVASCRIPT_ERROR in react platform
-
-[js-admin-demo](https://mitojs.github.io/mito-admin-demo/#/errors/3/info):show JAVASCRIPT_ERROR in js platform
-
-[wx-mini-admin-demo](https://mitojs.github.io/mito-admin-demo/#/errors/4/info):show JAVASCRIPT_ERROR in wx-mini platform
 
 ## 📞 issue&&contact
 ### issue
