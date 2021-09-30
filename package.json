@@ -31,7 +31,7 @@
     "miniPrograme"
   ],
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.13.2",
+    "@microsoft/api-extractor": "7.18.11",
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-html": "^0.2.0",
