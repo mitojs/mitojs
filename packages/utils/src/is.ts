@@ -47,12 +47,22 @@ export function isError(wat: any): boolean {
 
 /**
  * 检查是否是空对象
- * ../param obj 待检测的对象
+ *
+ * @export
+ * @param {Object} obj 待检测的对象
+ * @return {*}  {boolean}
  */
 export function isEmptyObject(obj: Object): boolean {
   return variableTypeDetection.isObject(obj) && Object.keys(obj).length === 0
 }
 
+/**
+ * 检测是否是空字符、undefined、null
+ *
+ * @export
+ * @param {*} wat
+ * @return {*}  {boolean}
+ */
 export function isEmpty(wat: any): boolean {
   return (variableTypeDetection.isString(wat) && wat.trim() === '') || wat === undefined || wat === null
 }

@@ -1,4 +1,4 @@
-import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes } from '@mitojs/shared'
+import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes } from '@mitojs/shared'
 import { RouteChangeCollectType } from '@mitojs/types'
 import { sleepRun, _global } from '@mitojs/utils'
 import { BrowserClient } from '../../browserClient'

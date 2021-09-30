@@ -8,9 +8,6 @@ describe('hashRoutePlugin', () => {
   const browserInstance = new BrowserClient({
     dsn: 'http://test.com/upload'
   })
-  beforeEach(() => {
-    browserInstance.breadcrumb.clear()
-  })
   hashRoutePlugin.monitor = jest.fn(hashRoutePlugin.monitor)
   hashRoutePlugin.transform = jest.fn(hashRoutePlugin.transform)
   hashRoutePlugin.consumer = jest.fn(hashRoutePlugin.consumer)
@@ -20,7 +17,7 @@ describe('hashRoutePlugin', () => {
   it("hashRoutePlugin's func should be called by browserClient", (done) => {
     const to = '#/three'
     location.hash = to
-    on(_global, BrowserEventTypes.HASHCHANGE, function (e: HashChangeEvent) {
+    on(_global, BrowserEventTypes.HASHCHANGE, function () {
       expect((hashRoutePlugin.monitor as jest.Mock).mock.calls.length).toBe(1)
       expect((hashRoutePlugin.transform as jest.Mock).mock.calls.length).toBe(1)
       expect((hashRoutePlugin.consumer as jest.Mock).mock.calls.length).toBe(1)
