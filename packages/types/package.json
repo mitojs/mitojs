@@ -26,7 +26,6 @@
   "dependencies": {
     "@mitojs/core": "2.1.30",
     "@mitojs/utils": "2.1.30",
-    "@mitojs/browser": "2.1.30",
     "@mitojs/shared": "2.1.30",
     "@types/wechat-miniprogram": "^3.1.0"
   }
