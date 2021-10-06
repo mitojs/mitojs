@@ -31,13 +31,11 @@
 
 ✔️ 👌 rich hooks and options [configuration doc](https://mitojs.github.io/mito-doc/#/sdk/guide/basic-configuration)
 
-✔️ 👌 support web（>= IE8） [@mitojs/browser](./packages/browser/README.md)
+✔️ 👌 support web(>= IE8)[@mitojs/browser](https://mitojs.github.io/mito-doc/#/sdk/guide/browser)
 
-✔️ 👌 support framework with Vue3、Vue2.6[@mitojs/vue](./packages/vue/README.md)、React@latest[@mitojs/react](./packages/react/README.md)
+✔️ 👌 support framework with Vue3、Vue2.6[@mitojs/vue](https://mitojs.github.io/mito-doc/#/sdk/guide/vue)、React@latest[@mitojs/react](https://mitojs.github.io/mito-doc/#/sdk/guide/react)
 
-✔️ 👌 support native wxmini、uni-app、remax framework etc [@mitojs/wx-mini](./packages/wx-mini/README.md)
-
-✔️ 🔥 keep iterating~
+✔️ 👌 support native wxmini、uni-app、remax framework etc [@mitojs/wx-mini](https://mitojs.github.io/mito-doc/#/sdk/guide/wx-mini)
 
 ## 😎 Get Started
 
