@@ -39,9 +39,7 @@
 
 ## 😎 Get Started
 
-here is [document](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction)
-
-Build your first demo in 2 min or less:
+here is [document](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction).Build your first demo in 2 min or less:
 
 ### browser
 #### 🛠️ Install
