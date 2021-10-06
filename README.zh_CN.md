@@ -30,7 +30,7 @@
 
 ## 😎 快速开始
 
-这里是 [详细文档](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction)
+这里是 [详细文档](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/introduction)
 
 花2分钟或更少时间来构建你的第一个demo:
 ### browser
@@ -55,19 +55,14 @@ const MitoInstance = init({
 })
 ```
 
-更多`@mitojs/browser`信息[点击这里](https://mitojs.github.io/mito-doc/#/sdk/guide/browser)
+更多`@mitojs/browser`信息[点击这里](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/browser)
 
 ## SDK在线试用Demo
-[react-sdk-demo](https://mitojs.github.io/react-sdk-demo)
+[react-sdk-demo](https://mitojs.github.io/react-sdk-demo):Use @mitojs/react  in react@next
 
-[vue2-sdk-demo](https://mitojs.github.io/vue2-sdk-demo)
+[vue3-sdk-demo](https://mitojs.github.io/vue3-sdk-demo):Use @mitojs/vue in Vue3.x
 
-![react-sdk-demo](https://tva1.sinaimg.cn/large/008i3skNly1gtr0cdzowzg31fy0u0q4z.gif)
-
-### 支持平台
-* [react 使用指南](./packages/react/README.md)
-* [vue 使用指南](./packages/vue/README.md)
-* [wx-mini 使用指南](./packages/wx-mini/README.md)
+<!-- ![react-sdk-demo](https://tva1.sinaimg.cn/large/008i3skNly1gtr0cdzowzg31fy0u0q4z.gif) -->
 
 ## 🧐 在线示例
 
@@ -83,9 +78,11 @@ const MitoInstance = init({
 
 ### 联系
 * wx：cjinhuo
+
   <img src="https://tva1.sinaimg.cn/large/008i3skNly1guqs71uy5pj60u50u0ju802.jpg" width="200" height="200"></img>
-* email：cjinhuo@qq.com
-* bytedance introduce：(杭州、北京、上海、深圳、杭州、广州)
+
+* 简历邮箱：chenjinhuo@bytedance.com
+* 字节内推：(杭州、北京、上海、深圳、杭州、广州)
 1. [杭州岗位](https://jobs.bytedance.com/experienced/position?keywords=%E5%89%8D%E7%AB%AF&category=6704215862603155720%2C6704215862557018372%2C6704215886108035339%2C6704215888985327886%2C6704215897130666254%2C6704215956018694411%2C6704215957146962184%2C6704215958816295181%2C6704215963966900491%2C6704216109274368264%2C6704216296701036811%2C6704216635923761412%2C6704217321877014787%2C6704219452277262596%2C6704219534724696331%2C6938376045242353957&location=CT_52&project=&type=&job_hot_flag=&current=1&limit=10)（web infra、平台架构、电商、商业变现等等）
 
 

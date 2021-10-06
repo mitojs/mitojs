@@ -66,11 +66,6 @@ const MitoInstance = init({
 
 more usage info of `@mitojs/browser` [click here](https://mitojs.github.io/mito-doc/#/sdk/guide/browser)
 
-### support list
-* [react usage manual](./packages/react/README.md)
-* [vue usage manual](./packages/vue/README.md)
-* [wx-mini usage manual](./packages/wx-mini/README.md)
-
 
 ## 🧐 Demo for SDK
 
@@ -87,8 +82,10 @@ more usage info of `@mitojs/browser` [click here](https://mitojs.github.io/mito-
 welcome to raise issue, you can contact me on wx or email if you have some good suggestion(notes: mitojs)
 ### Contact
 * wx：cjinhuo
+
   <img src="https://tva1.sinaimg.cn/large/008i3skNly1guqs71uy5pj60u50u0ju802.jpg" width="200" height="200"></img>
-* email：cjinhuo@qq.com
+
+* send resume to email：chenjinhuo@bytedance.com
 * bytedance introduce：(Hanghou、Beijing、Shanghai、Shenzhen、Guangzhou)
 1. [hangzhou-jobs](https://jobs.bytedance.com/experienced/position?keywords=%E5%89%8D%E7%AB%AF&category=6704215862603155720%2C6704215862557018372%2C6704215886108035339%2C6704215888985327886%2C6704215897130666254%2C6704215956018694411%2C6704215957146962184%2C6704215958816295181%2C6704215963966900491%2C6704216109274368264%2C6704216296701036811%2C6704216635923761412%2C6704217321877014787%2C6704219452277262596%2C6704219534724696331%2C6938376045242353957&location=CT_52&project=&type=&job_hot_flag=&current=1&limit=10)（web infrastructure、platform architecture etc.）
 
