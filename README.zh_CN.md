@@ -57,13 +57,6 @@ const MitoInstance = init({
 
 更多`@mitojs/browser`信息[点击这里](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/browser)
 
-## SDK在线试用Demo
-[react-sdk-demo](https://mitojs.github.io/react-sdk-demo):Use @mitojs/react  in react@next
-
-[vue3-sdk-demo](https://mitojs.github.io/vue3-sdk-demo):Use @mitojs/vue in Vue3.x
-
-<!-- ![react-sdk-demo](https://tva1.sinaimg.cn/large/008i3skNly1gtr0cdzowzg31fy0u0q4z.gif) -->
-
 ## 🧐 在线示例
 
 **下面的demo展示sdk可以收集到的数据**
