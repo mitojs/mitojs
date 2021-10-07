@@ -44,7 +44,14 @@ export function parseErrorString(str: string): WxParsedErrorType {
   }
 }
 
-export function getBreadcrumbCategoryInWx(type: WxBreadcrumbTypes) {
+/**
+ * 根据wx行为类型返回种类
+ *
+ * @export
+ * @param {WxBreadcrumbTypes} type
+ * @return {*}  {BREADCRUMBCATEGORYS}
+ */
+export function getBreadcrumbCategoryInWx(type: WxBreadcrumbTypes): BREADCRUMBCATEGORYS {
   switch (type) {
     case WxBreadcrumbTypes.XHR:
       return BREADCRUMBCATEGORYS.HTTP

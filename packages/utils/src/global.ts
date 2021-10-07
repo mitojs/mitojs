@@ -54,16 +54,16 @@ function getGlobalMitoSupport(): MitoSupport {
 
 export { _global, _support }
 
-_support.replaceFlag = _support.replaceFlag || {}
-const replaceFlag = _support.replaceFlag
-export function setFlag(replaceType: EventTypes, isSet: boolean): void {
-  if (replaceFlag[replaceType]) return
-  replaceFlag[replaceType] = isSet
-}
+// _support.replaceFlag = _support.replaceFlag || {}
+// const replaceFlag = _support.replaceFlag
+// export function setFlag(replaceType: EventTypes, isSet: boolean): void {
+//   if (replaceFlag[replaceType]) return
+//   replaceFlag[replaceType] = isSet
+// }
 
-export function getFlag(replaceType: EventTypes): boolean {
-  return replaceFlag[replaceType] ? true : false
-}
+// export function getFlag(replaceType: EventTypes): boolean {
+//   return replaceFlag[replaceType] ? true : false
+// }
 
 export function supportsHistory(): boolean {
   // borrowed from: https://github.com/angular/angular.js/pull/13945/files

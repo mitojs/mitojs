@@ -48,7 +48,14 @@ export function parseUrlToObj(url: string): {
   }
 }
 
-export function getBreadcrumbCategoryInBrowser(type: BrowserBreadcrumbTypes) {
+/**
+ * 根据browser行为类型返回种类
+ *
+ * @export
+ * @param {BrowserBreadcrumbTypes} type
+ * @return {*}  {BREADCRUMBCATEGORYS}
+ */
+export function getBreadcrumbCategoryInBrowser(type: BrowserBreadcrumbTypes): BREADCRUMBCATEGORYS {
   switch (type) {
     case BrowserBreadcrumbTypes.XHR:
     case BrowserBreadcrumbTypes.FETCH:
