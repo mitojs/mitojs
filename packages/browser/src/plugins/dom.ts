@@ -4,11 +4,12 @@ import { BasePluginType } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
 import { addBreadcrumbInBrowser } from '../utils'
 
-interface DomCollectedType {
+export interface DomCollectedType {
+  // maybe will add doubleClick or other in the future
   category: 'click'
   data: Document
 }
-const domPlugins: BasePluginType<BrowserEventTypes, BrowserClient> = {
+const domPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name: BrowserEventTypes.DOM,
   monitor(notify) {
     if (!('document' in _global)) return
@@ -27,11 +28,13 @@ const domPlugins: BasePluginType<BrowserEventTypes, BrowserClient> = {
   },
   transform(collectedData: DomCollectedType) {
     const htmlString = htmlElementAsString(collectedData.data.activeElement as HTMLElement)
-    if (htmlString) {
-      addBreadcrumbInBrowser.call(this, htmlString, BrowserBreadcrumbTypes.CLICK)
-    }
+    return htmlString
   },
-  consumer() {}
+  consumer(transformedData: string) {
+    if (transformedData) {
+      addBreadcrumbInBrowser.call(this, transformedData, BrowserBreadcrumbTypes.CLICK)
+    }
+  }
 }
 
-export default domPlugins
+export default domPlugin

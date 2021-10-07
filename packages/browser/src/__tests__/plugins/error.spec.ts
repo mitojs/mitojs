@@ -12,5 +12,6 @@ describe('errorPlugin', () => {
   it("errorPlugin's func should be called by browserClient", () => {
     expect((errorPlugin.monitor as jest.Mock).mock.calls.length).toBe(1)
     // don't simulate code error in node,so pass in param in errorPlugin.transform
+    // should test in e2e
   })
 })

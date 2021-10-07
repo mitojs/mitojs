@@ -4,25 +4,26 @@ import { BrowserClient } from '../browserClient'
 import { dsnConfig } from './config'
 
 describe('browserClient.ts', () => {
-  const browserClient = new BrowserClient({
+  const browserInstance = new BrowserClient({
     dsn: dsnConfig
   })
-  it('browserClient log should work', () => {
+  it('browserClient log should work', (done) => {
     const msg = 'log spec msg'
     const tag = 'log spec tag'
     const level = Severity.High
-    browserClient.log({
+    browserInstance.log({
       message: msg,
       tag,
       level
     })
     sleepRun(() => {
-      const stack = browserClient.breadcrumb.getStack()
+      const stack = browserInstance.breadcrumb.getStack()
       const item = stack[0]
       expect(item.category).toBe(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CUSTOMER))
       expect(item.type).toBe(BrowserBreadcrumbTypes.CUSTOMER)
-      expect(item.level).toBe(level)
+      expect(item.level).toBe(Severity.fromString(level))
       expect(item.data).toBe(msg)
+      done()
     })
   })
 })
