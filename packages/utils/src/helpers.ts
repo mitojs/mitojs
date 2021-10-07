@@ -60,16 +60,16 @@ export function replaceOld(source: IAnyObject, name: string, replacement: (...ar
  * 用&分割对象，返回a=1&b=2
  * ../param obj 需要拼接的对象
  */
-export function splitObjToQuery(obj: Record<string, unknown>): string {
-  return Object.entries(obj).reduce((result, [key, value], index) => {
-    if (index !== 0) {
-      result += '&'
-    }
-    const valueStr = variableTypeDetection.isObject(value) || variableTypeDetection.isArray(value) ? JSON.stringify(value) : value
-    result += `${key}=${valueStr}`
-    return result
-  }, '')
-}
+// export function splitObjToQuery(obj: Record<string, unknown>): string {
+//   return Object.entries(obj).reduce((result, [key, value], index) => {
+//     if (index !== 0) {
+//       result += '&'
+//     }
+//     const valueStr = variableTypeDetection.isObject(value) || variableTypeDetection.isArray(value) ? JSON.stringify(value) : value
+//     result += `${key}=${valueStr}`
+//     return result
+//   }, '')
+// }
 
 export const defaultFunctionName = '<anonymous>'
 /**
@@ -195,10 +195,6 @@ export function getBigVersion(version: string) {
   return Number(version.split('.')[0])
 }
 
-export function isHttpFail(code: number) {
-  return code === 0 || code === HTTP_CODE.BAD_REQUEST || code > HTTP_CODE.UNAUTHORIZED
-}
-
 /**
  * 给url添加query
  * @param url
@@ -219,7 +215,7 @@ export function setUrlQuery(url: string, query: object) {
 
 export function interceptStr(str: string, interceptLength: number): string {
   if (variableTypeDetection.isString(str)) {
-    return str.slice(0, interceptLength) + (str.length > interceptLength ? `:截取前${interceptLength}个字符` : '')
+    return str.slice(0, interceptLength) + (str.length > interceptLength ? `;slice the first ${interceptLength} characters` : '')
   }
   return ''
 }
