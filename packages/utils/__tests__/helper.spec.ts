@@ -15,7 +15,8 @@ import {
   setUrlQuery,
   interceptStr,
   firstStrtoLowerCase,
-  safeStringify
+  safeStringify,
+  getObjectWithForIn
 } from '../src/index'
 
 describe('helper.ts', () => {
@@ -140,10 +141,29 @@ describe('helper.ts', () => {
   })
 
   it('should safeStringify func work', () => {
-    // safeStringify()
+    const obj1 = {
+      a: {}
+    }
+    const obj2 = {
+      b: obj1
+    }
+    obj1.a = obj2
+    expect(safeStringify(obj1)).toBe('{"a":{"b":"Circular"}}')
+    const normalObj = { test: { data: 1 } }
+    expect(safeStringify(normalObj)).toBe('{"test":{"data":1}}')
   })
 
   it('should getObjectWithForIn func work', () => {
-    // getObjectWithForIn()
+    expect(getObjectWithForIn('1' as unknown as object)).toBe('1')
+    // const
+    const target = {}
+    const p = new Proxy(target, {})
+    const result = {
+      a: 1,
+      b: 2
+    }
+    p['a'] = result.a
+    p['b'] = result.b
+    expect(getObjectWithForIn(p)).toEqual(result)
   })
 })

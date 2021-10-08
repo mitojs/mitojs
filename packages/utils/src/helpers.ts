@@ -294,7 +294,7 @@ export function safeStringify(obj: object): string {
  * @return {*}  {T}
  */
 export function getObjectWithForIn<T = object>(obj: object): T {
-  if (!variableTypeDetection.isObject(obj)) obj
+  if (!variableTypeDetection.isObject(obj)) return obj as unknown as T
   const result = {}
   for (const key in obj) {
     result[key] = obj[key]
