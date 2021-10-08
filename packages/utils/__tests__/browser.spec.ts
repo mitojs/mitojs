@@ -1,4 +1,5 @@
-import { extractErrorStack, htmlElementAsString, parseUrlToObj, Severity } from '../src'
+import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes } from '@mitojs/shared'
+import { extractErrorStack, getBreadcrumbCategoryInBrowser, htmlElementAsString, parseUrlToObj, Severity } from '../src'
 
 describe('browser.ts', () => {
   describe('htmlElementAsString function', () => {
@@ -29,6 +30,9 @@ describe('browser.ts', () => {
     expect(parseUrlToObj('')).toEqual({})
   })
   it('should extractErrorStack func work parsed on object Error ', () => {
+    const res = extractErrorStack('error string', Severity.Critical)
+    expect(res.message).toBe(undefined)
+    expect(res.name).toBe(undefined)
     try {
       const a = 6
       const b = a as unknown as String
@@ -40,5 +44,17 @@ describe('browser.ts', () => {
       expect(errInfo.message).toBe('b.split is not a function')
       expect(errInfo.name).toBe('TypeError')
     }
+  })
+  it('should work on getBreadcrumbCategoryInBrowser ', () => {
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.XHR)).toBe(BREADCRUMBCATEGORYS.HTTP)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.FETCH)).toBe(BREADCRUMBCATEGORYS.HTTP)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CLICK)).toBe(BREADCRUMBCATEGORYS.USER)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.ROUTE)).toBe(BREADCRUMBCATEGORYS.USER)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CUSTOMER)).toBe(BREADCRUMBCATEGORYS.DEBUG)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CUSTOMER)).toBe(BREADCRUMBCATEGORYS.DEBUG)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.UNHANDLEDREJECTION)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CODE_ERROR)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.UNHANDLEDREJECTION)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
+    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.RESOURCE)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
   })
 })

@@ -1,7 +1,7 @@
 import { BrowserOptionsFieldsTypes } from '@mitojs/browser'
 import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes } from '@mitojs/shared'
 import { BreadcrumbPushData } from '@mitojs/types'
-import { getBreadcrumbCategoryInBrowser, Severity } from '@mitojs/utils'
+import { Severity } from '@mitojs/utils'
 import { Breadcrumb } from '../breadcrumb'
 
 const MaxBreadcrumbs = 16
@@ -40,18 +40,5 @@ describe('breadcrumb.ts', () => {
     breadcrumbDemo.category = BREADCRUMBCATEGORYS.HTTP
     breadcrumb.push(breadcrumbDemo)
     expect(breadcrumb.getStack().length).toBe(1)
-  })
-
-  it('should work on getBreadcrumbCategoryInBrowser ', () => {
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.XHR)).toBe(BREADCRUMBCATEGORYS.HTTP)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.FETCH)).toBe(BREADCRUMBCATEGORYS.HTTP)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CLICK)).toBe(BREADCRUMBCATEGORYS.USER)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.ROUTE)).toBe(BREADCRUMBCATEGORYS.USER)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CUSTOMER)).toBe(BREADCRUMBCATEGORYS.DEBUG)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CUSTOMER)).toBe(BREADCRUMBCATEGORYS.DEBUG)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.UNHANDLEDREJECTION)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.CODE_ERROR)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.UNHANDLEDREJECTION)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-    expect(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.RESOURCE)).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
   })
 })

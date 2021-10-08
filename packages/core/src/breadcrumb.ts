@@ -59,7 +59,7 @@ export class Breadcrumb<O extends BaseOptionsFieldsIntegrationType = BaseOptions
     return this.stack
   }
 
-  private bindOptions(options: Partial<O> = {}): void {
+  bindOptions(options: Partial<O> = {}): void {
     const { maxBreadcrumbs, beforePushBreadcrumb } = options
     toStringValidateOption(maxBreadcrumbs, 'maxBreadcrumbs', ToStringTypes.Number) && (this.maxBreadcrumbs = maxBreadcrumbs)
     toStringValidateOption(beforePushBreadcrumb, 'beforePushBreadcrumb', ToStringTypes.Function) &&
