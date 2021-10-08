@@ -53,34 +53,36 @@ export function createErrorId(data: ReportDataType, apikey: string, maxDuplicate
 function generatePromiseErrorId(data: ReportDataType, apikey: string) {
   const locationUrl = getRealPath(data.url)
   if (data.name === BrowserEventTypes.UNHANDLEDREJECTION) {
-    return data.type + objectOrder(data.message) + apikey
+    return data.type + stringToObjAndOrder(data.message) + apikey
   }
-  return data.type + data.name + objectOrder(data.message) + locationUrl
+  return data.type + data.name + stringToObjAndOrder(data.message) + locationUrl
+}
+
+export function sortObjByKey<T = object>(obj: T): T {
+  return Object.keys(obj)
+    .sort()
+    .reduce((total, key) => {
+      if (variableTypeDetection.isObject(obj[key])) {
+        total[key] = sortObjByKey(obj[key])
+      } else {
+        total[key] = obj[key]
+      }
+      return total
+    }, {}) as T
 }
 
 /**
  * sort object keys
  * ../param reason promise.reject
  */
-function objectOrder(reason: any) {
-  const sortFn = (obj: any) => {
-    return Object.keys(obj)
-      .sort()
-      .reduce((total, key) => {
-        if (variableTypeDetection.isObject(obj[key])) {
-          total[key] = sortFn(obj[key])
-        } else {
-          total[key] = obj[key]
-        }
-        return total
-      }, {})
-  }
+export function stringToObjAndOrder(reason: string) {
   try {
     if (/\{.*\}/.test(reason)) {
       let obj = JSON.parse(reason)
-      obj = sortFn(obj)
+      obj = sortObjByKey(obj)
       return JSON.stringify(obj)
     }
+    return reason
   } catch (error) {
     return reason
   }

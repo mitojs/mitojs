@@ -1,6 +1,14 @@
 import { ErrorTypes, HttpTypes } from '@mitojs/shared'
 import { ReportDataType } from '@mitojs/types'
-import { createErrorId, getFlutterRealOrigin, getFlutterRealPath, getRealPath, Severity } from '../src/index'
+import {
+  createErrorId,
+  getFlutterRealOrigin,
+  getFlutterRealPath,
+  getRealPath,
+  sortObjByKey,
+  Severity,
+  stringToObjAndOrder
+} from '../src/index'
 
 describe('errorId.ts', () => {
   const apikey = '13213-1231-1231'
@@ -113,6 +121,53 @@ describe('errorId.ts', () => {
       const errorId_2 = createErrorId(error_2, apikey, 2)
       expect(errorId_1).not.toBe(errorId_2)
     })
+    it('default case createErrorId', () => {
+      const else_error = {
+        // not one of ErrorTypes
+        type: 'else_' as ErrorTypes,
+        level: Severity.Critical,
+        message: '{"one":111}',
+        name: 'MITO.log',
+        customTag: '测试',
+        time: 1609211248523,
+        url: 'http://localhost:2021/JS/index.html'
+      }
+      expect(createErrorId(else_error, apikey, 2)).not.toBeNull()
+    })
+  })
+
+  it('should sortObjByKey func work', () => {
+    const beforeOrderObj = {
+      b: 1,
+      a: 2,
+      c: {
+        e: 3,
+        d: 4
+      }
+    }
+    const afterOrderObj = {
+      a: 2,
+      b: 1,
+      c: {
+        d: 4,
+        e: 3
+      }
+    }
+    expect(JSON.stringify(sortObjByKey(beforeOrderObj))).toBe(JSON.stringify(afterOrderObj))
+  })
+
+  it('should stringToObjAndOrder func work', () => {
+    const beforeOrderObjString = '{"b":1,"a":2,"c":3}'
+    const afterOrderObj = {
+      a: 2,
+      b: 1,
+      c: 3
+    }
+    expect(stringToObjAndOrder(beforeOrderObjString)).toBe(JSON.stringify(afterOrderObj))
+    // return param when is not object string
+    expect(stringToObjAndOrder('11')).toBe('11')
+    const isNotObjectString = '{"b":1,"a":2,"c":3}}'
+    expect(stringToObjAndOrder(isNotObjectString)).toBe(isNotObjectString)
   })
 
   describe('getRealPath should work', () => {
