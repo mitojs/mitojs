@@ -2,7 +2,7 @@
     <a href="#" target="_blank">
     <img src="https://i.loli.net/2021/07/28/EvPwd4NjVH3tBfO.jpg" alt="mito-logo" height="90">
     </a>
-    <p>A Lite SDK For Monitor Web</p>
+    <p>A Lightweight SDK For Monitor Web</p>
 
 [![npm version](https://img.shields.io/npm/v/@mitojs/web.svg?style=flat)](https://www.npmjs.com/package/@mitojs/web)
 [![Code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
