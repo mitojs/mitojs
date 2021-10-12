@@ -22,10 +22,10 @@ type TotalEventName = keyof GlobalEventHandlersEventMap | keyof XMLHttpRequestEv
  * 添加事件监听器
  *
  * @export
- * @param {{ addEventListener: Function }} target
- * @param {TotalEventName} eventName
- * @param {Function} handler
- * @param {(boolean | unknown)} [opitons=false]
+ * @param {{ addEventListener: Function }} target 目标对象
+ * @param {TotalEventName} eventName 目标对象上的事件名
+ * @param {Function} handler 回调函数
+ * @param {(boolean | unknown)} [opitons=false] useCapture默认为false
  */
 export function on(
   target: { addEventListener: Function },
