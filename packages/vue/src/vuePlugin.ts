@@ -22,6 +22,7 @@ const vuePlugin: BasePluginType<BaseEventTypes, BaseClient> = {
         }
         notify(BaseEventTypes.VUE, { data, vm })
         const hasConsole = typeof console !== 'undefined'
+        // vue源码会判断Vue.config.silent，为true时则不会在控制台打印，false时则会打印
         if (hasConsole && !Vue.config.silent) {
           silentConsoleScope(() => {
             console.error('Error in ' + info + ': "' + err.toString() + '"', vm)
