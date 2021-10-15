@@ -178,7 +178,7 @@ describe('errorId.ts', () => {
 
     it('去掉多余{param}', () => {
       const url = 'http://a/b/c/project/info/18'
-      expect(getRealPath(url)).toBe('http://a/b/c/project/info{param}')
+      expect(getRealPath(url)).toBe('http://a/b/c/project/info/{param}')
     })
   })
 

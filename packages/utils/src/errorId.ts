@@ -97,7 +97,10 @@ export function stringToObjAndOrder(reason: string) {
  * @example http://.../project?id=1#a => http://.../project  http://.../id/123=> http://.../id/{param}
  */
 export function getRealPath(url: string): string {
-  return url.replace(/[\?#].*$/, '').replace(/\/\d+([\/]*$)/, '{param}$1')
+  return url
+    .replace(/[?#].*$/, '')
+    .replace(/\/(\d+)\//g, '/{param}/$1')
+    .replace(/\/\d+([/]*$)/g, '/{param}$1')
 }
 
 /**
