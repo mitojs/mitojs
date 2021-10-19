@@ -14,6 +14,12 @@ import { BasePluginType, HttpCollectedType, HttpTransformedType } from '@mitojs/
 import { WxClient } from '../wxClient'
 import { addBreadcrumbInWx } from '../utils'
 
+enum WxXhrTypes {
+  request = 'request',
+  downloadFile = 'downloadFile',
+  uploadFile = 'uploadFile'
+}
+
 const wxRequestPlugin: BasePluginType<WxEventTypes, WxClient> = {
   name: WxBaseEventTypes.REQUEST,
   monitor(notify) {
@@ -28,7 +34,7 @@ const wxRequestPlugin: BasePluginType<WxEventTypes, WxClient> = {
 }
 
 function monitorWxXhr(this: WxClient, notify: (eventName: WxEventTypes, data: any) => void) {
-  const hookMethods = ['request', 'downloadFile', 'uploadFile']
+  const hookMethods = Object.keys(WxXhrTypes)
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const that = this
   const { options: wxOptions } = this
@@ -39,36 +45,40 @@ function monitorWxXhr(this: WxClient, notify: (eventName: WxEventTypes, data: an
       enumerable: true,
       configurable: true,
       value: function (...args: any[]) {
+        // 拿到入参
         const options: WechatMiniprogram.RequestOption | WechatMiniprogram.DownloadFileOption | WechatMiniprogram.UploadFileOption = args[0]
-        let method: string
+        const { url } = options
+        let method: string,
+          reqData = undefined
         if ((options as WechatMiniprogram.RequestOption).method) {
           method = (options as WechatMiniprogram.RequestOption).method
-        } else if (hook === 'downloadFile') {
+        } else if (hook === WxXhrTypes.downloadFile) {
           method = MethodTypes.Get
         } else {
           method = MethodTypes.Post
         }
-        const { url } = options
         let header = options.header
         !header && (header = {})
-
         if ((method === MethodTypes.Post && that.transport.isSelfDsn(url)) || wxOptions.isFilterHttpUrl(url)) {
           return originRequest.call(this, options)
         }
-        let reqData = undefined
-        if (hook === 'request') {
-          reqData = (options as WechatMiniprogram.RequestOption).data
-        } else if (hook === 'downloadFile') {
-          reqData = {
-            filePath: (options as WechatMiniprogram.DownloadFileOption).filePath
-          }
-        } else {
-          // uploadFile
-          reqData = {
-            filePath: (options as WechatMiniprogram.UploadFileOption).filePath,
-            name: (options as WechatMiniprogram.UploadFileOption).name
-          }
+        switch (hook) {
+          case WxXhrTypes.request:
+            reqData = (options as WechatMiniprogram.RequestOption).data
+            break
+          case WxXhrTypes.downloadFile:
+            reqData = {
+              filePath: (options as WechatMiniprogram.DownloadFileOption).filePath
+            }
+            break
+          default:
+            // uploadFile
+            reqData = {
+              filePath: (options as WechatMiniprogram.UploadFileOption).filePath,
+              name: (options as WechatMiniprogram.UploadFileOption).name
+            }
         }
+        // 收集小程序的请求信息
         const httpCollect: HttpCollectedType = {
           request: {
             httpType: HttpTypes.XHR,
@@ -87,6 +97,7 @@ function monitorWxXhr(this: WxClient, notify: (eventName: WxEventTypes, data: an
           header[key] = value
         }
         wxOptions.beforeAppAjaxSend && wxOptions.beforeAppAjaxSend({ method, url }, { setRequestHeader })
+        // 成功回调
         const successHandler:
           | WechatMiniprogram.RequestSuccessCallback
           | WechatMiniprogram.DownloadFileSuccessCallback
@@ -97,11 +108,12 @@ function monitorWxXhr(this: WxClient, notify: (eventName: WxEventTypes, data: an
           httpCollect.response.status = res.statusCode
           httpCollect.errMsg = res.errMsg
           notify(WxBaseEventTypes.REQUEST, httpCollect)
-          if (typeof options.success === 'function') {
+          if (variableTypeDetection.isFunction(options.success)) {
             return options.success(res)
           }
         }
         const _fail = options.fail
+        // 失败回调
         const failHandler:
           | WechatMiniprogram.RequestFailCallback
           | WechatMiniprogram.DownloadFileFailCallback
@@ -121,6 +133,7 @@ function monitorWxXhr(this: WxClient, notify: (eventName: WxEventTypes, data: an
           success: successHandler,
           fail: failHandler
         }
+        // return 原始函数
         return originRequest.call(this, actOptions)
       }
     })
