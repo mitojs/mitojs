@@ -92,6 +92,7 @@ export function monitorWxRoute(this: WxClient, notify: (eventName: WxBaseEventTy
               isFail: true,
               message: res.errMsg
             }
+            // 拿到跳转失败的信息
             notify(WxBaseEventTypes.ROUTE, failData)
             if (variableTypeDetection.isFunction(_fail)) {
               return _fail(res)
