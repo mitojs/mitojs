@@ -8,11 +8,16 @@ const MitoInstance = MITO.init({
     console.log('mito options appOnlauch', options)
   },
   pageOnLoad(options) {
-    console.log('mito page onload', options)
+    console.log('mito page onload', options.route, wx.MitoInstance)
+    wx.MitoInstance.trackSend({
+      id: 'track-id'
+    })
   },
   pageOnReady(options) {
     console.log('mito page pageOnReady', options)
   },
+  pageOnShow,
+  pageOnHide,
   configReportWxRequest() {
     console.log('configReportWxRequest')
     return {
@@ -24,6 +29,31 @@ const MitoInstance = MITO.init({
   }
 })
 wx.MitoInstance = MitoInstance
+const currentPage = {
+  startTime: 0,
+  page: null
+}
+function pageOnShow(page) {
+  // 进入页面埋点
+  wx.MitoInstance.trackSend({
+    route: page.route
+  })
+  currentPage.startTime = Date.now()
+  currentPage.page = page
+}
+function pageOnHide(page) {
+  // 离开页面埋点
+  const endTime = Date.now()
+  const elapsedTime = endTime - currentPage.startTime
+  // 拿到信息并上报
+  console.log('currentPage', currentPage)
+  wx.MitoInstance.trackSend({
+    // 曝光时间
+    elapsedTime,
+    // 页面路由
+    route: currentPage.page.route
+  })
+}
 
 App({
   onLaunch() {
