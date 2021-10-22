@@ -6,4 +6,5 @@
 **/esm
 **/node_modules
 /script
+.eslintrc.js
 # rollup.config.js

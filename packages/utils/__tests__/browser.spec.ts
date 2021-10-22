@@ -35,7 +35,7 @@ describe('browser.ts', () => {
     expect(res.name).toBe(undefined)
     try {
       const a = 6
-      const b = a as unknown as String
+      const b = a as unknown as string
       b.split(',')
     } catch (error) {
       const level = Severity.Normal

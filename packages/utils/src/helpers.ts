@@ -1,5 +1,5 @@
 import { IAnyObject } from '@mitojs/types'
-import { globalVar, HTTP_CODE, ToStringTypes } from '@mitojs/shared'
+import { globalVar, ToStringTypes } from '@mitojs/shared'
 import { logger } from './logger'
 import { nativeToString, variableTypeDetection } from './is'
 import { isWxMiniEnv, isBrowserEnv } from './global'
@@ -290,10 +290,10 @@ export function safeStringify(obj: object): string {
  *
  * @export
  * @template T
- * @param {object} obj
+ * @param {IAnyObject} obj
  * @return {*}  {T}
  */
-export function getObjectWithForIn<T = object>(obj: object): T {
+export function getObjectWithForIn<T = IAnyObject>(obj: IAnyObject): T {
   if (!variableTypeDetection.isObject(obj)) return obj as unknown as T
   const result = {}
   for (const key in obj) {
