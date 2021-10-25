@@ -1,4 +1,4 @@
-import { getGlobal, isBrowserEnv, isNodeEnv, isWxMiniEnv, supportsHistory } from '../src'
+import { getGlobal, isBrowserEnv, isNodeEnv, isWxMiniEnv } from '../src'
 
 describe('global.ts', () => {
   it('should getGLoabl func work', () => {

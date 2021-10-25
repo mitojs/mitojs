@@ -85,5 +85,5 @@ export function isInstanceOf(wat: any, base: any): boolean {
 }
 
 export function isExistProperty(obj: Object, key: string | number | symbol): boolean {
-  return obj.hasOwnProperty(key)
+  return Object.prototype.hasOwnProperty.call(obj, key)
 }

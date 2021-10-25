@@ -11,9 +11,9 @@ describe('core/subscrib.ts', () => {
       expect(data).toBe(mockData)
     })
     // throw error
-    const watchCallbackThree = jest.fn((data) => {
-      throw new Error('call back error')
-    })
+    // const watchCallbackThree = jest.fn((data) => {
+    //   throw new Error('call back error')
+    // })
     const subscrib = new Subscrib<BrowserEventTypes>()
     const targetEventName = BrowserEventTypes.CUSTOMER
     subscrib.watch(targetEventName, watchCallback)

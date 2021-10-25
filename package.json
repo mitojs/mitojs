@@ -16,6 +16,7 @@
     "e2e:mini:performance": "jest --runTestsByPath ./test/e2e/MiniPerformance/index.test.ts --detectOpenHandles --forceExit --config jest.config.ts",
     "format": "prettier --write \"packages/**/*.ts?(x)\" && eslint --fix --ext .ts packages",
     "format:package": "prettier --write \"packages/**/package.json\"",
+    "postinstall": "husky install",
     "commit": "git add . && git cz",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1"
   },

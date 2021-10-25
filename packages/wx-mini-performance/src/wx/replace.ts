@@ -145,11 +145,13 @@ export function replaceNetwork(store: Store) {
         } as WxPerformanceAnyObj
         switch (hook) {
           case 'request':
+            // eslint-disable-next-line no-case-declarations
             const { method } = options as WechatMiniprogram.RequestOption
             reqData = { ...reqData, method }
             break
           case 'downloadFile':
           case 'uploadFile':
+            // eslint-disable-next-line no-case-declarations
             const { filePath } = options as WechatMiniprogram.DownloadFileOption | WechatMiniprogram.UploadFileOption
             reqData = { ...reqData, filePath, method: hook === 'downloadFile' ? 'GET' : 'POST' }
             break

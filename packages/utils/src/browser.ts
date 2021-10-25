@@ -32,6 +32,7 @@ export function parseUrlToObj(url: string): {
     return {}
   }
 
+  // eslint-disable-next-line no-useless-escape
   const match = url.match(/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/)
 
   if (!match) {

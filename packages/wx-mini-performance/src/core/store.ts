@@ -49,6 +49,7 @@ class Store extends Event {
     this.stack = []
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async _pushData(data: Array<WxPerformanceData>) {
     if (this.immediately) {
       this.report(data)
@@ -60,6 +61,7 @@ class Store extends Event {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async reportLeftData() {
     this.report([...this.stack])
     this.stack = []
@@ -113,6 +115,7 @@ class Store extends Event {
         break
       case WxPerformanceDataType.WX_USER_ACTION:
         this.handleWxAction(data as WxPerformanceItem)
+      // eslint-disable-next-line no-fallthrough
       default:
         break
     }
@@ -170,6 +173,7 @@ class Store extends Event {
   customPaint() {
     const now = Date.now()
     const path = getPageUrl(false)
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       if (path && this.navigationMap[path]) {
         const navigationStart = this.navigationMap[path]

@@ -7,7 +7,7 @@ import { WxPerformanceInitOptions } from './types/index'
 class WxPerformance {
   appId: string
   version: string
-  private store: Store
+  private readonly store: Store
 
   constructor(options: WxPerformanceInitOptions) {
     if (!isWxMiniEnv) {
