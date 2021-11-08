@@ -2,7 +2,7 @@ languages: node_js
 after_success:
   - codecov
 node_js:
-  - "12.18.3"
+  - '12.18.3'
 rvm:
   -
 install:
@@ -11,3 +11,4 @@ scripts:
   - npm install codecov -g
   - npm run build
   - npm test
+  - npm run size
