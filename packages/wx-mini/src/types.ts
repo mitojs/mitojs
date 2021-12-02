@@ -41,13 +41,20 @@ export interface WxSilentOptionsType {
    */
   silentAppOnPageNotFound?: boolean
 
+  /**
+   * 静默监控OnShareAppMessage事件
+   */
+  silentPageOnShareAppMessage?: boolean
+  /**
+   * 静默监控OnShareTimeline事件
+   */
+  silentPageOnShareTimeline?: boolean
+
   // silentAppOnLaunch?: boolean
 
   // slientAppOnShow?: boolean
 
   // slientAppOnHide?: boolean
-
-  // silentWxOnShareAppMessage?: boolean
 }
 
 export interface WxHookOptionsType {

@@ -4,6 +4,8 @@ const MitoInstance = MITO.init({
   dsn: 'http://localhost:2021/errors/upload',
   silentConsole: true,
   debug: true,
+  silentPageOnShareAppMessage: true,
+  silentPageOnShareTimeline: true,
   appOnLaunch(options) {
     console.log('mito options appOnlauch', options)
   },

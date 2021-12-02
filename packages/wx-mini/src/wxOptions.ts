@@ -45,6 +45,14 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
    */
   silentAppOnUnhandledRejection: boolean
   /**
+   * 静默监控OnShareAppMessage事件
+   */
+  silentPageOnShareAppMessage: boolean
+  /**
+   * 静默监控OnShareTimeline事件
+   */
+  silentPageOnShareTimeline: boolean
+  /**
    * 静默监控onPageNotFound事件
    *
    * @type {boolean}
@@ -82,7 +90,9 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
       silentRoute,
       silentAppOnError,
       silentAppOnUnhandledRejection,
-      silentAppOnPageNotFound
+      silentAppOnPageNotFound,
+      silentPageOnShareAppMessage,
+      silentPageOnShareTimeline
     } = options
     const booleanType = ToStringTypes.Boolean
     const functionType = ToStringTypes.Function
@@ -95,6 +105,8 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
       [silentAppOnError, 'silentAppOnError', booleanType],
       [silentAppOnUnhandledRejection, 'silentAppOnUnhandledRejection', booleanType],
       [silentAppOnPageNotFound, 'silentAppOnPageNotFound', booleanType],
+      [silentPageOnShareAppMessage, 'silentPageOnShareAppMessage', booleanType],
+      [silentPageOnShareTimeline, 'silentPageOnShareTimeline', booleanType],
       // mito hooks
       [beforeAppAjaxSend, 'beforeAppAjaxSend', functionType],
       // wx-mini hooks

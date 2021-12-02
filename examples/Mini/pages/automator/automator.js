@@ -16,12 +16,12 @@ Page({
   onTapRejectPromise() {
     return Promise.reject('Promise reject str')
   },
-  onShareTimeline(options){
-    console.log('pageOnShareTimeline',options)
-  },
-  onShareAppMessage(options) {
-    console.log('onShareAppMessage', options)
-  },
+  // onShareTimeline(options){
+  //   console.log('pageOnShareTimeline',options)
+  // },
+  // onShareAppMessage(options) {
+  //   console.log('onShareAppMessage', options)
+  // },
   onTapRequest() {
     wx.request({
       url: '/exception',

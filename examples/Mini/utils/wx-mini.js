@@ -1097,8 +1097,8 @@ wxPagePluginMap.set('PageOnUnload', {
   }
 })
 wxPagePluginMap.set('PageOnShareTimeline', {
-  transform: function () {
-    return pageHookTransform.call(this, 'PageOnShareTimeline')
+  transform: function (options) {
+    return pageHookTransform.call(this, 'PageOnShareTimeline', options)
   },
   consumer: function (data) {
     addBreadcrumbInWx.call(this, data, 'Page On Share Timeline')
@@ -1797,7 +1797,9 @@ var WxOptions = (function (_super) {
       silentRoute = options.silentRoute,
       silentAppOnError = options.silentAppOnError,
       silentAppOnUnhandledRejection = options.silentAppOnUnhandledRejection,
-      silentAppOnPageNotFound = options.silentAppOnPageNotFound
+      silentAppOnPageNotFound = options.silentAppOnPageNotFound,
+      silentPageOnShareAppMessage = options.silentPageOnShareAppMessage,
+      silentPageOnShareTimeline = options.silentPageOnShareTimeline
     var booleanType = 'Boolean'
     var functionType = 'Function'
     var optionArr = [
@@ -1808,6 +1810,8 @@ var WxOptions = (function (_super) {
       [silentAppOnError, 'silentAppOnError', booleanType],
       [silentAppOnUnhandledRejection, 'silentAppOnUnhandledRejection', booleanType],
       [silentAppOnPageNotFound, 'silentAppOnPageNotFound', booleanType],
+      [silentPageOnShareAppMessage, 'silentPageOnShareAppMessage', booleanType],
+      [silentPageOnShareTimeline, 'silentPageOnShareTimeline', booleanType],
       [beforeAppAjaxSend, 'beforeAppAjaxSend', functionType],
       [appOnLaunch, 'appOnLaunch', functionType],
       [appOnShow, 'appOnShow', functionType],
