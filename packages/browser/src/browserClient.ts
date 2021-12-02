@@ -6,7 +6,8 @@ import {
   EventTypes,
   MitoLog,
   MitoLogEmptyMsg,
-  MitoLogEmptyTag
+  MitoLogEmptyTag,
+  Silent
 } from '@mitojs/shared'
 import {
   extractErrorStack,
@@ -41,7 +42,7 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
    * @memberof BrowserClient
    */
   isPluginEnable(name: BrowserEventTypes): boolean {
-    const silentField = `silent${firstStrtoUppercase(name)}`
+    const silentField = `${Silent}${firstStrtoUppercase(name)}`
     return !this.options[silentField]
   }
   log(data: LogTypes) {

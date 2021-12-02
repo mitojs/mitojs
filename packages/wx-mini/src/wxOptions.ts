@@ -15,10 +15,10 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
   pageOnReady: Function = () => {}
   pageOnHide: Function = () => {}
   pageOnUnload: Function = () => {}
-  onPageNotFound: Function = () => {}
-  onShareAppMessage: Function = () => {}
-  onShareTimeline: Function = () => {}
-  onTabItemTap: Function = () => {}
+  appOnPageNotFound: Function = () => {}
+  pageOnShareAppMessage: Function = () => {}
+  pageOnShareTimeline: Function = () => {}
+  pageOnTabItemTap: Function = () => {}
   // silent options
   /**
    * 静默监控wx.request事件
@@ -65,15 +65,15 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
       appOnLaunch,
       appOnShow,
       appOnHide,
+      appOnPageNotFound,
       pageOnLoad,
       pageOnReady,
       pageOnShow,
       pageOnUnload,
       pageOnHide,
-      onPageNotFound,
-      onShareAppMessage,
-      onShareTimeline,
-      onTabItemTap,
+      pageOnShareAppMessage,
+      pageOnShareTimeline,
+      pageOnTabItemTap,
       wxNavigateToMiniProgram,
       triggerWxEvent,
       silentRequest,
@@ -101,15 +101,15 @@ export class WxOptions extends BaseOptions<WxOptionsFieldsTypes> {
       [appOnLaunch, 'appOnLaunch', functionType],
       [appOnShow, 'appOnShow', functionType],
       [appOnHide, 'appOnHide', functionType],
+      [appOnPageNotFound, 'appOnPageNotFound', functionType],
       [pageOnLoad, 'pageOnLoad', functionType],
       [pageOnReady, 'pageOnReady', functionType],
       [pageOnShow, 'pageOnShow', functionType],
       [pageOnUnload, 'pageOnUnload', functionType],
       [pageOnHide, 'pageOnHide', functionType],
-      [onPageNotFound, 'onPageNotFound', functionType],
-      [onShareAppMessage, 'onShareAppMessage', functionType],
-      [onShareTimeline, 'onShareTimeline', functionType],
-      [onTabItemTap, 'onTabItemTap', functionType],
+      [pageOnShareAppMessage, 'pageOnShareAppMessage', functionType],
+      [pageOnShareTimeline, 'pageOnShareTimeline', functionType],
+      [pageOnTabItemTap, 'pageOnTabItemTap', functionType],
       [wxNavigateToMiniProgram, 'wxNavigateToMiniProgram', functionType],
       [triggerWxEvent, 'triggerWxEvent', functionType]
     ]

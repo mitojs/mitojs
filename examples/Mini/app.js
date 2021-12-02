@@ -26,6 +26,12 @@ const MitoInstance = MITO.init({
       },
       dataType: 'text'
     }
+  },
+  pageOnShareTimeline( options, page){
+    console.log('mito pageOnShareTimeline', page,options)
+  },
+  pageOnShareAppMessage( options, page) {
+    console.log('mito PageOnShareAppMessage', page,options)
   }
 })
 wx.MitoInstance = MitoInstance

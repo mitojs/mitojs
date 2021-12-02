@@ -177,6 +177,7 @@ var globalVar = {
   isLogAddBreadcrumb: true,
   crossOriginThreshold: 1000
 }
+var Silent = 'silent'
 
 var nativeToString = Object.prototype.toString
 function isType(type) {
@@ -551,8 +552,9 @@ var Queue = (function () {
     var temp = this.stack.slice(0)
     this.stack.length = 0
     this.isFlushing = false
-    for (var i = 0; i < temp.length; i++) {
-      temp[i]()
+    for (var _i = 0, temp_1 = temp; _i < temp_1.length; _i++) {
+      var fn = temp_1[_i]
+      fn()
     }
   }
   return Queue
@@ -935,7 +937,7 @@ wxAppPluginMap.set('AppOnError', {
 wxAppPluginMap.set('AppOnPageNotFound', {
   transform: function (data) {
     var sdkOptions = this.options
-    sdkOptions.onPageNotFound(data)
+    sdkOptions.appOnPageNotFound(data)
     return data
   },
   consumer: function (data) {
@@ -1043,6 +1045,16 @@ function pageHookTransform(hook) {
   }
   sdkOptions[firstStrtoLowerCase(hook)]()
 }
+function pageHookTransformWithOptions(hook, options) {
+  var page = getCurrentPagesPop()
+  var sdkOptions = this.options
+  sdkOptions[firstStrtoLowerCase(hook)](options, page)
+  return {
+    path: page === null || page === void 0 ? void 0 : page.route,
+    query: page === null || page === void 0 ? void 0 : page.options,
+    options: options
+  }
+}
 var wxPagePluginMap = new Map()
 wxPagePluginMap.set('PageOnLoad', {
   transform: function () {
@@ -1078,7 +1090,7 @@ wxPagePluginMap.set('PageOnHide', {
 })
 wxPagePluginMap.set('PageOnUnload', {
   transform: function () {
-    return pageHookTransform.call(this, 'PageOnHide')
+    return pageHookTransform.call(this, 'PageOnUnload')
   },
   consumer: function (data) {
     addBreadcrumbInWx.call(this, data, 'Page On Unload')
@@ -1086,7 +1098,7 @@ wxPagePluginMap.set('PageOnUnload', {
 })
 wxPagePluginMap.set('PageOnShareTimeline', {
   transform: function () {
-    return pageHookTransform.call(this, 'PageOnHide')
+    return pageHookTransform.call(this, 'PageOnShareTimeline')
   },
   consumer: function (data) {
     addBreadcrumbInWx.call(this, data, 'Page On Share Timeline')
@@ -1094,15 +1106,7 @@ wxPagePluginMap.set('PageOnShareTimeline', {
 })
 wxPagePluginMap.set('PageOnShareAppMessage', {
   transform: function (options) {
-    var page = getCurrentPages().pop()
-    var sdkOptions = this.options
-    sdkOptions.onShareAppMessage(__assign(__assign({}, page), options))
-    var data = {
-      path: page.route,
-      query: page.options,
-      options: options
-    }
-    return data
+    return pageHookTransformWithOptions.call(this, 'PageOnShareAppMessage', options)
   },
   consumer: function (data) {
     addBreadcrumbInWx.call(this, data, 'Page On Share App Message')
@@ -1110,15 +1114,7 @@ wxPagePluginMap.set('PageOnShareAppMessage', {
 })
 wxPagePluginMap.set('PageOnTabItemTap', {
   transform: function (options) {
-    var page = getCurrentPages().pop()
-    var sdkOptions = this.options
-    sdkOptions.onShareAppMessage(__assign(__assign({}, page), options))
-    var data = {
-      path: page.route,
-      query: page.options,
-      options: options
-    }
-    return data
+    return pageHookTransformWithOptions.call(this, 'PageOnTabItemTap', options)
   },
   consumer: function (data) {
     addBreadcrumbInWx.call(this, data, 'Page On Tab Item Tap')
@@ -1770,10 +1766,10 @@ var WxOptions = (function (_super) {
     _this.pageOnReady = function () {}
     _this.pageOnHide = function () {}
     _this.pageOnUnload = function () {}
-    _this.onPageNotFound = function () {}
-    _this.onShareAppMessage = function () {}
-    _this.onShareTimeline = function () {}
-    _this.onTabItemTap = function () {}
+    _this.appOnPageNotFound = function () {}
+    _this.pageOnShareAppMessage = function () {}
+    _this.pageOnShareTimeline = function () {}
+    _this.pageOnTabItemTap = function () {}
     _this.triggerWxEvent = function () {}
     _super.prototype.bindOptions.call(_this, options)
     _this.bindOptions(options)
@@ -1784,15 +1780,15 @@ var WxOptions = (function (_super) {
       appOnLaunch = options.appOnLaunch,
       appOnShow = options.appOnShow,
       appOnHide = options.appOnHide,
+      appOnPageNotFound = options.appOnPageNotFound,
       pageOnLoad = options.pageOnLoad,
       pageOnReady = options.pageOnReady,
       pageOnShow = options.pageOnShow,
       pageOnUnload = options.pageOnUnload,
       pageOnHide = options.pageOnHide,
-      onPageNotFound = options.onPageNotFound,
-      onShareAppMessage = options.onShareAppMessage,
-      onShareTimeline = options.onShareTimeline,
-      onTabItemTap = options.onTabItemTap,
+      pageOnShareAppMessage = options.pageOnShareAppMessage,
+      pageOnShareTimeline = options.pageOnShareTimeline,
+      pageOnTabItemTap = options.pageOnTabItemTap,
       wxNavigateToMiniProgram = options.wxNavigateToMiniProgram,
       triggerWxEvent = options.triggerWxEvent,
       silentRequest = options.silentRequest,
@@ -1816,15 +1812,15 @@ var WxOptions = (function (_super) {
       [appOnLaunch, 'appOnLaunch', functionType],
       [appOnShow, 'appOnShow', functionType],
       [appOnHide, 'appOnHide', functionType],
+      [appOnPageNotFound, 'appOnPageNotFound', functionType],
       [pageOnLoad, 'pageOnLoad', functionType],
       [pageOnReady, 'pageOnReady', functionType],
       [pageOnShow, 'pageOnShow', functionType],
       [pageOnUnload, 'pageOnUnload', functionType],
       [pageOnHide, 'pageOnHide', functionType],
-      [onPageNotFound, 'onPageNotFound', functionType],
-      [onShareAppMessage, 'onShareAppMessage', functionType],
-      [onShareTimeline, 'onShareTimeline', functionType],
-      [onTabItemTap, 'onTabItemTap', functionType],
+      [pageOnShareAppMessage, 'pageOnShareAppMessage', functionType],
+      [pageOnShareTimeline, 'pageOnShareTimeline', functionType],
+      [pageOnTabItemTap, 'pageOnTabItemTap', functionType],
       [wxNavigateToMiniProgram, 'wxNavigateToMiniProgram', functionType],
       [triggerWxEvent, 'triggerWxEvent', functionType]
     ]
@@ -1892,7 +1888,7 @@ var WxClient = (function (_super) {
     return _this
   }
   WxClient.prototype.isPluginEnable = function (name) {
-    var silentField = 'silent' + firstStrtoUppercase(name)
+    var silentField = '' + Silent + firstStrtoUppercase(name)
     return !this.options[silentField]
   }
   WxClient.prototype.log = function (data) {

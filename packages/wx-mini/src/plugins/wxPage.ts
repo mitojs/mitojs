@@ -7,6 +7,13 @@ import { WxClient } from '../wxClient'
 
 type WxPagePluginMapType = Map<WxPageEvents, Partial<BasePluginType<WxEventTypes, WxClient>>>
 
+/**
+ * 执行init传入的hook，没有携带参数options
+ *
+ * @param {WxClient} this
+ * @param {WxPageEvents} hook
+ * @return {*}
+ */
 function pageHookTransform(this: WxClient, hook: WxPageEvents) {
   const page = getCurrentPagesPop()
   const { options: sdkOptions } = this
@@ -18,6 +25,24 @@ function pageHookTransform(this: WxClient, hook: WxPageEvents) {
     }
   }
   sdkOptions[firstStrtoLowerCase(hook)]()
+}
+
+/**
+ * 执行init传入的hook
+ *
+ * @param {WxClient} this
+ * @param {WxPageEvents} hook
+ * @return {*}
+ */
+function pageHookTransformWithOptions(this: WxClient, hook: WxPageEvents, options: any) {
+  const page = getCurrentPagesPop()
+  const { options: sdkOptions } = this
+  sdkOptions[firstStrtoLowerCase(hook)](options, page)
+  return {
+    path: page?.route,
+    query: page?.options,
+    options
+  }
 }
 
 const wxPagePluginMap: WxPagePluginMapType = new Map()
@@ -60,7 +85,7 @@ wxPagePluginMap.set(WxPageEvents.PageOnHide, {
 
 wxPagePluginMap.set(WxPageEvents.PageOnUnload, {
   transform() {
-    return pageHookTransform.call(this, WxPageEvents.PageOnHide)
+    return pageHookTransform.call(this, WxPageEvents.PageOnUnload)
   },
   consumer(data: WxLifeCycleBreadcrumb) {
     addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_UNLOAD)
@@ -68,28 +93,17 @@ wxPagePluginMap.set(WxPageEvents.PageOnUnload, {
 })
 
 wxPagePluginMap.set(WxPageEvents.PageOnShareTimeline, {
-  transform() {
-    return pageHookTransform.call(this, WxPageEvents.PageOnHide)
+  transform(options: WechatMiniprogram.Page.IShareAppMessageOption) {
+    return pageHookTransform.call(this, WxPageEvents.PageOnShareTimeline, options)
   },
-  consumer(data: WxOnShareAppMessageBreadcrumb) {
+  consumer(data: WxLifeCycleBreadcrumb) {
     addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHARE_TIMELINE)
   }
 })
 
 wxPagePluginMap.set(WxPageEvents.PageOnShareAppMessage, {
   transform(options: WechatMiniprogram.Page.IShareAppMessageOption) {
-    const page = getCurrentPages().pop()
-    const { options: sdkOptions } = this
-    sdkOptions.onShareAppMessage({
-      ...page,
-      ...options
-    })
-    const data: WxOnShareAppMessageBreadcrumb = {
-      path: page.route,
-      query: page.options,
-      options
-    }
-    return data
+    return pageHookTransformWithOptions.call(this, WxPageEvents.PageOnShareAppMessage, options)
   },
   consumer(data: WxOnShareAppMessageBreadcrumb) {
     addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHARE_APP_MESSAGE)
@@ -98,18 +112,7 @@ wxPagePluginMap.set(WxPageEvents.PageOnShareAppMessage, {
 
 wxPagePluginMap.set(WxPageEvents.PageOnTabItemTap, {
   transform(options: WechatMiniprogram.Page.ITabItemTapOption) {
-    const page = getCurrentPages().pop()
-    const { options: sdkOptions } = this
-    sdkOptions.onShareAppMessage({
-      ...page,
-      ...options
-    })
-    const data: WxOnTabItemTapBreadcrumb = {
-      path: page.route,
-      query: page.options,
-      options
-    }
-    return data
+    return pageHookTransformWithOptions.call(this, WxPageEvents.PageOnTabItemTap, options)
   },
   consumer(data: WxOnTabItemTapBreadcrumb) {
     addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_TAB_ITEM_TAP)
@@ -209,5 +212,4 @@ export function invokeCallbackInReplaceComponent(
 }
 
 const wxPagePlugins = getWxPagePlugins()
-export { wxPagePluginMap }
 export default wxPagePlugins

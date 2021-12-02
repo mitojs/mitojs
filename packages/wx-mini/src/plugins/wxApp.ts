@@ -93,7 +93,7 @@ wxAppPluginMap.set(WxAppEvents.AppOnError, {
 wxAppPluginMap.set(WxAppEvents.AppOnPageNotFound, {
   transform(data: WechatMiniprogram.OnPageNotFoundCallbackResult) {
     const { options: sdkOptions } = this
-    sdkOptions.onPageNotFound(data)
+    sdkOptions.appOnPageNotFound(data)
     return data
   },
   consumer(data: WechatMiniprogram.OnPageNotFoundCallbackResult) {

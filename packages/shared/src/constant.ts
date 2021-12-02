@@ -89,4 +89,6 @@ const globalVar = {
   isLogAddBreadcrumb: true,
   crossOriginThreshold: 1000
 }
+
+export const Silent = 'silent'
 export { globalVar }

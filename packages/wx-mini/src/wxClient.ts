@@ -1,5 +1,5 @@
 import { Breadcrumb, BaseClient } from '@mitojs/core'
-import { ErrorTypes, EventTypes, MitoLog, MitoLogEmptyMsg, MitoLogEmptyTag, WxBreadcrumbTypes, WxEventTypes } from '@mitojs/shared'
+import { ErrorTypes, EventTypes, MitoLog, MitoLogEmptyMsg, MitoLogEmptyTag, Silent, WxBreadcrumbTypes, WxEventTypes } from '@mitojs/shared'
 import { extractErrorStack, firstStrtoUppercase, getCurrentRoute, getTimestamp, isError, Severity, unknownToString } from '@mitojs/utils'
 import { LogTypes, TrackReportDataType } from '@mitojs/types'
 import { WxOptions } from './wxOptions'
@@ -26,7 +26,7 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
    * @memberof WxClient
    */
   isPluginEnable(name: WxEventTypes): boolean {
-    const silentField = `silent${firstStrtoUppercase(name)}`
+    const silentField = `${Silent}${firstStrtoUppercase(name)}`
     return !this.options[silentField]
   }
   log(data: LogTypes) {

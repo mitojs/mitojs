@@ -230,14 +230,14 @@ MITO.init({
    * @memberof WxHookOptionsType
    */
   ```
-### onPageNotFound(data: WechatMiniprogram.OnPageNotFoundCallbackResult): void
+### appOnPageNotFound(data: WechatMiniprogram.OnPageNotFoundCallbackResult): void
 
-**示例：**在`Page`的`onPageNotFound`中打印并输出入参`
+**示例：**在`Page`的`appOnPageNotFound`中打印并输出入参`
 ```js
 MITO.init({
   ...
-  onPageNotFound(data){
-  	console.log('mito onPageNotFound', data)
+  appOnPageNotFound(data){
+  	console.log('mito appOnPageNotFound', data)
   }
 })
 ```
@@ -363,14 +363,14 @@ MITO.init({
    * @memberof WxHookOptionsType
    */
   ```
-### onShareAppMessage(options: WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance): void
+### pageOnShareAppMessage(options: WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance): void
 
-**示例：**在`Page`的`onShareAppMessage`中打印并输出入参`
+**示例：**在`Page`的`pageOnShareAppMessage`中打印并输出入参`
 ```js
 MITO.init({
   ...
-  onShareAppMessage(options){
-  	console.log('mito onShareAppMessage', options)
+  pageOnShareAppMessage(options){
+  	console.log('mito pageOnShareAppMessage', options)
   }
 })
 ```
@@ -386,14 +386,14 @@ MITO.init({
    * @memberof WxHookOptionsType
    */
   ```
-### onShareTimeline(page: IWxPageInstance): void
+### pageOnShareTimeline(page: IWxPageInstance): void
 
-**示例：**在`Page`的`onShareTimeline`中打印并输出入参`
+**示例：**在`Page`的`pageOnShareTimeline`中打印并输出入参`
 ```js
 MITO.init({
   ...
-  onShareTimeline(page){
-  	console.log('mito onShareTimeline', page)
+  pageOnShareTimeline(page){
+  	console.log('mito pageOnShareTimeline', page)
   }
 })
 ```
@@ -408,14 +408,14 @@ MITO.init({
    * @memberof WxHookOptionsType
    */
   ```
-### onTabItemTap(options: WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance): void
+### pageOnTabItemTap(options: WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance): void
 
-**示例：**在`Page`的`onTabItemTap`中打印并输出入参`
+**示例：**在`Page`的`pageOnTabItemTap`中打印并输出入参`
 ```js
 MITO.init({
   ...
-  onTabItemTap(options){
-  	console.log('mito onTabItemTap', options)
+  pageOnTabItemTap(options){
+  	console.log('mito pageOnTabItemTap', options)
   }
 })
 ```

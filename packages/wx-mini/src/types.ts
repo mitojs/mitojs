@@ -85,7 +85,7 @@ export interface WxHookOptionsType {
    * @param {WechatMiniprogram.OnPageNotFoundCallbackResult} data
    * @memberof WxHookOptionsType
    */
-  onPageNotFound?(data: WechatMiniprogram.OnPageNotFoundCallbackResult): void
+  appOnPageNotFound?(data: WechatMiniprogram.OnPageNotFoundCallbackResult): void
   /**
    * 钩子函数：先执行hook:pageOnLoad再执行wx小程序的Page下的onShow
    *
@@ -127,21 +127,21 @@ export interface WxHookOptionsType {
    * @param {(WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance)} options
    * @memberof WxHookOptionsType
    */
-  onShareAppMessage?(options: WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance): void
+  pageOnShareAppMessage?(options: WechatMiniprogram.Page.IShareAppMessageOption & IWxPageInstance): void
   /**
    * 先执行hook:onShareTimeline再执行wx小程序的Page下的onShareTimeline
    *
    * @param {IWxPageInstance} page
    * @memberof WxHookOptionsType
    */
-  onShareTimeline?(page: IWxPageInstance): void
+  pageOnShareTimeline?(page: IWxPageInstance): void
   /**
    * 先执行hook:onTabItemTap再执行wx小程序的Page下的onTabItemTap
    *
    * @param {(WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance)} options
    * @memberof WxHookOptionsType
    */
-  onTabItemTap?(options: WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance): void
+  pageOnTabItemTap?(options: WechatMiniprogram.Page.ITabItemTapOption & IWxPageInstance): void
   /**
    * 钩子函数：重写wx.NavigateToMiniProgram将里面的参数抛出来，便于在跳转时更改query和extraData
    *
@@ -161,23 +161,6 @@ export interface WxHookOptionsType {
   triggerWxEvent?(e: WechatMiniprogram.BaseEvent): void
 }
 
-export interface WxOnShareAppMessageBreadcrumb {
-  path: string
-  query: IAnyObject
-  options: WechatMiniprogram.Page.IShareAppMessageOption
-}
-
-export interface WxOnTabItemTapBreadcrumb {
-  path: string
-  query: IAnyObject
-  options: WechatMiniprogram.Page.ITabItemTapOption
-}
-
-export interface WxRequestErrorBreadcrumb {
-  requestOptions: WechatMiniprogram.RequestOption
-  errMsg: string
-}
-
 export interface WxLifeCycleBreadcrumb {
   path: string
   query: IAnyObject
@@ -185,4 +168,16 @@ export interface WxLifeCycleBreadcrumb {
   // referrerInfo: IAnyObject
   // scene: number
   // shareTicket: any
+}
+export interface WxOnShareAppMessageBreadcrumb extends WxLifeCycleBreadcrumb {
+  options: WechatMiniprogram.Page.IShareAppMessageOption
+}
+
+export interface WxOnTabItemTapBreadcrumb extends WxLifeCycleBreadcrumb {
+  options: WechatMiniprogram.Page.ITabItemTapOption
+}
+
+export interface WxRequestErrorBreadcrumb {
+  requestOptions: WechatMiniprogram.RequestOption
+  errMsg: string
 }
