@@ -92,7 +92,7 @@
     "./packages/browser/dist/browser.min.js": {
       "none": "23 kB"
     },
-    "./packages/wx-mini/dist/w-mini.min.js": {
+    "./packages/wx-mini/dist/wx-mini.min.js": {
       "none": "28 kB"
     }
   },
