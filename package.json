@@ -90,7 +90,7 @@
   },
   "filesize": {
     "./packages/browser/dist/browser.min.js": {
-      "none": "23 kB"
+      "none": "24 kB"
     },
     "./packages/wx-mini/dist/wx-mini.min.js": {
       "none": "28 kB"
