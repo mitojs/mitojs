@@ -49,52 +49,65 @@ const processEnvBanner = `
 const includeEnvNames = ['react', 'web']
 const banner = `${mitoAnnotation}${includeEnvNames.includes(name) ? '\n' + processEnvBanner : ''}`
 
-const common = {
-  input: `${packageDir}/src/index.ts`,
-  output: {
-    banner,
-    footer: '/* follow me on Github! @cjinhuo */',
-    globals: {
-      react: 'React',
-      jsxRuntime: 'jsxRuntime'
-    }
-  },
-  external: [...Object.keys(paths), 'react', 'jsxRuntime'],
-  plugins: [
-    resolve(),
-    size(),
-    visualizer({
-      title: `${M} analyzer`,
-      filename: 'analyzer.html'
-    }),
-    commonjs({
-      exclude: 'node_modules'
-    }),
-    json(),
-    cleanup({
-      comments: 'none'
-    }),
-    typescript({
-      tsconfig: 'tsconfig.build.json',
-      useTsconfigDeclarationDir: true,
-      tsconfigOverride: {
-        compilerOptions: {
-          declaration: isDeclaration,
-          declarationMap: isDeclaration,
-          declarationDir: `${packageDirDist}/packages/`, // 类型声明文件的输出目录
-          module: 'ES2015',
-          paths
-        }
-      },
-      include: ['*.ts+(|x)', '**/*.ts+(|x)', '../**/*.ts+(|x)']
-    })
-    // remove console.log in bundle
-    // strip({
-    //   include: ['**/*.(js|ts|tsx)'],
-    //   functions: ['console.log']
-    // })
-  ]
+function getCommon(format) {
+  const common = {
+    input: `${packageDir}/src/index.ts`,
+    output: {
+      banner,
+      footer: '/* follow me on Github! @cjinhuo */',
+      globals: {
+        react: 'React',
+        jsxRuntime: 'jsxRuntime'
+      }
+    },
+    // 外部依赖，也是防止重复打包的配置
+    external: [...Object.keys(paths), 'react', 'jsxRuntime'],
+    plugins: [
+      resolve(),
+      size(),
+      visualizer({
+        title: `${M} analyzer`,
+        filename: 'analyzer.html'
+      }),
+      commonjs({
+        exclude: 'node_modules'
+      }),
+      json(),
+      cleanup({
+        comments: 'none'
+      }),
+      typescript({
+        tsconfig: 'tsconfig.build.json',
+        useTsconfigDeclarationDir: true,
+        tsconfigOverride: {
+          compilerOptions: {
+            declaration: isDeclaration,
+            declarationMap: isDeclaration,
+            declarationDir: `${packageDirDist}/packages/`, // 类型声明文件的输出目录
+            module: 'ES2015',
+            paths
+          }
+        },
+        include: ['*.ts+(|x)', '**/*.ts+(|x)', '../**/*.ts+(|x)']
+      })
+      // remove console.log in bundle
+      // strip({
+      //   include: ['**/*.(js|ts|tsx)'],
+      //   functions: ['console.log']
+      // })
+    ]
+  }
+  return common
 }
+
+// const FormatTypes = {
+//   esm: 'esm',
+//   cjs: 'cjs',
+//   iife: 'iife'
+// }
+
+const common = getCommon()
+
 const esmPackage = {
   ...common,
   output: {
@@ -134,7 +147,6 @@ const iifePackage = {
     name: 'MITO',
     ...common.output
   },
-  // , terser()
   plugins: [...common.plugins, terser()]
 }
 const total = {

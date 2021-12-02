@@ -1,6 +1,6 @@
 {
   "name": "@mitojs/core",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "@mitojs/core",
   "author": "cjinhuo",
   "license": "MIT",
@@ -24,8 +24,8 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/types": "3.0.0",
-    "@mitojs/utils": "3.0.0",
-    "@mitojs/shared": "3.0.0"
+    "@mitojs/types": "3.0.1",
+    "@mitojs/utils": "3.0.1",
+    "@mitojs/shared": "3.0.1"
   }
 }

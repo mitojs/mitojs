@@ -1,6 +1,6 @@
-import { BaseBreadcrumbTypes, BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
+import { BaseBreadcrumbTypes, BREADCRUMBCATEGORYS, ErrorTypes, SDK_NAME, SDK_VERSION } from '@mitojs/shared'
 import { reactUrl } from '@/test/config'
-import { ReportDataType, TransportDataType } from '@mitojs/types'
+import { TransportDataType } from '@mitojs/types'
 import { Severity } from '@mitojs/utils'
 import puppeteer from 'puppeteer'
 import { BrowserClient } from '@mitojs/browser'
