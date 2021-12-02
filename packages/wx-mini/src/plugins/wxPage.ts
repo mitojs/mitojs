@@ -94,7 +94,7 @@ wxPagePluginMap.set(WxPageEvents.PageOnUnload, {
 
 wxPagePluginMap.set(WxPageEvents.PageOnShareTimeline, {
   transform(options: WechatMiniprogram.Page.IShareAppMessageOption) {
-    return pageHookTransform.call(this, WxPageEvents.PageOnShareTimeline, options)
+    return pageHookTransformWithOptions.call(this, WxPageEvents.PageOnShareTimeline, options)
   },
   consumer(data: WxLifeCycleBreadcrumb) {
     addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.PAGE_ON_SHARE_TIMELINE)

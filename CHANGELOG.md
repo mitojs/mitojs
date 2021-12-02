@@ -1,3 +1,28 @@
+## [3.0.1](https://github.com/mitojs/mitojs/compare/v3.0.0...v3.0.1) (2021-12-02)
+
+
+### Bug Fixes
+
+* **utils/errorid:** correct getRealPath ([e242098](https://github.com/mitojs/mitojs/commit/e2420989f611883558e9c700a55dcb3d578f40f1))
+
+
+### Features
+
+* **wx-mini:** add options param in OnShareTimeline and OnShareAppMessage ([d2ea0c2](https://github.com/mitojs/mitojs/commit/d2ea0c2e1c07b5ccc83ab4c4d0251718287a3ef9))
+* **wx-mini:** add silentPageOnShareAppMessage and silentPageOnShareTimeline ([b0e51b4](https://github.com/mitojs/mitojs/commit/b0e51b47665d820f18a4368708bf850d7a411bec))
+
+
+### BREAKING CHANGES
+
+#### **wx-mini:**
+
+* onShareAppMessage to pageOnShareAppMessage
+* onShareTimeline to pageOnShareTimeline
+* onTabItemTap to pageOnTabItemTap
+* onPageNotFound to appOnPageNotFound
+
+
+
 # [3.0.0](https://github.com/mitojs/mitojs/compare/2.1.19...3.0.0) (2021-10-08)
 
 
