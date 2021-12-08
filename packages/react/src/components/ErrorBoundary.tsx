@@ -30,13 +30,13 @@ class ErrorBoundaryWrapped extends PureComponent<ErrorBoundaryProps, ErrorBounda
     reactError.type = ErrorTypes.REACT
     onError?.(error, componentStack)
     // mito handler -> collected react render error
-    const breadcrumbStack = MitoInstance.breadcrumb.push({
+    const breadcrumbStack = MitoInstance?.breadcrumb.push({
       type: BaseBreadcrumbTypes.REACT,
       data: reactError,
       category: BREADCRUMBCATEGORYS.EXCEPTION,
       level: Severity.Error
     })
-    MitoInstance.transport.send(reactError, breadcrumbStack)
+    MitoInstance?.transport.send(reactError, breadcrumbStack)
     this.setState({
       hasError: true
     })
