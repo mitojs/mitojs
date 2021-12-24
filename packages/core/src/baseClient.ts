@@ -2,7 +2,7 @@ import { EventTypes, SDK_VERSION } from '@mitojs/shared'
 import { BaseClientType, BaseOptionsFieldsIntegrationType, BasePluginType, LogTypes } from '@mitojs/types'
 import { logger } from '@mitojs/utils'
 import { BaseTransport, Breadcrumb } from '.'
-import { Subscrib } from './subscribe'
+import { Subscribe } from './subscribe'
 
 /**
  * 抽象客户端，已实现插件和钩子函数的定义
@@ -39,12 +39,12 @@ export abstract class BaseClient<
   use(plugins: BasePluginType<E>[]) {
     if (this.options.disabled) return
     // 新建发布订阅实例
-    const subscrib = new Subscrib<E>()
+    const subscribe = new Subscribe<E>()
     plugins.forEach((item) => {
       if (!this.isPluginEnable(item.name)) return
       // 调用插件中的monitor并将发布函数传入
-      item.monitor.call(this, subscrib.notify.bind(subscrib))
-      const wrapperTranform = (...args: any[]) => {
+      item.monitor.call(this, subscribe.notify.bind(subscribe))
+      const wrapperTransform = (...args: any[]) => {
         // 先执行transform
         const res = item.transform?.apply(this, args)
         // 拿到transform返回的数据并传入
@@ -52,7 +52,7 @@ export abstract class BaseClient<
         // 如果需要新增hook，可在这里添加逻辑
       }
       // 订阅插件中的名字，并传入回调函数
-      subscrib.watch(item.name, wrapperTranform)
+      subscribe.watch(item.name, wrapperTransform)
     })
   }
   getOptions() {

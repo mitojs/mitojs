@@ -5,10 +5,10 @@ type MonitorCallback = (data: any) => void
  * 发布订阅类
  *
  * @export
- * @class Subscrib
+ * @class Subscribe
  * @template T 事件枚举
  */
-export class Subscrib<T> {
+export class Subscribe<T> {
   dep: Map<T, MonitorCallback[]> = new Map()
   constructor() {}
   watch(eventName: T, callBack: (data: any) => any) {
@@ -28,7 +28,7 @@ export class Subscrib<T> {
           fn(data)
         },
         (e: Error) => {
-          logger.error(`Subscrib.notify：监听事件的回调函数发生错误\neventName:${eventName}\nName: ${getFunctionName(fn)}\nError: ${e}`)
+          logger.error(`Subscribe.notify：监听事件的回调函数发生错误\neventName:${eventName}\nName: ${getFunctionName(fn)}\nError: ${e}`)
         }
       )
     })

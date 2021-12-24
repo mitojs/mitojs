@@ -1548,11 +1548,11 @@ var Breadcrumb = (function () {
   return Breadcrumb
 })()
 
-var Subscrib = (function () {
-  function Subscrib() {
+var Subscribe = (function () {
+  function Subscribe() {
     this.dep = new Map()
   }
-  Subscrib.prototype.watch = function (eventName, callBack) {
+  Subscribe.prototype.watch = function (eventName, callBack) {
     var fns = this.dep.get(eventName)
     if (fns) {
       this.dep.set(eventName, fns.concat(callBack))
@@ -1560,7 +1560,7 @@ var Subscrib = (function () {
     }
     this.dep.set(eventName, [callBack])
   }
-  Subscrib.prototype.notify = function (eventName, data) {
+  Subscribe.prototype.notify = function (eventName, data) {
     var fns = this.dep.get(eventName)
     if (!eventName || !fns) return
     fns.forEach(function (fn) {
@@ -1570,7 +1570,7 @@ var Subscrib = (function () {
         },
         function (e) {
           logger.error(
-            'Subscrib.notify\uFF1A\u76D1\u542C\u4E8B\u4EF6\u7684\u56DE\u8C03\u51FD\u6570\u53D1\u751F\u9519\u8BEF\neventName:' +
+            'Subscribe.notify\uFF1A\u76D1\u542C\u4E8B\u4EF6\u7684\u56DE\u8C03\u51FD\u6570\u53D1\u751F\u9519\u8BEF\neventName:' +
               eventName +
               '\nName: ' +
               getFunctionName(fn) +
@@ -1581,7 +1581,7 @@ var Subscrib = (function () {
       )
     })
   }
-  return Subscrib
+  return Subscribe
 })()
 
 var BaseClient = (function () {
@@ -1593,10 +1593,10 @@ var BaseClient = (function () {
   BaseClient.prototype.use = function (plugins) {
     var _this = this
     if (this.options.disabled) return
-    var subscrib = new Subscrib()
+    var subscribe = new Subscribe()
     plugins.forEach(function (item) {
       if (!_this.isPluginEnable(item.name)) return
-      item.monitor.call(_this, subscrib.notify.bind(subscrib))
+      item.monitor.call(_this, subscribe.notify.bind(subscribe))
       var wrapperTranform = function () {
         var _a, _b
         var args = []
@@ -1606,7 +1606,7 @@ var BaseClient = (function () {
         var res = (_a = item.transform) === null || _a === void 0 ? void 0 : _a.apply(_this, args)
         ;(_b = item.consumer) === null || _b === void 0 ? void 0 : _b.call(_this, res)
       }
-      subscrib.watch(item.name, wrapperTranform)
+      subscribe.watch(item.name, wrapperTranform)
     })
   }
   BaseClient.prototype.getOptions = function () {
