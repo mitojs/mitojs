@@ -11,6 +11,8 @@ jobs:
       CI_JOB_NUMBER: 1
     steps:
       - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm install
       - uses: andresz1/size-limit-action@v1.7.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
