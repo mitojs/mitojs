@@ -2,7 +2,8 @@ name: 'size'
 on:
   pull_request:
     branches:
-      - limit
+      - master
+      - dev
 jobs:
   size:
     runs-on: ubuntu-latest
