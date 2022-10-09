@@ -82,7 +82,7 @@
     "rollup-plugin-visualizer": "^5.4.1",
     "size-limit": "^8.1.0",
     "ts-jest": "^26.4.4",
-    "ts-node": "^9.1.1",
+    "ts-node": "10.8.1",
     "tsconfig-paths": "^3.9.0",
     "tslib": "^2.3.1",
     "typescript": "^4.3"
