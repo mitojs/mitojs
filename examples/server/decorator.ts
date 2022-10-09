@@ -1,6 +1,5 @@
 function log(target, property, descriptor) {
   const oldValue = descriptor.value
-  console.log(target, property, descriptor)
   descriptor.value = function () {
     // eslint-disable-next-line prefer-rest-params
     console.log(`Calling ${property} with`, arguments)

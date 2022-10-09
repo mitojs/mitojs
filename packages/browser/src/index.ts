@@ -25,7 +25,6 @@ function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins:
   browserClient.use([...browserPlugins, ...plugins])
   return browserClient
 }
-console.log('test limit size.........')
 
 const init = createBrowserInstance
 export { createBrowserInstance, init, BrowserClient }

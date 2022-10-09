@@ -14,7 +14,6 @@ const unhandlerejectionPlugin: BasePluginType<BrowserEventTypes, BrowserClient> 
     })
   },
   transform(collectedData: PromiseRejectionEvent) {
-    console.log('collectedData', collectedData)
     let data: ReportDataType = {
       type: ErrorTypes.PROMISE,
       message: unknownToString(collectedData.reason),

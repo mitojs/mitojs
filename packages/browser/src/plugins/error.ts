@@ -62,7 +62,6 @@ function codeErrorTransform(errorEvent: ErrorEvent) {
   }
   result || (result = handleNotErrorInstance(message, filename, lineno, colno))
   result.type = ErrorTypes.JAVASCRIPT
-  console.log('test error......')
   return result
 }
 
