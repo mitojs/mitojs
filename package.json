@@ -19,7 +19,8 @@
     "postinstall": "husky install",
     "commit": "git add . && git cz",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
-    "size": "filesize"
+    "size": "filesize",
+    "limit": "size-limit"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@ampproject/filesize": "^4.3.0",
     "@microsoft/api-extractor": "7.18.11",
+    "@perfsee/rollup": "^1.0.0-alpha.4",
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-html": "^0.2.0",
@@ -42,6 +44,8 @@
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-strip": "^2.1.0",
     "@rollup/plugin-typescript": "^4.1.2",
+    "@size-limit/file": "^8.1.0",
+    "@size-limit/preset-app": "^8.1.0",
     "@types/express": "^4.17.9",
     "@types/jest": "^26.0.19",
     "@types/node-fetch": "^2.5.7",
@@ -77,6 +81,7 @@
     "rollup-plugin-terser": "^6.1.0",
     "rollup-plugin-typescript2": "^0.30.0",
     "rollup-plugin-visualizer": "^5.4.1",
+    "size-limit": "^8.1.0",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
@@ -89,7 +94,7 @@
     }
   },
   "filesize": {
-    "./packages/browser/dist/browser.min.js": {
+    "./packages/browser/dist/*.js": {
       "none": "24 kB"
     },
     "./packages/wx-mini/dist/wx-mini.min.js": {

@@ -8,7 +8,8 @@ import cleanup from 'rollup-plugin-cleanup'
 import size from 'rollup-plugin-sizes'
 import { visualizer } from 'rollup-plugin-visualizer'
 import strip from '@rollup/plugin-strip'
-
+import { PerfseePlugin } from '@perfsee/rollup'
+console.log('perfsee', PerfseePlugin)
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -76,6 +77,20 @@ function getCommon(format) {
       cleanup({
         comments: 'none'
       }),
+      // PerfseePlugin({
+      //   project: 'mitojs',
+      //   toolkit: 'rollup',
+      //   enableAudit: true,
+      //   artifactName: 'perfsee',
+      //   severOptions: {
+      //     port: 9099
+      //   },
+      //   token: 'uV31OmJ/svdVXVfIb3Fw8pbhFv+qH9+45rE98czPAnV8=',
+      //   shouldPassAudit(score, result) {
+      //     console.log('scoressssssssssssssssssssss', score, 'result', result)
+      //     return true
+      //   }
+      // }),
       typescript({
         tsconfig: 'tsconfig.build.json',
         useTsconfigDeclarationDir: true,
