@@ -13,6 +13,7 @@ describe('consolePlugin', () => {
   browserInstance.use([consolePlugin])
   it("console's func should be called by browserClient", () => {
     const consoleLogMsg = 'this is console.log will be collected'
+    console.log(consoleLogMsg)
     expect((consolePlugin.monitor as jest.Mock).mock.calls.length).toBe(1)
     expect((consolePlugin.transform as jest.Mock).mock.calls.length).toBe(1)
     expect((consolePlugin.consumer as jest.Mock).mock.calls.length).toBe(1)
