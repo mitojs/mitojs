@@ -3,7 +3,7 @@ module.exports = [
     name: '@mitojs/browser - ES5 CDN Bundle (minified)',
     path: 'packages/browser/dist/browser.min.js',
     gzip: false,
-    limit: '25 KB'
+    limit: '23 KB'
   },
   {
     name: '@mitojs/vue - ES5 CDN Bundle (minified)',
