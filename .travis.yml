@@ -11,4 +11,4 @@ scripts:
   - npm install codecov -g
   - npm run build
   - npm test
-  - npm run size
+  - npm run limit

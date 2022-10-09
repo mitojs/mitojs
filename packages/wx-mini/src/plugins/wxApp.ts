@@ -44,6 +44,7 @@ wxAppPluginMap.set(WxAppEvents.AppOnShow, {
     }
     return data
   },
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   async consumer(data: WxLifeCycleBreadcrumb) {
     _support.deviceInfo = await getWxMiniDeviceInfo()
     addBreadcrumbInWx.call(this, data, WxBreadcrumbTypes.APP_ON_SHOW)

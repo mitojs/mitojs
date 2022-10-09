@@ -8,7 +8,6 @@ import cleanup from 'rollup-plugin-cleanup'
 import size from 'rollup-plugin-sizes'
 import { visualizer } from 'rollup-plugin-visualizer'
 import strip from '@rollup/plugin-strip'
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -76,6 +75,7 @@ function getCommon(format) {
       cleanup({
         comments: 'none'
       }),
+
       typescript({
         tsconfig: 'tsconfig.build.json',
         useTsconfigDeclarationDir: true,

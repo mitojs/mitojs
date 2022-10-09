@@ -1,4 +1,4 @@
-import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes } from '@mitojs/shared'
+import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes } from '@mitojs/shared'
 import { ReportDataType } from '@mitojs/types'
 import { Severity, sleepRun } from '@mitojs/utils'
 import { BrowserClient } from '../../browserClient'

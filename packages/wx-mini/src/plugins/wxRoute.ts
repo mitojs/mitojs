@@ -28,6 +28,7 @@ const wxRoutePlugin: BasePluginType<WxEventTypes, WxClient> = {
       collectedData
     }
   },
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   consumer(transformedData: WxRouteTransformType) {
     const { data, collectedData } = transformedData
     if (collectedData.isFail) {
