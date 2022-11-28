@@ -1,0 +1,26 @@
+[
+  {
+    "name": "@mitojs/browser - ES5 CDN Bundle (minified)",
+    "passed": false,
+    "size": 24356,
+    "sizeLimit": 24000
+  },
+  {
+    "name": "@mitojs/vue - ES5 CDN Bundle (minified)",
+    "passed": true,
+    "size": 4507,
+    "sizeLimit": 5000
+  },
+  {
+    "name": "@mitojs/react - ES5 CDN Bundle (minified)",
+    "passed": true,
+    "size": 48736,
+    "sizeLimit": 50000
+  },
+  {
+    "name": "@mitojs/wx-mini - ES5 CDN Bundle (minified)",
+    "passed": false,
+    "size": 30289,
+    "sizeLimit": 29000
+  }
+]
