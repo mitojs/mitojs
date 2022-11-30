@@ -7,13 +7,8 @@ import { BaseTransport } from '@mitojs/core'
 export class BrowserTransport extends BaseTransport<BrowserOptionsFieldsTypes> {
   configReportXhr: unknown
   useImgUpload = false
-  constructor(options: BrowserOptionsFieldsTypes = {}) {
-    super()
-    super.bindOptions(options)
-    this.bindOptions(options)
-  }
-  post(data: any, url: string) {
-    const requestFun = (): void => {
+  requestPostFun = (data: any, url: string): (() => void) => {
+    return () => {
       const xhr = new XMLHttpRequest()
       xhr.open(MethodTypes.Post, url)
       xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
@@ -23,7 +18,14 @@ export class BrowserTransport extends BaseTransport<BrowserOptionsFieldsTypes> {
       }
       xhr.send(safeStringify(data))
     }
-    this.queue.addTask(requestFun)
+  }
+  constructor(options: BrowserOptionsFieldsTypes = {}) {
+    super()
+    super.bindOptions(options)
+    this.bindOptions(options)
+  }
+  post(data: any, url: string) {
+    this.queue.addTask(this.requestPostFun(data, url))
   }
   imgRequest(data: any, url: string): void {
     const requestFun = () => {

@@ -6,6 +6,10 @@ export interface BrowserOptionsFieldsTypes extends BrowsersilentOptionsType, Bas
    * 为true时，则使用img上报的方式，会在dsn后面追加data=encodeURIComponent(reportData)，在服务端接受时需要decodeURIComponent
    */
   useImgUpload?: boolean
+  /**
+   * 自定义post方法
+   */
+  requestPostFun?(data: any, url: string): () => void
 }
 
 /**
