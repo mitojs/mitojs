@@ -3,7 +3,7 @@
 ## Setting up an Enviroment
 To run the test suite and our code linter, node.js and yarn are required.
 
-[`node` download](https://nodejs.org/download)
+[`node` download](https://nodejs.org/download),the version is preferably 14.xx. Yeah,it is way too old for 2024,I will spend some time to refactor it.
 [`yarn` download](https://yarnpkg.com/en/docs/install)
 
 ```
