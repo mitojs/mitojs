@@ -38,8 +38,7 @@ const wxDomPlugin: BasePluginType<WxBaseEventTypes, WxClient> = {
                     that._mito_hook_ = true
                     Object.keys(that).forEach(function (vmk) {
                       // $ 开头不重写，不是 tap 函数
-                      if (~vmk.indexOf('$')) return
-                      if (typeof that[vmk] === 'function') return
+                      if (~vmk.indexOf('$') || typeof that[vmk] !== 'function') return
                       const original = that[vmk]
                       that[vmk] = function () {
                         // eslint-disable-next-line prefer-rest-params
