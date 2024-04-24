@@ -30,6 +30,32 @@ const wxDomPlugin: BasePluginType<WxBaseEventTypes, WxClient> = {
             m,
             function (originMethod: (args: any) => void) {
               return function (...args: any): void {
+                // 兼容 uni app 3：start
+                if (this.$vm && !this.$vm._mito_hook_) {
+                  // eslint-disable-next-line @typescript-eslint/no-this-alias
+                  const that = this
+                  if (!that._mito_hook_) {
+                    that._mito_hook_ = true
+                    Object.keys(that).forEach(function (vmk) {
+                      // $ 开头不重写，不是 tap 函数
+                      if (~vmk.indexOf('$') || typeof that[vmk] !== 'function') return
+                      const original = that[vmk]
+                      that[vmk] = function () {
+                        // eslint-disable-next-line prefer-rest-params
+                        const e = arguments[0]
+                        if (e && e.type && e.currentTarget && !e.mitoWorked) {
+                          sdkOptions.triggerWxEvent(e)
+                          if (linstenerTypes.indexOf(e.type) > -1) {
+                            throttleGesturetrigger(e)
+                          }
+                        }
+                        // eslint-disable-next-line prefer-rest-params
+                        return original.apply(this, arguments)
+                      }
+                    })
+                  }
+                }
+                // end
                 const e = args[0]
                 if (e && e.type && e.currentTarget && !e.mitoWorked) {
                   sdkOptions.triggerWxEvent(e)
