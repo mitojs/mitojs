@@ -1,3 +1,9 @@
+## [@mitojs/wx-mini@3.1.0](https://github.com/mitojs/mitojs/commit/b7d0e55b4680847dbf4ab8e836ca3409b1baa8bd)
+### Features
+
+* **wx-mini:** hijack tap event at uni app v3 ([b7d0e55](https://github.com/mitojs/mitojs/commit/b7d0e55b4680847dbf4ab8e836ca3409b1baa8bd))
+
+
 ## [3.0.1](https://github.com/mitojs/mitojs/compare/v3.0.0...v3.0.1) (2021-12-02)
 
 
