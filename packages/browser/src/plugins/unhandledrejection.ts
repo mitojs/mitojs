@@ -5,7 +5,7 @@ import { BrowserClient } from '../browserClient'
 import { addBreadcrumbInBrowser } from '../utils'
 
 const name = BrowserEventTypes.UNHANDLEDREJECTION
-const unhandlerejectionPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
+const unhandledrejectionPlugin: BasePluginType<BrowserEventTypes, BrowserClient> = {
   name,
   monitor(notify) {
     on(_global, name, function (ev: PromiseRejectionEvent) {
@@ -36,4 +36,4 @@ const unhandlerejectionPlugin: BasePluginType<BrowserEventTypes, BrowserClient> 
   }
 }
 
-export default unhandlerejectionPlugin
+export default unhandledrejectionPlugin
