@@ -8,7 +8,7 @@ import errorPlugin from './plugins/error'
 import hashRoutePlugin from './plugins/hashRoute'
 import historyRoutePlugin from './plugins/historyRoute'
 import consolePlugin from './plugins/console'
-import unhandlerejectionPlugin from './plugins/unhandlerejecttion'
+import unhandledrejectionPlugin from './plugins/unhandledrejection'
 import { BasePluginType } from '@mitojs/types'
 function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins: BasePluginType[] = []) {
   const browserClient = new BrowserClient(options)
@@ -20,7 +20,7 @@ function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins:
     hashRoutePlugin,
     historyRoutePlugin,
     consolePlugin,
-    unhandlerejectionPlugin
+    unhandledrejectionPlugin
   ]
   browserClient.use([...browserPlugins, ...plugins])
   return browserClient

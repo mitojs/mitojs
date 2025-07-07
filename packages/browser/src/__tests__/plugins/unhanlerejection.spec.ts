@@ -2,7 +2,7 @@ import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes } from '@mitojs/shared'
 import { ReportDataType } from '@mitojs/types'
 import { Severity, sleepRun } from '@mitojs/utils'
 import { BrowserClient } from '../../browserClient'
-import unhandlerejectionPlugin from '../../plugins/unhandlerejecttion'
+import unhandlerejectionPlugin from '../../plugins/unhandledrejection'
 
 describe('unhandlerejectionPlugin', () => {
   const browserInstance = new BrowserClient({
