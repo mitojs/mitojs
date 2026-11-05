@@ -41,8 +41,9 @@ function monitorFetch(this: BrowserClient, notify: (eventName: BrowserEventTypes
         setRequestHeader: headers.set
       })
       options.setTraceId(url, (headerFieldName: string, traceId: string) => {
-        httpCollect.request.traceId = traceId
-        headers.set(headerFieldName, traceId)
+        const existing = headers.get(headerFieldName)
+        httpCollect.request.traceId = existing || traceId
+        if (!existing) headers.set(headerFieldName, traceId)
       })
       options.beforeAppAjaxSend && options.beforeAppAjaxSend({ method, url }, headers)
       config = {
