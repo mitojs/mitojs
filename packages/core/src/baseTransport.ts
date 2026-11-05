@@ -11,6 +11,7 @@ import { AuthInfo, BaseOptionsFieldsIntegrationType, BreadcrumbPushData, ReportD
  * @template O
  */
 export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> {
+  disabled = false
   apikey = ''
   dsn = ''
   queue: Queue
@@ -75,9 +76,10 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
    * @memberof BaseTransport
    */
   bindOptions(options: Partial<O> = {}): void {
-    const { dsn, beforeDataReport, apikey, maxDuplicateCount, backTrackerId, configReportUrl } = options
+    const { disabled, dsn, beforeDataReport, apikey, maxDuplicateCount, backTrackerId, configReportUrl } = options
     const functionType = ToStringTypes.Function
     const optionArr = [
+      [disabled, 'disabled', ToStringTypes.Boolean],
       [apikey, 'apikey', ToStringTypes.String],
       [dsn, 'dsn', ToStringTypes.String],
       [maxDuplicateCount, 'maxDuplicateCount', ToStringTypes.Number],
@@ -97,6 +99,7 @@ export abstract class BaseTransport<O extends BaseOptionsFieldsIntegrationType =
    * @memberof BaseTransport
    */
   async send(data: any, breadcrumb: BreadcrumbPushData[] = []): Promise<void> {
+    if (this.disabled) return
     // 如果是埋点则不需要生成errorId
     if (!data.isTrack) {
       const errorId = createErrorId(data, this.apikey, this.maxDuplicateCount)
