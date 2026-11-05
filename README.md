@@ -16,6 +16,8 @@
 
 [中文文档](./README.zh_CN.md)
 
+[Code structure and development FAQ / 代码结构与使用 FAQ](./docs/architecture.md)
+
 
 ## 👋 Features
 
