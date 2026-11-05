@@ -9,7 +9,7 @@ describe('fetch compatibility', () => {
   const response = () => new Response('response')
   let nativeFetch: jest.Mock
   beforeEach(() => {
-    ;(global as any).Headers = Headers
+    global.Headers = Headers as any
     nativeFetch = jest.fn().mockImplementation(() => Promise.resolve(response()))
     _global.fetch = nativeFetch
   })
