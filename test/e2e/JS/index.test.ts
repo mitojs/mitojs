@@ -9,233 +9,117 @@ import {
   SDK_VERSION
 } from '@mitojs/shared'
 import puppeteer from 'puppeteer'
-import { BreadcrumbPushData, ReportDataType, TransportDataType } from '@mitojs/types'
+import { ReportDataType, TransportDataType } from '@mitojs/types'
 import { SpanStatus, Severity } from '@mitojs/utils'
 import { ServerUrls } from '../../../examples/server/config'
 import { jsUrl } from '@/test/config'
 import { BrowserClient } from '@mitojs/browser'
 
 describe('Native JS e2e:', () => {
-  const timeout = 3000
   let page: puppeteer.Page
-  let browser: puppeteer.Browser
-  const uploadRequestHandles = []
-  const finishedRequestHandles = []
-  async function getStack() {
-    return await page.evaluate(() => {
-      return (window['_MITO_'] as BrowserClient).breadcrumb.getStack()
-    })
-  }
   beforeEach(async () => {
-    browser = await puppeteer.launch()
+    const browser = (global as any).__BROWSER__ as puppeteer.Browser
     page = await browser.newPage()
-    // print console
-    // page.on('console', (msg) => {
-    //   for (let i = 0; i < msg.args().length; ++i) console.log(`${i}: ${msg.args()[i]}`)
-    // })
     await page.goto(jsUrl)
-    page.on('request', (request) => {
-      if (request.url().includes(ServerUrls.errorsUpload) && uploadRequestHandles.length > 0) {
-        uploadRequestHandles.shift()(request)
-      }
-    })
-    page.on('requestfinished', (request) => {
-      if (finishedRequestHandles.length > 0) {
-        finishedRequestHandles.shift()(request)
-      }
-    })
   })
-
   afterEach(async () => {
-    browser.close()
+    await page?.close()
   })
 
-  afterAll(() => {
-    browser.close()
+  function getStack() {
+    return page.evaluate(() => (window['_MITO_'] as BrowserClient).breadcrumb.getStack())
+  }
+  async function clickAndUpload(selector: string): Promise<ReportDataType> {
+    const [request] = await Promise.all([
+      page.waitForRequest((request) => request.method() === 'POST' && new URL(request.url()).pathname === ServerUrls.errorsUpload),
+      page.click(selector)
+    ])
+    const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
+    expect(authInfo.sdkName).toBe(SDK_NAME)
+    expect(authInfo.sdkVersion).toBe(SDK_VERSION)
+    return data as ReportDataType
+  }
+
+  it('Code Error btn click，breadcrumb stack should add two and upload this error', async () => {
+    const data = await clickAndUpload('#codeErr')
+    expect(data.type).toBe(ErrorTypes.JAVASCRIPT)
+    expect(data.level).toBe(Severity.Normal)
+    expect(Array.isArray(data.stack)).toBe(true)
+    const stack = await getStack()
+    expect(stack).toHaveLength(2)
+    expect(stack[0]).toMatchObject({ type: BrowserBreadcrumbTypes.CLICK, category: BREADCRUMBCATEGORYS.USER, level: Severity.Info })
+    expect(stack[1]).toMatchObject({
+      type: BrowserBreadcrumbTypes.CODE_ERROR,
+      category: BREADCRUMBCATEGORYS.EXCEPTION,
+      level: Severity.Error
+    })
   })
-  it(
-    'Code Error btn click，breadcrumb stack should add two and upload this error',
-    async () => {
-      const interceptRequest = (request: puppeteer.Request) => {
-        const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
-        expect((data as ReportDataType).type).toBe(ErrorTypes.JAVASCRIPT)
-        expect((data as ReportDataType).level).toBe(Severity.Normal)
-        expect(Array.isArray((data as ReportDataType).stack)).toBeTruthy()
-        expect(authInfo.sdkName).toBe(SDK_NAME)
-        expect(authInfo.sdkVersion).toBe(SDK_VERSION)
-      }
-      uploadRequestHandles.push(interceptRequest)
-      await page.click('#codeErr')
 
-      const stack = await getStack()
-      // click
-      expect(stack[0].type).toBe(BrowserBreadcrumbTypes.CLICK)
-      expect(stack[0].category).toBe(BREADCRUMBCATEGORYS.USER)
-      expect(stack[0].level).toBe(Severity.Info)
-      // code error
-      expect(stack[1].type).toBe(BrowserBreadcrumbTypes.CODE_ERROR)
-      expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-      expect(stack[1].level).toBe(Severity.Error)
-      expect(stack.length).toBe(2)
-    },
-    timeout
-  )
-
-  it(
-    'a normal get XHR request，breadcrumb stack should add one',
-    (done) => {
-      async function requestfinishedHandle(request: puppeteer.Request) {
-        if (request.method() === MethodTypes.Get && request.url().includes(ServerUrls.normalGet)) {
-          const stack = await getStack()
-          expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
-          expect(stack[1].type).toBe(BrowserBreadcrumbTypes.XHR)
-          expect(stack[1].level).toBe(Severity.Info)
-          expect((stack[1].data as ReportDataType).message).toBe(SpanStatus.Ok)
-          expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
-          expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Get)
-          expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.normalGet)
-        }
-        done()
-      }
-      finishedRequestHandles.push(requestfinishedHandle)
-      page.click('#normalReq')
-    },
-    timeout
-  )
-
-  it(
-    'a exception get XHR request，breadcrumb stack should add two and upload this error',
-    (done) => {
-      async function requestfinishedHandle(request: puppeteer.Request) {
-        // if (request.method() === MethodTypes.Get && request.url().includes('/exception')) {
-        const stack = await getStack()
-        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
-        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.XHR)
-        expect(stack[1].level).toBe(Severity.Info)
-        expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionGet}`)
-        expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
-        expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Get)
-        expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.exceptionGet)
-
-        expect(stack[2].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-        expect(stack[2].type).toBe(BrowserBreadcrumbTypes.XHR)
-        expect(stack[2].level).toBe(Severity.Error)
-        expect((stack[2].data as ReportDataType).request.httpType).toBe(HttpTypes.XHR)
-        expect((stack[2].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionGet}`)
-        expect((stack[2].data as ReportDataType).request.method).toBe(MethodTypes.Get)
-        expect((stack[2].data as ReportDataType).request.url).toBe(ServerUrls.exceptionGet)
-        done()
-        // }
-      }
-      finishedRequestHandles.push(requestfinishedHandle)
-      function interceptedRequest(request: puppeteer.Request) {
-        const { authInfo, data } = JSON.parse(request.postData()) as TransportDataType
-        expect((data as ReportDataType).type).toBe(ErrorTypes.HTTP)
-        expect((data as ReportDataType).level).toBe(Severity.Low)
-        expect(authInfo.sdkName).toBe(SDK_NAME)
-        expect(authInfo.sdkVersion).toBe(SDK_VERSION)
-      }
-      uploadRequestHandles.push(interceptedRequest)
-      page.click('#exceptionReq')
-    },
-    timeout
-  )
-
-  it(
-    'a normal post fetch request，breadcrumb stack should add one',
-    (done) => {
-      async function requestfinishedHandle() {
-        const stack = await getStack()
-        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
-        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.FETCH)
-        expect(stack[1].level).toBe(Severity.Info)
-        expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.Ok}`)
-        expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
-        expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Post)
-        expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.normalPost)
-        done()
-      }
-      finishedRequestHandles.push(requestfinishedHandle)
-      page.click('#normalFetch')
-    },
-    timeout
-  )
-
-  it(
-    'a exception post fetch request，breadcrumb stack should add two and upload this error',
-    (done) => {
-      async function requestfinishedHandle() {
-        const stack = await getStack()
-        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.HTTP)
-        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.FETCH)
-        expect(stack[1].level).toBe(Severity.Info)
-        expect((stack[1].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionPost}`)
-        expect((stack[1].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
-        expect((stack[1].data as ReportDataType).request.method).toBe(MethodTypes.Post)
-        expect((stack[1].data as ReportDataType).request.url).toBe(ServerUrls.exceptionPost)
-
-        expect(stack[2].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-        expect(stack[2].type).toBe(BrowserBreadcrumbTypes.FETCH)
-        expect(stack[2].level).toBe(Severity.Error)
-        expect((stack[2].data as ReportDataType).request.httpType).toBe(HttpTypes.FETCH)
-        expect((stack[2].data as ReportDataType).message).toBe(`${SpanStatus.InternalError} ${ServerUrls.exceptionPost}`)
-        expect((stack[2].data as ReportDataType).request.method).toBe(MethodTypes.Post)
+  it.each([
+    ['#normalReq', ServerUrls.normalGet, MethodTypes.Get, HttpTypes.XHR, BrowserBreadcrumbTypes.XHR, 200],
+    ['#exceptionReq', ServerUrls.exceptionGet, MethodTypes.Get, HttpTypes.XHR, BrowserBreadcrumbTypes.XHR, 500],
+    ['#normalFetch', ServerUrls.normalPost, MethodTypes.Post, HttpTypes.FETCH, BrowserBreadcrumbTypes.FETCH, 200],
+    ['#exceptionFetch', ServerUrls.exceptionPost, MethodTypes.Post, HttpTypes.FETCH, BrowserBreadcrumbTypes.FETCH, 500]
+  ])('%s captures the intended request and its breadcrumbs', async (selector, url, method, httpType, type, status) => {
+    const upload = status === 500 ? clickAndUpload(selector as string) : null
+    if (status !== 500) {
+      await Promise.all([
+        page.waitForResponse((response) => new URL(response.url()).pathname === url && response.request().method() === method),
+        page.click(selector as string)
+      ])
+    }
+    if (status === 500) {
+      const data = await upload
+      expect(data).toMatchObject({ type: ErrorTypes.HTTP, level: Severity.Low })
+    }
+    // A response event precedes fetch's asynchronous body collection.
+    await page.waitForFunction(
+      (targetUrl, targetType) => {
+        return (window['_MITO_'] as BrowserClient).breadcrumb.getStack().some((item) => {
+          return item.type === targetType && (item.data as ReportDataType)?.request?.url === targetUrl
+        })
+      },
+      {},
+      url,
+      type
+    )
+    const stack = await getStack()
+    expect(stack).toHaveLength(status === 500 ? 3 : 2)
+    expect(stack[0]).toMatchObject({ type: BrowserBreadcrumbTypes.CLICK, category: BREADCRUMBCATEGORYS.USER })
+    const message = status === 200 ? SpanStatus.Ok : `${SpanStatus.InternalError} ${url}`
+    const httpData = { message, request: { httpType, method, url }, response: { status } }
+    expect(stack[1]).toMatchObject({ category: BREADCRUMBCATEGORYS.HTTP, type, level: Severity.Info, data: httpData })
+    if (status === 500) {
+      expect(stack[2]).toMatchObject({ category: BREADCRUMBCATEGORYS.EXCEPTION, type, level: Severity.Error, data: httpData })
+      if (httpType === HttpTypes.FETCH) {
         expect((stack[2].data as ReportDataType).request.data).toBe(JSON.stringify({ test: '测试请求体' }))
-        expect((stack[2].data as ReportDataType).request.url).toBe(ServerUrls.exceptionPost)
-        done()
       }
-      finishedRequestHandles.push(requestfinishedHandle)
-      function interceptedRequest(request: puppeteer.Request) {
-        const { data } = JSON.parse(request.postData()) as TransportDataType
-        expect((data as ReportDataType).type).toBe(ErrorTypes.HTTP)
-        expect((data as ReportDataType).level).toBe(Severity.Low)
-      }
-      uploadRequestHandles.push(interceptedRequest)
-      page.click('#exceptionFetch')
-    },
-    timeout
-  )
+    }
+  })
 
-  it(
-    'manual report，breadcrumb should add one and upload this error',
-    async (done) => {
-      async function interceptedRequest(request: puppeteer.Request) {
-        const stack = await getStack()
-        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.DEBUG)
-        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.CUSTOMER)
-        expect(stack[1].level).toBe(Severity.Error)
-        const { data } = JSON.parse(request.postData()) as TransportDataType
-        expect((data as ReportDataType).customTag).toBe('测试')
-        expect((data as ReportDataType).name).toBe(MitoLog)
-        expect((data as ReportDataType).type).toBe(ErrorTypes.LOG)
-        expect((data as ReportDataType).level).toBe(Severity.Critical)
-        expect((data as ReportDataType).message).toBe(JSON.stringify({ one: 111 }))
-        done()
-      }
-      uploadRequestHandles.push(interceptedRequest)
-      await page.click('#logUpload')
-    },
-    timeout
-  )
+  it('manual report，breadcrumb should add one and upload this error', async () => {
+    const data = await clickAndUpload('#logUpload')
+    expect(data).toMatchObject({
+      customTag: '测试',
+      name: MitoLog,
+      type: ErrorTypes.LOG,
+      level: Severity.Critical,
+      message: JSON.stringify({ one: 111 })
+    })
+    const stack = await getStack()
+    expect(stack).toHaveLength(2)
+    expect(stack[1]).toMatchObject({ category: BREADCRUMBCATEGORYS.DEBUG, type: BrowserBreadcrumbTypes.CUSTOMER, level: Severity.Error })
+  })
 
-  it(
-    'promiseError，breadcrumb should add one and upload this error',
-    async (done) => {
-      async function interceptedRequest(request: puppeteer.Request) {
-        const stack = await getStack()
-        expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-        expect(stack[1].type).toBe(BrowserBreadcrumbTypes.UNHANDLEDREJECTION)
-        expect(stack[1].level).toBe(Severity.Error)
-        const { data } = JSON.parse(request.postData()) as TransportDataType
-        expect((data as ReportDataType).name).toBe('unhandledrejection')
-        expect((data as ReportDataType).type).toBe(ErrorTypes.PROMISE)
-        expect((data as ReportDataType).level).toBe(Severity.Low)
-        expect((data as ReportDataType).message).toBe('promise reject')
-        done()
-      }
-      uploadRequestHandles.push(interceptedRequest)
-      await page.click('#promiseError')
-    },
-    timeout
-  )
+  it('promiseError，breadcrumb should add one and upload this error', async () => {
+    const data = await clickAndUpload('#promiseError')
+    expect(data).toMatchObject({ name: 'unhandledrejection', type: ErrorTypes.PROMISE, level: Severity.Low, message: 'promise reject' })
+    const stack = await getStack()
+    expect(stack).toHaveLength(2)
+    expect(stack[1]).toMatchObject({
+      category: BREADCRUMBCATEGORYS.EXCEPTION,
+      type: BrowserBreadcrumbTypes.UNHANDLEDREJECTION,
+      level: Severity.Error
+    })
+  })
 })
