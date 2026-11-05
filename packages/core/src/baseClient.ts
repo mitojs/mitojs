@@ -23,6 +23,7 @@ export abstract class BaseClient<
   SDK_NAME: string
   SDK_VERSION = SDK_VERSION
   options: BaseOptionsFieldsIntegrationType
+  private readonly installedPlugins = new Set<BasePluginType<E>>()
   abstract breadcrumb: Breadcrumb
   abstract transport: BaseTransport
   constructor(options: O) {
@@ -38,12 +39,9 @@ export abstract class BaseClient<
    */
   use(plugins: BasePluginType<E>[]) {
     if (this.options.disabled) return
-    // 新建发布订阅实例
     const subscribe = new Subscribe<E>()
     plugins.forEach((item) => {
-      if (!this.isPluginEnable(item.name)) return
-      // 调用插件中的monitor并将发布函数传入
-      item.monitor.call(this, subscribe.notify.bind(subscribe))
+      if (this.installedPlugins.has(item) || !this.isPluginEnable(item.name)) return
       const wrapperTransform = (...args: any[]) => {
         // 先执行transform
         const res = item.transform?.apply(this, args)
@@ -53,6 +51,13 @@ export abstract class BaseClient<
       }
       // 订阅插件中的名字，并传入回调函数
       subscribe.watch(item.name, wrapperTransform)
+      this.installedPlugins.add(item)
+      try {
+        item.monitor.call(this, subscribe.notify.bind(subscribe))
+      } catch (error) {
+        this.installedPlugins.delete(item)
+        throw error
+      }
     })
   }
   getOptions() {
