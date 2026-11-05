@@ -11,6 +11,7 @@ import { generateUUID, validateOptionsAndSet } from '@mitojs/utils'
  * @template O
  */
 export class BaseOptions<O extends BaseOptionsFieldsIntegrationType = BaseOptionsFieldsIntegrationType> implements BaseOptionsType<O> {
+  disabled = false
   enableTraceId = false
   filterXhrUrlRegExp: RegExp
   includeHttpUrlTraceIdRegExp = /.*/
@@ -20,9 +21,18 @@ export class BaseOptions<O extends BaseOptionsFieldsIntegrationType = BaseOption
   vue: VueInstance = null
   constructor() {}
   bindOptions(options: O) {
-    const { enableTraceId, vue, filterXhrUrlRegExp, traceIdFieldName, throttleDelayTime, includeHttpUrlTraceIdRegExp, beforeAppAjaxSend } =
-      options
+    const {
+      disabled,
+      enableTraceId,
+      vue,
+      filterXhrUrlRegExp,
+      traceIdFieldName,
+      throttleDelayTime,
+      includeHttpUrlTraceIdRegExp,
+      beforeAppAjaxSend
+    } = options
     const optionArr = [
+      [disabled, 'disabled', ToStringTypes.Boolean],
       [enableTraceId, 'enableTraceId', ToStringTypes.Boolean],
       [traceIdFieldName, 'traceIdFieldName', ToStringTypes.String],
       [throttleDelayTime, 'throttleDelayTime', ToStringTypes.Number],
