@@ -30,6 +30,7 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
     return !this.options[silentField]
   }
   log(data: LogTypes) {
+    if (this.options.disabled) return
     const { message = MitoLogEmptyMsg, tag = MitoLogEmptyTag, level = Severity.Critical, ex = '' } = data
     let errorInfo = {}
     if (isError(ex)) {
@@ -56,6 +57,7 @@ export class WxClient extends BaseClient<WxOptionsFieldsTypes, EventTypes> {
    * @memberof WxClient
    */
   trackSend(trackData: TrackReportDataType): void {
+    if (this.options.disabled) return
     this.transport.send(
       {
         isTrack: true,
