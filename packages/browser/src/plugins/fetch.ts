@@ -1,6 +1,6 @@
 import { BrowserEventTypes, HttpTypes } from '@mitojs/shared'
 import { getTimestamp, replaceOld, _global } from '@mitojs/utils'
-import { BasePluginType, HttpCollectedType, HttpTransformedType, voidFun } from '@mitojs/types'
+import { BasePluginType, HttpCollectedType, HttpTransformedType } from '@mitojs/types'
 import { BrowserClient } from '../browserClient'
 import { httpTransform, httpTransformedDataConsumer } from './xhr'
 
@@ -22,21 +22,24 @@ function monitorFetch(this: BrowserClient, notify: (eventName: BrowserEventTypes
   if (!('fetch' in _global)) {
     return
   }
-  replaceOld(_global, BrowserEventTypes.FETCH, (originalFetch: voidFun) => {
-    return function (url: string, config: Partial<Request> = {}): void {
+  replaceOld(_global, BrowserEventTypes.FETCH, (originalFetch: typeof fetch) => {
+    return function (this: Window, input: RequestInfo | URL, config: RequestInit = {}): Promise<Response> {
+      config = config || {}
+      const request = typeof input === 'object' && input !== null && 'url' in input ? (input as Request) : undefined
+      const url = request ? request.url : String(input)
       const sTime = getTimestamp()
-      const method = (config && config.method) || 'GET'
+      const method = config.method || request?.method || 'GET'
       const httpCollect: HttpCollectedType = {
         request: {
           httpType: HttpTypes.FETCH,
           url,
           method,
-          data: config && config.body
+          data: config.body
         },
         time: sTime,
         response: {}
       }
-      const headers = new Headers(config.headers || {})
+      const headers = new Headers(config.headers !== undefined ? config.headers : request?.headers || {})
       Object.assign(headers, {
         setRequestHeader: headers.set
       })
@@ -50,25 +53,32 @@ function monitorFetch(this: BrowserClient, notify: (eventName: BrowserEventTypes
         headers
       }
       const isBlock = transport.isSelfDsn(url) || options.isFilterHttpUrl(url)
-      return originalFetch.apply(_global, [url, config]).then(
+      return originalFetch.call(this, input, config).then(
         (res: Response) => {
-          const resClone = res.clone()
+          if (isBlock) return res
           const eTime = getTimestamp()
           httpCollect.elapsedTime = eTime - sTime
-          httpCollect.response.status = resClone.status
-          resClone.text().then((data) => {
-            if (isBlock) return
-            httpCollect.response.data = data
+          httpCollect.response.status = res.status
+          const report = (data?: string) => {
+            if (data !== undefined) httpCollect.response.data = data
             notify(BrowserEventTypes.FETCH, httpCollect)
-          })
+          }
+          try {
+            res
+              .clone()
+              .text()
+              .then(report, () => report())
+          } catch (_error) {
+            report()
+          }
           return res
         },
         (err: Error) => {
-          if (isBlock) return
-          const eTime = getTimestamp()
-          httpCollect.elapsedTime = eTime - sTime
-          httpCollect.response.status = 0
-          notify(BrowserEventTypes.FETCH, httpCollect)
+          if (!isBlock) {
+            httpCollect.elapsedTime = getTimestamp() - sTime
+            httpCollect.response.status = 0
+            notify(BrowserEventTypes.FETCH, httpCollect)
+          }
           throw err
         }
       )
