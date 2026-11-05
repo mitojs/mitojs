@@ -28,6 +28,8 @@
 
 ## 文档
 
+[代码结构、源码阅读顺序与使用 FAQ](./docs/architecture.md)
+
 ## 😎 快速开始
 
 这里是 [详细文档](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/introduction) 花2分钟或更少时间来构建你的第一个demo:
