@@ -15,6 +15,6 @@
     "@mitojs/utils": "workspace:*"
   },
   "scripts": {
-    "build": "node ../../scripts/build-package.mjs wx-mini-performance"
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

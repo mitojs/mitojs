@@ -58,11 +58,11 @@ flowchart LR
 ```sh
 pnpm install --frozen-lockfile
 pnpm unit
-pnpm build browser web
+pnpm build --projects=@mitojs/browser,@mitojs/web
 pnpm watch
 ```
 
-构建默认生成 ES2015 的 ESM、CJS、IIFE 和类型声明，产物位于各包 `dist`。根脚本通过 Nx 编排全量构建，也可以传入包名进行局部构建。
+构建默认生成 ES2015 的 ESM、CJS、IIFE 和类型声明，产物位于各包 `dist`。根命令直接调用 Nx，各包通过共享的 `vite.config.mjs` 构建；使用 Nx 的 `--projects` 参数选择包。`pnpm watch` 由 Nx 监听工作区变化并重建。
 
 浏览器 E2E 使用安装包产物，先构建并准备打包文件，再运行 Playwright：
 

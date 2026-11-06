@@ -1,6 +1,10 @@
 import { defineConfig } from 'vitest/config'
-import { sourceAliases } from './tools/vite/library.mjs'
+import { readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+
+const sourceAliases = Object.fromEntries(readdirSync(new URL('./packages/', import.meta.url), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => [`@mitojs/${entry.name}`, fileURLToPath(new URL(`./packages/${entry.name}/src/index.ts`, import.meta.url))]))
 
 export default defineConfig({
   resolve: { alias: { ...sourceAliases, packages: fileURLToPath(new URL('./packages/', import.meta.url)) } },

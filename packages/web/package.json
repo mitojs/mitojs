@@ -30,6 +30,6 @@
     "@mitojs/vue": "workspace:*"
   },
   "scripts": {
-    "build": "node ../../scripts/build-package.mjs web"
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

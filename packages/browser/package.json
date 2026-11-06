@@ -30,13 +30,7 @@
     "@mitojs/shared": "workspace:*",
     "@mitojs/types": "workspace:*"
   },
-  "buildOptions": {
-    "formats": [
-      "esm-bundler",
-      "cjs"
-    ]
-  },
   "scripts": {
-    "build": "node ../../scripts/build-package.mjs browser"
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

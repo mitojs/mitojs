@@ -24,6 +24,6 @@
     "monitor"
   ],
   "scripts": {
-    "build": "node ../../scripts/build-package.mjs shared"
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

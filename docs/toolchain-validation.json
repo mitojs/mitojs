@@ -18,7 +18,9 @@
     "lint": "passed",
     "sdkAndTestTypecheck": "passed",
     "sourceMaps": "original TypeScript positions verified; source-free bundles do not emit empty maps",
-    "sizeLimits": "unchanged, all passed"
+    "sizeLimits": "unchanged, all passed",
+    "selectedBuild": "passed: native Nx --projects selected browser/web and the shared compiler",
+    "watch": "passed: initial build, root Vite configuration change, and restored-configuration rebuild"
   },
   "minifiedBytes": {
     "browser": 19955,
@@ -28,38 +30,38 @@
   },
   "candidateArchives": {
     "mitojs-browser-3.0.1.tgz": {
-      "sha256": "180983eb3d3978c8e144dabf75c6d34f030e1e9e4e7691b9fa6ce0c3b29bc2c2"
+      "sha256": "15f36f9a1f9ad8bcc93d9b8fb43dd4db6613b3ce3298c3df0a6bb2ff7d8ae5bb"
     },
     "mitojs-core-3.0.1.tgz": {
-      "sha256": "3411bb5ddda87c3c1510ca642608a4878b65200b21f8db51b369ec6382365ffc"
+      "sha256": "b105c95cce9774827823813e89f24abd1d76ad11d5d226de065b203f970bf904"
     },
     "mitojs-react-3.0.1.tgz": {
-      "sha256": "78cc6d25d15f2e670ffc7516c2bb560b63f70d220a9522781ffac31d5177df1a"
+      "sha256": "ad57c2952de917b255073fafb349f1ef3e7620b6d227e11f56d5b24eedace0c6"
     },
     "mitojs-shared-3.0.1.tgz": {
-      "sha256": "a2fc51171e2b5646c05203c9a79fd48adf5cdf07f27ec353286423f3a90c3d0e"
+      "sha256": "8a8e783c19b3ba1acfbbd6581d2b7a327808f1a18bb40598c7f671c9f570b5d9"
     },
     "mitojs-types-3.0.1.tgz": {
-      "sha256": "76ddad07e81125fd0f81c50194771b4432e75d5c65170b9069a244b1f94657a9"
+      "sha256": "c03cbb5c669fa6b4c548d08917a122da3493d1aa78f2b309fa342d4413f4c7bd"
     },
     "mitojs-utils-3.0.1.tgz": {
-      "sha256": "537ce4735c9e43fa10119016734073e5ac1a4778044b83d1356f5e54296e8dd9"
+      "sha256": "0df166217e260f486003a6d17fbac8ada3a1e467b7b8292068749d55269f598c"
     },
     "mitojs-vue-3.0.1.tgz": {
-      "sha256": "3f5c609667018ca3ce4ba9fa796591423b7f774f485fb3b64f84ffd6107a94b9"
+      "sha256": "c1dbf099f32deecf1e5a2780aa211fcf2b0deeba46407e129ec7960efed7d07f"
     },
     "mitojs-web-3.0.1.tgz": {
-      "sha256": "d89959b0bf3715b6b5daa2c848d7d818f73732638499866bc1d0c51487027100"
+      "sha256": "81621b809d961cb12303106112c999cf0b12fc336583f8d70e5da8166b861088"
     },
     "mitojs-wx-mini-3.1.0.tgz": {
-      "sha256": "974b51439c8c6540e99d581db9e1e0fecb6dcdcc8dd7de7840eae58c17ff729f"
+      "sha256": "65b4a6e829a407196376b2da237ad07dddf8961f5a11c06e26525a7f4b196a3c"
     },
     "mitojs-wx-mini-performance-3.0.1.tgz": {
-      "sha256": "b05c8f096fcc201094494250e31753417b276f17764a89a9f119145f865c35fe"
+      "sha256": "0eb7dd1bdcadea9e6b6f88d3ccc96b7ae28406fa796dbd610b8df054a099d608"
     }
   },
   "notes": [
-    "SDK source checking and declarations use TypeScript 7; Vite/Rolldown builds ES2015 bundles and Oxc minifies the IIFE output. No separate JavaScript downlevel or sourcemap rewriting stage remains.",
+    "SDK source checking and declarations use TypeScript 7; native Nx commands orchestrate packages that share vite.config.mjs. Vite/Rolldown builds ES2015 environments and Oxc minifies the IIFE output; API Extractor runs after all JavaScript outputs.",
     "The pending Changeset records major releases because the minimum runtime is now ES2015. Local candidate versions remain 3.0.1 (wx-mini 3.1.0).",
     "TypeScript 4.1/4.4 declaration-consumer tests passed with an ES2015 target; these tests do not require ES5 runtime output.",
     "The three original demo browser tests were skipped by the default verify command. The separate Node 14 original-consumer workflow was not rerun locally for this change.",

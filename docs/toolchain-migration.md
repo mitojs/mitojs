@@ -12,7 +12,7 @@ nvm use
 npm install --global --allow-scripts=pnpm pnpm@12.16.1
 pnpm install --frozen-lockfile
 pnpm build                 # 全部 10 个包
-pnpm build browser web     # 指定包，自动准备编译产物
+pnpm build --projects=@mitojs/browser,@mitojs/web  # 指定包，自动准备编译产物
 pnpm watch
 pnpm typecheck
 pnpm unit
@@ -31,8 +31,10 @@ Linux CI 首次运行 Playwright 使用 `playwright install --with-deps chromium
 
 - pnpm workspace + Catalog 统一版本；发布包中的 workspace 协议由 pnpm pack 转成普通版本号。
 - Nx 管理编译依赖、并行和缓存。现有 core/types/utils 包存在类型循环，因此先使用一个 SDK 编译任务处理整个类型图，各包的打包任务依赖这个任务。没有把循环包直接接成 `^build` 任务循环。
+- 根 `build` 和 `watch` 直接调用 Nx CLI，不再使用自定义命令包装。指定包使用原生 `--projects` 参数；watch 使用 Nx daemon 监听项目文件和根构建配置等全局文件的变化。
 - TypeScript 7 负责源码检查、跨文件 const enum 内联和声明生成，输出到 `.cache/emit`；编译缓存同时提供 API Extractor 所需的真实 package 边界。
 - 所有 SDK 的最低语法目标统一为 ES2015（ES6），运行环境需要具备对应的语言与标准库能力。Vite 8/Rolldown 直接构建 ESM、CommonJS 和 IIFE，IIFE 使用 Vite 默认的 Oxc 压缩；不再进行额外的 JavaScript 降级、手工压缩或 sourcemap 重写。
+- 各包直接运行 `vite build --config ../../vite.config.mjs --app`，共享根配置中的三种构建环境。ESM 首先清理输出目录，随后构建 CommonJS/IIFE，最后通过同一配置汇总声明；不再保留独立的逐包构建脚本或未使用的旧 API Extractor JSON 配置。
 - CommonJS 保留 __esModule 标记。所有包的文件名沿用原名，IIFE 全局名为 MITO。
 - CommonJS/IIFE 显式保留旧 Rollup 产物的 strict 模式，避免 Rolldown 默认 auto 策略改变函数语义。
 - ESM 的 @mitojs 包依赖和 React 保留外部引用；CommonJS/IIFE 保持自包含。ESM 内部使用的 tslib helper 也打入产物。

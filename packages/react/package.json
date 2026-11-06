@@ -33,6 +33,6 @@
     "@mitojs/shared": "workspace:*"
   },
   "scripts": {
-    "build": "node ../../scripts/build-package.mjs react"
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

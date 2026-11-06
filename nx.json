@@ -10,6 +10,6 @@
   },
   "namedInputs": {
     "sdkSources": ["{workspaceRoot}/packages/*/src/**/*", "{workspaceRoot}/packages/*/package.json"],
-    "sharedGlobals": ["{workspaceRoot}/pnpm-lock.yaml", "{workspaceRoot}/tools/**/*", "{workspaceRoot}/scripts/**/*", "{workspaceRoot}/tsconfig*.json", "{workspaceRoot}/.node-version"]
+    "sharedGlobals": ["{workspaceRoot}/pnpm-lock.yaml", "{workspaceRoot}/vite.config.mjs", "{workspaceRoot}/tools/**/*", "{workspaceRoot}/scripts/**/*", "{workspaceRoot}/tsconfig*.json", "{workspaceRoot}/.node-version"]
   }
 }

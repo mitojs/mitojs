@@ -30,6 +30,6 @@
     "@types/wechat-miniprogram": "^3.1.0"
   },
   "scripts": {
-    "build": "node ../../scripts/build-package.mjs types"
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

@@ -29,6 +29,6 @@
     "@mitojs/shared": "workspace:*"
   },
   "scripts": {
-    "build": "node ../../scripts/build-package.mjs core"
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

@@ -4,8 +4,8 @@
   "license": "MIT",
   "author": "cjinhuo",
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "watch": "node scripts/build.mjs --watch",
+    "build": "nx run-many -t build --parallel=2 --output-style=static",
+    "watch": "nx watch --all --includeGlobalWorkspaceFiles --initialRun -- pnpm build",
     "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p tsconfig.test.json",
     "unit": "vitest run",
     "test": "vitest run",
