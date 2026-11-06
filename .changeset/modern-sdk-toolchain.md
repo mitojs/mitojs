@@ -1,14 +1,14 @@
 ---
-"@mitojs/browser": patch
-"@mitojs/core": patch
-"@mitojs/react": patch
-"@mitojs/shared": patch
-"@mitojs/types": patch
-"@mitojs/utils": patch
-"@mitojs/vue": patch
-"@mitojs/web": patch
-"@mitojs/wx-mini": patch
-"@mitojs/wx-mini-performance": patch
+"@mitojs/browser": major
+"@mitojs/core": major
+"@mitojs/react": major
+"@mitojs/shared": major
+"@mitojs/types": major
+"@mitojs/utils": major
+"@mitojs/vue": major
+"@mitojs/web": major
+"@mitojs/wx-mini": major
+"@mitojs/wx-mini-performance": major
 ---
 
-Migrate the SDK workspace to pnpm, Nx, Vite/Rolldown, TypeScript 7, Biome, Vitest and Playwright while preserving package names, file paths, ES5 output, CDN globals and existing integrations.
+Require an ES2015 (ES6) runtime for all SDK packages and remove ES5/Internet Explorer support. Migrate the SDK workspace to pnpm, Nx, Vite/Rolldown, TypeScript 7, Biome, Vitest and Playwright while preserving package names, file paths, CDN globals and existing integration APIs.

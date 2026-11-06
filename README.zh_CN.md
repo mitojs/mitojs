@@ -22,7 +22,7 @@
 - ✔️ 🔨 监控代码报错、资源加载错误
 - ✔️ 🔨 监控click、wx:tab、touchmove
 - ✔️ 👌 丰富的hooks与配置项支持可高定制化 [基础配置](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/basic-configuration)
-- ✔️ 👌 支持Web(>= IE8) [@mitojs/browser](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/browser)
+- ✔️ 👌 支持具备 ES2015（ES6）能力的现代 Web 环境 [@mitojs/browser](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/browser)
 - ✔️ 👌 支持框架Vue3、Vue2.6[@mitojs/vue](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/vue)、React@latest[@mitojs/react](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/react)
 - ✔️ 👌 支持原生微信小程序、支持uni-app等微信小程序框架 [@mitojs/wx-mini](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/wx-mini)
 

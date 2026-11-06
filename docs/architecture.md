@@ -15,9 +15,9 @@
 | `packages/vue` / `packages/react` | Vue 2/3 错误处理器集成；React ErrorBoundary 和 Context 集成 |
 | `packages/web` | 聚合导出 browser、Vue 和 React 功能 |
 | `packages/wx-mini-performance` | 独立的小程序性能、网络、内存和电池信息采集入口 |
-| `script` / `test` / `examples` | 构建发布脚本、浏览器 E2E 和配置、示例页面及本地服务 |
+| `scripts` / `tools` / `e2e` / `test` / `examples` | 构建发布脚本与配置、浏览器 E2E、测试辅助及示例页面与服务 |
 
-这是 pnpm workspace 多包仓库，使用 Nx 编排、TypeScript 7 检查、Vite/Rolldown 打包，API Extractor 汇总声明。旧 ES5 产物通过兼容降级阶段保留，详见[工具链迁移与验收](./toolchain-migration.md)。
+这是 pnpm workspace 多包仓库，使用 Nx 编排、TypeScript 7 检查、Vite/Rolldown 打包，API Extractor 汇总声明。所有 SDK 产物以 ES2015（ES6）为最低语法目标，详见[工具链迁移与验收](./toolchain-migration.md)。
 
 ## 采集与上报流程
 
@@ -53,7 +53,7 @@ flowchart LR
 
 ## 开发与验证
 
-按[贡献指南](../.github/CONTRIBUTING.md)使用 Node 14 和 Yarn 1，在仓库根目录执行：
+按[贡献指南](../.github/CONTRIBUTING.md)使用 `.node-version` 中的 Node 版本和 pnpm 12.16.1，在仓库根目录执行：
 
 ```sh
 pnpm install --frozen-lockfile
@@ -62,21 +62,24 @@ pnpm build browser web
 pnpm watch
 ```
 
-构建默认生成 ESM、CJS、IIFE 和类型声明，产物位于各包 `dist`。建议逐包构建，根脚本的全量构建会同时启动多个任务。
+构建默认生成 ES2015 的 ESM、CJS、IIFE 和类型声明，产物位于各包 `dist`。根脚本通过 Nx 编排全量构建，也可以传入包名进行局部构建。
 
-浏览器 E2E 前先构建 browser/web，再在保持运行的终端启动服务：
+浏览器 E2E 使用安装包产物，先构建并准备打包文件，再运行 Playwright：
+
+```sh
+pnpm build
+pnpm pack:sdks
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+Playwright 自动管理本地测试服务的启动与关闭；运行前需释放 2021 端口。手动浏览示例时，可在打包后单独启动：
 
 ```sh
 node scripts/serve-tests.mjs
 ```
 
-另一个终端检查 `curl -fsS http://localhost:2021/normal` 返回预期响应，再运行：
-
-```sh
-pnpm test:e2e
-```
-
-Puppeteer 需要可用浏览器。使用系统 Chromium 时，可设置 `PUPPETEER_SKIP_DOWNLOAD=true` 后安装依赖，并通过 `PUPPETEER_EXECUTABLE_PATH` 指定浏览器。完整测试还包含依赖外部 CDN 的 Vue 2/React 示例。微信 E2E 需要真实微信开发工具并打开服务端口，普通单测不能代替这部分验证。
+使用已有 Chromium 时，可通过 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 指定浏览器。Vue 示例使用仓库内的脚本，React 示例由测试服务提供本地依赖。微信 E2E 需要真实微信开发工具并打开服务端口，普通单测不能代替这部分验证。
 
 ## FAQ：只记录登录后的操作
 

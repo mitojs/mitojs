@@ -149,9 +149,7 @@
     "files": [
       "types.d.ts",
       "types.esm.js",
-      "types.esm.js.map",
       "types.js",
-      "types.js.map",
       "types.min.js"
     ],
     "runtime": [],
@@ -360,7 +358,6 @@
     "files": [
       "web.d.ts",
       "web.esm.js",
-      "web.esm.js.map",
       "web.js",
       "web.js.map",
       "web.min.js"

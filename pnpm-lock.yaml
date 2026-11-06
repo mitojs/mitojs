@@ -170,9 +170,6 @@ catalogs:
     '@changesets/cli':
       specifier: 3.0.3
       version: 3.0.3
-    '@jridgewell/remapping':
-      specifier: 2.3.5
-      version: 2.3.5
     '@jridgewell/trace-mapping':
       specifier: 0.3.31
       version: 0.3.31
@@ -230,9 +227,6 @@ catalogs:
     size-limit:
       specifier: 8.1.0
       version: 8.1.0
-    terser:
-      specifier: 5.51.2
-      version: 5.51.2
     tslib:
       specifier: 2.3.1
       version: 2.3.1
@@ -245,9 +239,6 @@ catalogs:
     typescript-4-4:
       specifier: npm:typescript@4.4.4
       version: 4.4.4
-    typescript-es5:
-      specifier: npm:typescript@5.9.3
-      version: 5.9.3
     vite:
       specifier: 8.3.6
       version: 8.3.6
@@ -268,9 +259,6 @@ importers:
       '@changesets/cli':
         specifier: 'catalog:'
         version: 3.0.3
-      '@jridgewell/remapping':
-        specifier: 'catalog:'
-        version: 2.3.5
       '@jridgewell/trace-mapping':
         specifier: 'catalog:'
         version: 0.3.31
@@ -328,9 +316,6 @@ importers:
       size-limit:
         specifier: 'catalog:'
         version: 8.1.0
-      terser:
-        specifier: 'catalog:'
-        version: 5.51.2
       tslib:
         specifier: 'catalog:'
         version: 2.3.1
@@ -343,9 +328,6 @@ importers:
       typescript-4-4:
         specifier: 'catalog:'
         version: typescript@4.4.4
-      typescript-es5:
-        specifier: 'catalog:'
-        version: typescript@5.9.3
       vite:
         specifier: 'catalog:'
         version: 8.3.6(@types/node@24.19.2)(terser@5.51.2)(yaml@2.9.1)
@@ -668,9 +650,6 @@ packages:
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
-
-  '@jridgewell/remapping@2.3.5':
-    resolution: {integrity: sha512-LI9u/+laYG4Ds1TDKSJW2YPrIlcVYOwi2fUC6xB43lueCjgxV4lffOCZCtYFiH6TNOX+tQKXx97T4IKHbhyHEQ==}
 
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
@@ -2065,11 +2044,6 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
 
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
@@ -2470,11 +2444,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
       '@jridgewell/trace-mapping': 0.3.31
-
-  '@jridgewell/remapping@2.3.5':
-    dependencies:
-      '@jridgewell/gen-mapping': 0.3.13
-      '@jridgewell/trace-mapping': 0.3.31
+    optional: true
 
   '@jridgewell/resolve-uri@3.1.2': {}
 
@@ -2482,6 +2452,7 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
+    optional: true
 
   '@jridgewell/sourcemap-codec@1.6.0': {}
 
@@ -2905,7 +2876,8 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
-  buffer-from@1.1.2: {}
+  buffer-from@1.1.2:
+    optional: true
 
   buffer@5.7.1:
     dependencies:
@@ -2966,7 +2938,8 @@ snapshots:
     dependencies:
       delayed-stream: 1.0.0
 
-  commander@2.20.3: {}
+  commander@2.20.3:
+    optional: true
 
   csstype@3.2.3: {}
 
@@ -3659,6 +3632,7 @@ snapshots:
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
+    optional: true
 
   source-map@0.6.1: {}
 
@@ -3708,6 +3682,7 @@ snapshots:
       acorn: 8.15.0
       commander: 2.20.3
       source-map-support: 0.5.21
+    optional: true
 
   tinybench@6.2.3: {}
 
@@ -3755,8 +3730,6 @@ snapshots:
   typescript@4.1.6: {}
 
   typescript@4.4.4: {}
-
-  typescript@5.9.3: {}
 
   typescript@6.0.3: {}
 

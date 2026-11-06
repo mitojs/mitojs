@@ -33,7 +33,7 @@ before(() => {
 })
 after(() => rmSync(fixture, { recursive: true, force: true }))
 
-function evaluate(code, cjs = false, wx = false, legacy = false) {
+function evaluate(code, cjs = false, wx = false) {
   const dom = wx ? null : new JSDOM('', { url: 'http://localhost/', runScripts: 'outside-only' })
   const context = dom ? dom.getInternalVMContext() : vm.createContext({ console, setTimeout, clearTimeout })
   if (wx) {
@@ -44,7 +44,6 @@ function evaluate(code, cjs = false, wx = false, legacy = false) {
     context.Component = () => {}
     context.getCurrentPages = () => []
   }
-  if (legacy) context.Symbol = undefined
   context.exports = {}
   context.module = { exports: context.exports }
   vm.runInContext(cjs ? `(function (exports, module) { ${code}\n}).call(module.exports, exports, module)` : code, context)
@@ -52,7 +51,7 @@ function evaluate(code, cjs = false, wx = false, legacy = false) {
 }
 
 for (const name of names) {
-  test(`packed @mitojs/${name} preserves manifest, paths, JS APIs and ES5`, () => {
+  test(`packed @mitojs/${name} preserves manifest, paths, JS APIs and ES2015`, () => {
     const directory = join(fixture, 'node_modules/@mitojs', name)
     const manifest = JSON.parse(readFileSync(join(directory, 'package.json'), 'utf8'))
     const contract = contracts[name]
@@ -66,12 +65,11 @@ for (const name of names) {
     for (const extension of ['js', 'esm.js', 'min.js']) {
       const code = readFileSync(join(directory, 'dist', `${name}.${extension}`), 'utf8')
       if (extension === 'esm.js') assert.ok(!/\b(?:__require|require)\s*\(/.test(code), 'Browser ESM must not require an external CommonJS loader')
-      const syntax = extension === 'esm.js' ? code.replace(/^import[^;]*;/gm, '').replace(/^export\s*\{[^}]*\}(?:\s*from[^;]*)?;/gm, '').replace(/^export\s*\*[^;]*;/gm, '') : code
-      const program = parse(syntax, { ecmaVersion: 5, sourceType: 'script', allowReserved: true })
+      const program = parse(code, { ecmaVersion: 2015, sourceType: extension === 'esm.js' ? 'module' : 'script' })
       if (extension === 'min.js') assert.equal(program.body[0]?.directive, undefined, 'IIFE strict mode must not affect concatenated application scripts')
       assert.ok(!code.includes('__coverage__'))
       if (extension !== 'esm.js') {
-        const result = evaluate(code, extension === 'js', name.startsWith('wx-mini'), true)
+        const result = evaluate(code, extension === 'js', name.startsWith('wx-mini'))
         for (const key of contract.runtime) assert.ok(key in result.api, `Missing ${key} in ${name}.${extension}`)
         if (result.api.init) assert.throws(() => result.api.init.caller, /caller|strict|restricted/i)
         assert.equal(result.context.__coverage__, undefined)
@@ -137,7 +135,7 @@ mini.log({ message: 'compatible' })
 `
   writeFileSync(join(fixture, 'consumer.tsx'), source)
   writeFileSync(join(fixture, 'tsconfig.json'), JSON.stringify({
-    compilerOptions: { noEmit: true, target: 'ES5', lib: ['ES2015', 'DOM'], module: 'ESNext', moduleResolution: 'Node', jsx: 'react', esModuleInterop: true, skipLibCheck: true, types: ['react', 'wechat-miniprogram'] },
+    compilerOptions: { noEmit: true, target: 'ES2015', lib: ['ES2015', 'DOM'], module: 'ESNext', moduleResolution: 'Node', jsx: 'react', esModuleInterop: true, skipLibCheck: true, types: ['react', 'wechat-miniprogram'] },
     files: ['consumer.tsx']
   }))
   for (const compiler of ['typescript-4-1', 'typescript-4-4']) {

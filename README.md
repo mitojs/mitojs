@@ -33,7 +33,7 @@
 
 ✔️ 👌 rich hooks and options [configuration doc](https://mitojs.github.io/mito-doc/#/sdk/guide/basic-configuration)
 
-✔️ 👌 support web(>= IE8)[@mitojs/browser](https://mitojs.github.io/mito-doc/#/sdk/guide/browser)
+✔️ 👌 support modern web environments with ES2015 (ES6) support [@mitojs/browser](https://mitojs.github.io/mito-doc/#/sdk/guide/browser)
 
 ✔️ 👌 support framework with Vue3、Vue2.6[@mitojs/vue](https://mitojs.github.io/mito-doc/#/sdk/guide/vue)、React@latest[@mitojs/react](https://mitojs.github.io/mito-doc/#/sdk/guide/react)
 

@@ -1,94 +1,69 @@
 {
   "validatedDate": "2026-11-06",
   "workspaceBranch": "chore/modern-sdk-toolchain",
-  "sourceBaseline": "9f71cc228ec64ca17e1ab57d1a9815d15e419a85",
-  "templateCommit": "c8f10a336ca9b190ec21529c3dbc882a505726c0",
-  "sourceAndValidationInputsSha256": "9d72f35b4b067318f4cad5552cbe078d1e83193dc3dc2d960cb1c5bdce318a27",
+  "buildTarget": "ES2015 (ES6)",
+  "environment": {
+    "node": "v24.22.2",
+    "pnpm": "12.16.1"
+  },
   "verify": {
+    "command": "pnpm verify",
     "result": "passed",
     "unitSuites": 29,
     "unitTests": 109,
     "packedConsumerTests": 14,
     "cdnBrowserTests": 10,
+    "originalConsumerBrowserTestsSkipped": 3,
     "releaseRehearsal": "stable, repeated publish, beta.0, beta.1, exit beta; localhost registry only",
     "lint": "passed",
     "sdkAndTestTypecheck": "passed",
-    "sourceMaps": "original TypeScript positions verified",
+    "sourceMaps": "original TypeScript positions verified; source-free bundles do not emit empty maps",
     "sizeLimits": "unchanged, all passed"
   },
-  "originalConsumerBrowserTests": 3,
-  "originalConsumers": [
-    {
-      "repository": "mitojs/react-sdk-demo",
-      "commit": "68057a602e32f33c616762488d9a6e3f16fbf7c1",
-      "sourceSha256": "3689b89609f1d03babfa3502c9ec59bdaab1738cacda3b64f57b26d172509044",
-      "build": "passed",
-      "sourceChanged": false
-    },
-    {
-      "repository": "mitojs/vue2-sdk-demo",
-      "commit": "1db7364f7c176702b3436eb8d82a514c94ee21b1",
-      "sourceSha256": "96cd232d0211b9b1c8e1c86ec14c5c5588e83619688c815e2af88ff11147abe7",
-      "build": "passed",
-      "sourceChanged": false
-    },
-    {
-      "repository": "mitojs/vue3-sdk-demo",
-      "commit": "12fb162c0cf4dbc5f6d4df8b1a5601543c3de48b",
-      "sourceSha256": "4a2257f452a7e8c6eb053b56fe00e4baebeee9d57d4c4e96efef1976f6e631ec",
-      "build": "passed",
-      "sourceChanged": false
-    }
-  ],
-  "originalConsumerToolchains": {
-    "react-sdk-demo": "React 17.0.2 / CRA 4.0.3",
-    "vue2-sdk-demo": "Vue 2.6.14 / Vue CLI 3.12.1",
-    "vue3-sdk-demo": "Vue 3.2.11 / Vite 2.5.6"
-  },
   "minifiedBytes": {
-    "browser": 23984,
-    "vue": 4798,
-    "react": 13983,
-    "wx-mini": 28704
+    "browser": 19955,
+    "vue": 3713,
+    "react": 12324,
+    "wx-mini": 24317
   },
   "candidateArchives": {
     "mitojs-browser-3.0.1.tgz": {
-      "sha256": "09bb668e2c5882157c22b05fafa48dc848c5f8f7f0ad6e62f4f8c86636cdf0d9"
+      "sha256": "180983eb3d3978c8e144dabf75c6d34f030e1e9e4e7691b9fa6ce0c3b29bc2c2"
     },
     "mitojs-core-3.0.1.tgz": {
-      "sha256": "b102d11b0e165ed0ba38e2a553005d5e20be6d0fe7a982f6759a53734ff5de23"
+      "sha256": "3411bb5ddda87c3c1510ca642608a4878b65200b21f8db51b369ec6382365ffc"
     },
     "mitojs-react-3.0.1.tgz": {
-      "sha256": "0ba9da1920106d7005fef64d465eb7bf56d2f4487c67987816fef2ba2c63388b"
+      "sha256": "78cc6d25d15f2e670ffc7516c2bb560b63f70d220a9522781ffac31d5177df1a"
     },
     "mitojs-shared-3.0.1.tgz": {
-      "sha256": "81c22f1facea219bbe71d91066eb2102aeff09f88dbb75ac17c5bad353571f36"
+      "sha256": "a2fc51171e2b5646c05203c9a79fd48adf5cdf07f27ec353286423f3a90c3d0e"
     },
     "mitojs-types-3.0.1.tgz": {
-      "sha256": "dcd8828f4150eb093c14070f7b239e99701ff96556142dd44fe5de0540595fba"
+      "sha256": "76ddad07e81125fd0f81c50194771b4432e75d5c65170b9069a244b1f94657a9"
     },
     "mitojs-utils-3.0.1.tgz": {
-      "sha256": "7fa6628a7ae1a91152c3332eec613eb97ea6b6396544440cdd653c4e74010640"
+      "sha256": "537ce4735c9e43fa10119016734073e5ac1a4778044b83d1356f5e54296e8dd9"
     },
     "mitojs-vue-3.0.1.tgz": {
-      "sha256": "a3d1ef0feb123668d404448cf4c740e3da13bd29b7e6a505eb743e9c848f2826"
+      "sha256": "3f5c609667018ca3ce4ba9fa796591423b7f774f485fb3b64f84ffd6107a94b9"
     },
     "mitojs-web-3.0.1.tgz": {
-      "sha256": "ce53567b3e044a4896d022184f99b61dbd21bba662878a5fded2f1ece8e1edcc"
+      "sha256": "d89959b0bf3715b6b5daa2c848d7d818f73732638499866bc1d0c51487027100"
     },
     "mitojs-wx-mini-3.1.0.tgz": {
-      "sha256": "6dccfd720cdb43faae439b446f5b7f2dc43d86521ae312d2a8360f099eadee3d"
+      "sha256": "974b51439c8c6540e99d581db9e1e0fecb6dcdcc8dd7de7840eae58c17ff729f"
     },
     "mitojs-wx-mini-performance-3.0.1.tgz": {
-      "sha256": "3f81260d3b127aaa251c7c4ff6d77e126d2f45ce7c5470164685ed607df8b650"
+      "sha256": "b05c8f096fcc201094494250e31753417b276f17764a89a9f119145f865c35fe"
     }
   },
   "notes": [
-    "SDK source checking/declarations use TypeScript 7.0.2; the JavaScript-only ES5 compatibility emitter uses TypeScript 5.9.3.",
-    "Local candidate versions remain 3.0.1 (wx-mini 3.1.0); the pending Changeset records new patch releases.",
-    "Local tarballs/resolutions are validation fixtures, not changes required in published SDK consumers.",
-    "The original React demo intentionally handles /upload with MSW; requests, responses and the ErrorBoundary fallback were verified.",
-    "No production npm release or remote deployment was performed.",
-    "WeChat developer tools/device testing and actual IE8 execution were not performed; WeChat API substitutes and ES5 checks are not substitutes for device certification."
+    "SDK source checking and declarations use TypeScript 7; Vite/Rolldown builds ES2015 bundles and Oxc minifies the IIFE output. No separate JavaScript downlevel or sourcemap rewriting stage remains.",
+    "The pending Changeset records major releases because the minimum runtime is now ES2015. Local candidate versions remain 3.0.1 (wx-mini 3.1.0).",
+    "TypeScript 4.1/4.4 declaration-consumer tests passed with an ES2015 target; these tests do not require ES5 runtime output.",
+    "The three original demo browser tests were skipped by the default verify command. The separate Node 14 original-consumer workflow was not rerun locally for this change.",
+    "WeChat API substitutes were exercised; WeChat developer tools/device testing was not performed.",
+    "No production npm release or remote deployment was performed."
   ]
 }
