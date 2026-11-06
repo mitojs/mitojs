@@ -17,7 +17,7 @@
 | `packages/wx-mini-performance` | 独立的小程序性能、网络、内存和电池信息采集入口 |
 | `script` / `test` / `examples` | 构建发布脚本、浏览器 E2E 和配置、示例页面及本地服务 |
 
-这是根目录统一管理开发依赖的多包仓库，并未声明 Yarn workspaces。单元测试通过 Jest 路径映射访问本地源码，Rollup 逐包构建，API Extractor 汇总声明文件。
+这是 pnpm workspace 多包仓库，使用 Nx 编排、TypeScript 7 检查、Vite/Rolldown 打包，API Extractor 汇总声明。旧 ES5 产物通过兼容降级阶段保留，详见[工具链迁移与验收](./toolchain-migration.md)。
 
 ## 采集与上报流程
 
@@ -56,11 +56,10 @@ flowchart LR
 按[贡献指南](../.github/CONTRIBUTING.md)使用 Node 14 和 Yarn 1，在仓库根目录执行：
 
 ```sh
-yarn install --frozen-lockfile
-yarn unit --runInBand
-yarn build browser
-yarn build web
-yarn watch browser
+pnpm install --frozen-lockfile
+pnpm unit
+pnpm build browser web
+pnpm watch
 ```
 
 构建默认生成 ESM、CJS、IIFE 和类型声明，产物位于各包 `dist`。建议逐包构建，根脚本的全量构建会同时启动多个任务。
@@ -68,13 +67,13 @@ yarn watch browser
 浏览器 E2E 前先构建 browser/web，再在保持运行的终端启动服务：
 
 ```sh
-NODE_ENV=test yarn ts-node examples/server/index.ts
+node scripts/serve-tests.mjs
 ```
 
 另一个终端检查 `curl -fsS http://localhost:2021/normal` 返回预期响应，再运行：
 
 ```sh
-yarn jest --runInBand --runTestsByPath test/e2e/JS/index.test.ts test/e2e/Vue3/index.test.ts --config jest.config.ts
+pnpm test:e2e
 ```
 
 Puppeteer 需要可用浏览器。使用系统 Chromium 时，可设置 `PUPPETEER_SKIP_DOWNLOAD=true` 后安装依赖，并通过 `PUPPETEER_EXECUTABLE_PATH` 指定浏览器。完整测试还包含依赖外部 CDN 的 Vue 2/React 示例。微信 E2E 需要真实微信开发工具并打开服务端口，普通单测不能代替这部分验证。

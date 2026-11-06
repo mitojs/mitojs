@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [{ "target": "build", "projects": ["sdk-compiler"] }],
+      "cache": true,
+      "outputs": ["{projectRoot}/dist"],
+      "inputs": ["sdkSources", "sharedGlobals"]
+    }
+  },
+  "namedInputs": {
+    "sdkSources": ["{workspaceRoot}/packages/*/src/**/*", "{workspaceRoot}/packages/*/package.json"],
+    "sharedGlobals": ["{workspaceRoot}/pnpm-lock.yaml", "{workspaceRoot}/tools/**/*", "{workspaceRoot}/scripts/**/*", "{workspaceRoot}/tsconfig*.json", "{workspaceRoot}/.node-version"]
+  }
+}

@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { BrowserClient } from '../../../browser/src/browserClient'
 import domPlugin from '../../../browser/src/plugins/dom'
 import { BasePluginType } from '@mitojs/types'
@@ -6,7 +7,7 @@ import { BrowserEventTypes } from '@mitojs/shared'
 describe('plugin installation', () => {
   it('installs the same object once, even across repeated use calls', () => {
     const client = new BrowserClient()
-    const plugin: BasePluginType = { name: BrowserEventTypes.DOM, monitor: jest.fn() }
+    const plugin: BasePluginType = { name: BrowserEventTypes.DOM, monitor: vi.fn() }
     client.use([plugin, plugin])
     client.use([plugin])
     expect(plugin.monitor).toHaveBeenCalledTimes(1)
@@ -14,7 +15,7 @@ describe('plugin installation', () => {
 
   it('subscribes before monitor emits synchronously', () => {
     const client = new BrowserClient()
-    const consumer = jest.fn()
+    const consumer = vi.fn()
     client.use([
       {
         name: BrowserEventTypes.DOM,
@@ -33,8 +34,8 @@ describe('plugin installation', () => {
 
   it('retains different plugin implementations subscribed to the same event', () => {
     const client = new BrowserClient()
-    const first = jest.fn(),
-      second = jest.fn()
+    const first = vi.fn(),
+      second = vi.fn()
     let emit: Function
     client.use([
       {
@@ -63,7 +64,7 @@ describe('plugin installation', () => {
 
   it('permits retry after monitor throws and prevents reentrant installation', () => {
     const client = new BrowserClient()
-    const plugin = { name: BrowserEventTypes.DOM, monitor: jest.fn() }
+    const plugin = { name: BrowserEventTypes.DOM, monitor: vi.fn() }
     plugin.monitor.mockImplementationOnce(() => {
       throw new Error('setup failed')
     })
@@ -74,7 +75,7 @@ describe('plugin installation', () => {
   })
 
   it('installs independently per instance and permits a previously silent plugin', () => {
-    const plugin = { name: BrowserEventTypes.DOM, monitor: jest.fn() }
+    const plugin = { name: BrowserEventTypes.DOM, monitor: vi.fn() }
     const first = new BrowserClient({ silentDom: true })
     first.use([plugin])
     expect(plugin.monitor).not.toHaveBeenCalled()

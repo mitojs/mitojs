@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { safeStringify, unknownToString } from '../src'
 import { BrowserClient } from '../../browser/src/browserClient'
 import { WxClient } from '../../wx-mini/src/wxClient'
@@ -30,14 +31,14 @@ describe('safe serialization', () => {
     message.self = message
     const client = new Client({ dsn: '/upload', apikey: Client.name })
     let uploaded: any
-    const wxRequest = jest.fn((options) => {
+    const wxRequest = vi.fn((options) => {
       uploaded = JSON.parse(options.data)
     })
     const originalWx = (global as any).wx
     const originalPages = (global as any).getCurrentPages
     ;(global as any).wx = { request: wxRequest }
     ;(global as any).getCurrentPages = () => []
-    const send = jest.spyOn(XMLHttpRequest.prototype, 'send').mockImplementation(function (data) {
+    const send = vi.spyOn(XMLHttpRequest.prototype, 'send').mockImplementation(function (data) {
       uploaded = JSON.parse(data as string)
     })
     try {

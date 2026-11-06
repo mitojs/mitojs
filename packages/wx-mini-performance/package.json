@@ -11,6 +11,10 @@
   "author": "zty <https://github.com/zty1205>",
   "license": "ISC",
   "dependencies": {
-    "@types/wechat-miniprogram": "^3.3.0"
+    "@types/wechat-miniprogram": "^3.3.0",
+    "@mitojs/utils": "workspace:*"
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-package.mjs wx-mini-performance"
   }
 }

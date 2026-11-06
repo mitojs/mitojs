@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes } from '@mitojs/shared'
 import { ReportDataType } from '@mitojs/types'
 import { Severity, sleepRun } from '@mitojs/utils'
@@ -8,16 +9,16 @@ describe('unhandlerejectionPlugin', () => {
   const browserInstance = new BrowserClient({
     dsn: 'http://test.com/upload'
   })
-  unhandlerejectionPlugin.monitor = jest.fn(unhandlerejectionPlugin.monitor)
-  unhandlerejectionPlugin.transform = jest.fn(unhandlerejectionPlugin.transform)
-  unhandlerejectionPlugin.consumer = jest.fn(unhandlerejectionPlugin.consumer)
+  unhandlerejectionPlugin.monitor = vi.fn(unhandlerejectionPlugin.monitor)
+  unhandlerejectionPlugin.transform = vi.fn(unhandlerejectionPlugin.transform)
+  unhandlerejectionPlugin.consumer = vi.fn(unhandlerejectionPlugin.consumer)
   browserInstance.use([unhandlerejectionPlugin])
   it("unhandlerejectionPlugin's func should be called by browserClient", () => {
-    expect((unhandlerejectionPlugin.monitor as jest.Mock).mock.calls.length).toBe(1)
+    expect((unhandlerejectionPlugin.monitor as Mock).mock.calls.length).toBe(1)
     // don't simulate code error in node,so pass in param in errorPlugin.transform
     // should test in e2e
   })
-  it('mock promise reject data to test unhandlerejectionPlugin.transform and unhandlerejectionPlugin.consumer', (done) => {
+  it('mock promise reject data to test unhandlerejectionPlugin.transform and unhandlerejectionPlugin.consumer', () => new Promise<void>((done) => {
     const reason = 'promise reject reason'
     const type = 'unhandledrejection'
     const mockPromiseRejectData: Partial<PromiseRejectionEvent> = {
@@ -37,5 +38,5 @@ describe('unhandlerejectionPlugin', () => {
       expect((item.data as ReportDataType).level).toBe(Severity.Low)
       done()
     })
-  })
+  }))
 })

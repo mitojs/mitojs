@@ -25,8 +25,11 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/utils": "3.0.1",
-    "@mitojs/shared": "3.0.1",
-    "@mitojs/types": "3.0.1"
+    "@mitojs/utils": "workspace:*",
+    "@mitojs/shared": "workspace:*",
+    "@mitojs/types": "workspace:*"
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-package.mjs vue"
   }
 }

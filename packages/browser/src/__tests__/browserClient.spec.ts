@@ -7,7 +7,7 @@ describe('browserClient.ts', () => {
   const browserInstance = new BrowserClient({
     dsn: dsnConfig
   })
-  it('browserClient log should work', (done) => {
+  it('browserClient log should work', () => new Promise<void>((done) => {
     const msg = 'log spec msg'
     const tag = 'log spec tag'
     const level = Severity.High
@@ -25,5 +25,5 @@ describe('browserClient.ts', () => {
       expect(item.data).toBe(msg)
       done()
     })
-  })
+  }))
 })

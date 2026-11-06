@@ -1,7 +1,7 @@
 {
   "name": "@mitojs/web",
   "version": "3.0.1",
-  "description": "A SDK For Monitoring Web(React、Vue) Errors",
+  "description": "A SDK For Monitoring Web(React\u3001Vue) Errors",
   "author": "cjinhuo(https://github.com/cjinhuo)",
   "license": "MIT",
   "main": "dist/web.js",
@@ -25,8 +25,11 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/browser": "3.0.1",
-    "@mitojs/react": "3.0.1",
-    "@mitojs/vue": "3.0.1"
+    "@mitojs/browser": "workspace:*",
+    "@mitojs/react": "workspace:*",
+    "@mitojs/vue": "workspace:*"
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-package.mjs web"
   }
 }

@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes, HttpTypes, MethodTypes } from '@mitojs/shared'
 import { HttpCollectedType } from '@mitojs/types'
 import { getBreadcrumbCategoryInBrowser, Severity } from '@mitojs/utils'
@@ -5,9 +6,9 @@ import { BrowserClient } from '../../browserClient'
 import xhrPlugin, { httpTransform, httpTransformedDataConsumer } from '../../plugins/xhr'
 
 describe('xhrPlugin', () => {
-  xhrPlugin.monitor = jest.fn(xhrPlugin.monitor)
-  xhrPlugin.transform = jest.fn(xhrPlugin.transform)
-  xhrPlugin.consumer = jest.fn(xhrPlugin.consumer)
+  xhrPlugin.monitor = vi.fn(xhrPlugin.monitor)
+  xhrPlugin.transform = vi.fn(xhrPlugin.transform)
+  xhrPlugin.consumer = vi.fn(xhrPlugin.consumer)
   const mockData: HttpCollectedType = {
     request: {
       httpType: HttpTypes.XHR,
@@ -27,9 +28,9 @@ describe('xhrPlugin', () => {
     dsn: 'http://test.com/upload'
   })
   browserInstance.use([xhrPlugin])
-  it("xhrPlugin's func should be called by browserClient", (done) => {
+  it("xhrPlugin's func should be called by browserClient", () => new Promise<void>((done) => {
     expect(xhrPlugin.name).toBe(BrowserEventTypes.XHR)
-    expect((xhrPlugin.monitor as jest.Mock).mock.calls.length).toBe(1)
+    expect((xhrPlugin.monitor as Mock).mock.calls.length).toBe(1)
 
     const xhr = new XMLHttpRequest()
     xhr.open('get', '/normal')
@@ -38,8 +39,8 @@ describe('xhrPlugin', () => {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         setTimeout(() => {
-          expect((xhrPlugin.transform as jest.Mock).mock.calls.length).toBe(1)
-          expect((xhrPlugin.consumer as jest.Mock).mock.calls.length).toBe(1)
+          expect((xhrPlugin.transform as Mock).mock.calls.length).toBe(1)
+          expect((xhrPlugin.consumer as Mock).mock.calls.length).toBe(1)
           const stack = browserInstance.breadcrumb.getStack()
           expect(stack[0].category).toBe(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.FETCH))
           expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
@@ -48,7 +49,7 @@ describe('xhrPlugin', () => {
         }, 100)
       }
     }
-  })
+  }))
 
   it('should httpTransform func work', () => {
     const result = httpTransform(mockData)

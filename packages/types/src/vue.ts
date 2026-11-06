@@ -1,4 +1,4 @@
-import { IAnyObject } from '@mitojs/types'
+import { IAnyObject } from './index'
 
 export interface VueInstance {
   // fix in Vue3 typescript's declaration file error

@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { Headers, Response } from 'node-fetch'
 import { BrowserClient } from '../../browserClient'
 import xhrPlugin from '../../plugins/xhr'
@@ -53,8 +54,8 @@ describe('multiple request monitors', () => {
   function monitor(plugin, fieldA = 'Trace-Id', fieldB = 'Trace-Id') {
     const a = new BrowserClient({ apikey: 'a', enableTraceId: true, traceIdFieldName: fieldA })
     const b = new BrowserClient({ apikey: 'b', enableTraceId: true, traceIdFieldName: fieldB })
-    const notifyA = jest.fn(),
-      notifyB = jest.fn()
+    const notifyA = vi.fn(),
+      notifyB = vi.fn()
     plugin.monitor.call(a, notifyA)
     plugin.monitor.call(b, notifyB)
     return { notifyA, notifyB }
@@ -130,7 +131,7 @@ describe('multiple request monitors', () => {
     ['Trace-Id', 'trace-id'],
     ['Trace-A', 'Trace-B']
   ])('shares only matching fetch trace headers (%s, %s)', async (fieldA, fieldB) => {
-    const native = jest.fn<Promise<Response>, any[]>(() => Promise.resolve(new Response('OK')))
+    const native = vi.fn<(...args: any[]) => Promise<Response>>(() => Promise.resolve(new Response('OK')))
     _global.fetch = native as any
     const { notifyA, notifyB } = monitor(fetchPlugin, fieldA, fieldB)
     const notifications = Promise.all([

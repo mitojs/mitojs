@@ -1,0 +1,47 @@
+packages:
+  - packages/*
+
+catalog:
+  "@biomejs/biome": "2.6.5"
+  "@changesets/cli": "3.0.3"
+  "@microsoft/api-extractor": "7.60.1"
+  "@playwright/test": "1.64.1"
+  "@size-limit/file": "8.1.0"
+  "@types/node": "24.19.2"
+  "@types/node-fetch": "2.6.13"
+  "@types/react": "17.0.90"
+  "@types/react-dom": "17.0.26"
+  "@types/wechat-miniprogram": "3.4.8"
+  "@vitest/coverage-v8": "5.1.0"
+  "acorn": "8.15.0"
+  "husky": "9.1.7"
+  "jsdom": "31.0.0"
+  "node-fetch": "2.7.0"
+  "nx": "24.0.4"
+  "react": "17.0.2"
+  "react-dom": "17.0.2"
+  "size-limit": "8.1.0"
+  "terser": "5.51.2"
+  "typescript": "7.0.2"
+  "typescript-4-1": "npm:typescript@4.1.6"
+  "typescript-4-4": "npm:typescript@4.4.4"
+  "vite": "8.3.6"
+  "vitest": "5.1.0"
+
+  "typescript-es5": "npm:typescript@5.9.3"
+  "@jridgewell/remapping": "2.3.5"
+  "tslib": "2.3.1"
+
+  "yarn": "1.22.22"
+
+  "@jridgewell/trace-mapping": "0.3.31"
+
+  "rolldown": "1.2.16"
+
+allowBuilds:
+  nx: true
+  yarn: false
+
+minimumReleaseAgeExclude:
+  - jsdom@31.0.0
+  - vite@8.3.6

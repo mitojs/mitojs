@@ -25,15 +25,18 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/utils": "3.0.1",
-    "@mitojs/core": "3.0.1",
-    "@mitojs/shared": "3.0.1",
-    "@mitojs/types": "3.0.1"
+    "@mitojs/utils": "workspace:*",
+    "@mitojs/core": "workspace:*",
+    "@mitojs/shared": "workspace:*",
+    "@mitojs/types": "workspace:*"
   },
   "buildOptions": {
     "formats": [
       "esm-bundler",
       "cjs"
     ]
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-package.mjs browser"
   }
 }

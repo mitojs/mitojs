@@ -1,4 +1,4 @@
-import { BreadcrumbPushData, TransportDataType, VueInstance } from '@mitojs/types'
+import { BreadcrumbPushData, TransportDataType, VueInstance } from './index'
 import { Breadcrumb } from '@mitojs/core'
 type CANCEL = null | undefined | boolean
 

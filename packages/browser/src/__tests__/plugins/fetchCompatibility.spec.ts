@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { Headers, Request, Response } from 'node-fetch'
 import { BrowserClient } from '../../browserClient'
 import fetchPlugin from '../../plugins/fetch'
@@ -7,10 +8,10 @@ describe('fetch compatibility', () => {
   const originalFetch = _global.fetch
   const originalHeaders = global.Headers
   const response = () => new Response('response')
-  let nativeFetch: jest.Mock
+  let nativeFetch: Mock
   beforeEach(() => {
     global.Headers = Headers as any
-    nativeFetch = jest.fn().mockImplementation(() => Promise.resolve(response()))
+    nativeFetch = vi.fn().mockImplementation(() => Promise.resolve(response()))
     _global.fetch = nativeFetch
   })
   afterEach(() => {
@@ -19,7 +20,7 @@ describe('fetch compatibility', () => {
   })
   function install(options = {}) {
     const client = new BrowserClient(options)
-    const notify = jest.fn()
+    const notify = vi.fn()
     fetchPlugin.monitor.call(client, notify)
     return notify
   }
@@ -65,7 +66,7 @@ describe('fetch compatibility', () => {
 
   it('passes through filtered responses without cloning', async () => {
     const result = response()
-    const clone = jest.spyOn(result, 'clone')
+    const clone = vi.spyOn(result, 'clone')
     nativeFetch.mockResolvedValue(result)
     const notify = install({ filterXhrUrlRegExp: /ignored/ })
     expect(await _global.fetch('/ignored')).toBe(result)
@@ -75,7 +76,7 @@ describe('fetch compatibility', () => {
 
   it.each(['clone', 'read'])('isolates response %s failures from the original response', async (failure) => {
     const result = response()
-    jest.spyOn(result, 'clone').mockImplementation(() => {
+    vi.spyOn(result, 'clone').mockImplementation(() => {
       if (failure === 'clone') throw new Error('clone failed')
       return { text: () => Promise.reject(new Error('read failed')) } as any
     })

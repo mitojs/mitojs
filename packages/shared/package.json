@@ -22,5 +22,8 @@
     "mitojs",
     "sdk",
     "monitor"
-  ]
+  ],
+  "scripts": {
+    "build": "node ../../scripts/build-package.mjs shared"
+  }
 }
