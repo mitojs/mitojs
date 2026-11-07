@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { mkdtempSync, readFileSync, readdirSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs'
+import { mkdtempSync, readFileSync, readdirSync, writeFileSync, mkdirSync, rmSync, existsSync, realpathSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { resolve, join, dirname } from 'node:path'
+import { resolve, join, dirname, basename } from 'node:path'
+import { createRequire } from 'node:module'
 import { after, before, test } from 'node:test'
 import vm from 'node:vm'
 import { JSDOM } from 'jsdom'
@@ -21,7 +22,7 @@ function run(command, args, options) {
 before(() => {
   const packages = packPackages()
   const dependencies = Object.fromEntries(packages.map((path) => {
-    const match = path.match(/mitojs-(.+)-\d/)
+    const match = basename(path).match(/mitojs-(.+)-\d/)
     return [`@mitojs/${match[1]}`, `file:${path}`]
   }))
   const overrides = { ...dependencies }
@@ -30,7 +31,8 @@ before(() => {
   dependencies['@types/react-dom'] = '17.0.26'
   dependencies['@types/wechat-miniprogram'] = '3.4.8'
   const { packageManager } = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
-  writeFileSync(join(fixture, 'package.json'), JSON.stringify({ name: 'sdk-consumer', private: true, packageManager, dependencies, pnpm: { overrides } }))
+  writeFileSync(join(fixture, 'package.json'), JSON.stringify({ name: 'sdk-consumer', private: true, packageManager, dependencies }))
+  writeFileSync(join(fixture, 'pnpm-workspace.yaml'), JSON.stringify({ packages: ['.'], nodeLinker: 'isolated', overrides }))
   run('pnpm', ['install', '--ignore-scripts', '--no-frozen-lockfile'], { cwd: fixture, stdio: 'pipe' })
 })
 after(() => rmSync(fixture, { recursive: true, force: true }))
@@ -64,6 +66,12 @@ for (const name of names) {
     assert.equal(manifest.exports, undefined)
     for (const path of contract.files) assert.ok(existsSync(join(directory, 'dist', path)), path)
     for (const version of Object.values(manifest.dependencies ?? {})) assert.ok(!version.startsWith('workspace:'))
+    const require = createRequire(realpathSync(join(directory, 'package.json')))
+    for (const dependency of Object.keys(manifest.dependencies ?? {}).filter((name) => name.startsWith('@mitojs/'))) {
+      const dependencyName = dependency.slice('@mitojs/'.length)
+      const expected = join(root, 'artifacts/unpacked', dependencyName, contracts[dependencyName].main)
+      assert.ok(readFileSync(require.resolve(dependency)).equals(readFileSync(expected)), `${name}: stale transitive ${dependency}`)
+    }
     for (const extension of ['js', 'esm.js', 'min.js']) {
       const code = readFileSync(join(directory, 'dist', `${name}.${extension}`), 'utf8')
       if (extension === 'esm.js') assert.ok(!/\b(?:__require|require)\s*\(/.test(code), 'Browser ESM must not require an external CommonJS loader')

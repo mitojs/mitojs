@@ -60,7 +60,7 @@ for (const [name, commit] of Object.entries(repositories)) {
   manifest.packageManager = packageManager
   const overrides = {}
   for (const archive of archives) {
-    const name = `@mitojs/${archive.match(/mitojs-(.+)-\d/)[1]}`
+    const name = `@mitojs/${basename(archive).match(/mitojs-(.+)-\d/)[1]}`
     manifest.dependencies[name] = `file:${archive}`
     // All local tarballs still carry their unpublished source version. Force
     // transitive SDK resolutions to the same candidate instead of npm's old
@@ -83,7 +83,7 @@ for (const [name, commit] of Object.entries(repositories)) {
   if (name === 'vue3-sdk-demo') run('pnpm', ['rebuild', 'esbuild'], project)
   // Compare installed bytes to the actual packed files, not only version strings.
   for (const archive of archives) {
-    const packageName = archive.match(/mitojs-(.+)-\d/)[1]
+    const packageName = basename(archive).match(/mitojs-(.+)-\d/)[1]
     const relative = `dist/${packageName}.js`
     const installed = resolve(project, 'node_modules/@mitojs', packageName)
     assert.equal(digest(readFileSync(resolve(installed, relative))), digest(readFileSync(resolve(root, 'artifacts/unpacked', packageName, relative))), `${name}: stale ${packageName} archive`)

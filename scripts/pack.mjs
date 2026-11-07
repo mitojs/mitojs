@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process'
 import { mkdirSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { resolve } from 'node:path'
+import { basename, resolve } from 'node:path'
 
 export const root = fileURLToPath(new URL('../', import.meta.url))
 export const artifactDirectory = resolve(root, 'artifacts/packages')
@@ -17,7 +17,7 @@ export function packPackages() {
   }
   const archives = paths.map((path) => resolve(artifactDirectory, path))
   for (const archive of archives) {
-    const name = archive.match(/mitojs-(.+)-\d/)[1]
+    const name = basename(archive).match(/mitojs-(.+)-\d/)[1]
     const destination = resolve(root, 'artifacts/unpacked', name)
     mkdirSync(destination, { recursive: true })
     execFileSync('tar', ['-xzf', archive, '-C', destination, '--strip-components=1'])
