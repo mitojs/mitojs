@@ -1,5 +1,15 @@
 # @mitojs/browser
 
+## 4.0.0-beta.1
+
+### Patch Changes
+
+- 0d55943: Bind plugin callbacks to the client that installs them so Vue 3 and browser plugins can be passed directly to init and client.use under strict TypeScript, while rejecting plugins that require a more specific client.
+- Updated dependencies [0d55943]
+  - @mitojs/core@4.0.0-beta.1
+  - @mitojs/types@4.0.0-beta.1
+  - @mitojs/utils@4.0.0-beta.1
+
 ## 4.0.0-beta.0
 
 ### Major Changes

@@ -1,6 +1,6 @@
 {
   "name": "@mitojs/wx-mini-performance",
-  "version": "4.0.0-beta.0",
+  "version": "4.0.0-beta.1",
   "description": "A SDK For Report Wx Mini Performance",
   "main": "dist/wx-mini-performance.js",
   "module": "dist/wx-mini-performance.js",

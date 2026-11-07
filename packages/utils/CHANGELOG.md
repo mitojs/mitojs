@@ -1,5 +1,11 @@
 # @mitojs/utils
 
+## 4.0.0-beta.1
+
+### Patch Changes
+
+- @mitojs/types@4.0.0-beta.1
+
 ## 4.0.0-beta.0
 
 ### Major Changes

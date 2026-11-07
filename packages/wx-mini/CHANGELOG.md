@@ -1,5 +1,14 @@
 # @mitojs/wx-mini
 
+## 4.0.0-beta.1
+
+### Patch Changes
+
+- Updated dependencies [0d55943]
+  - @mitojs/core@4.0.0-beta.1
+  - @mitojs/types@4.0.0-beta.1
+  - @mitojs/utils@4.0.0-beta.1
+
 ## 4.0.0-beta.0
 
 ### Major Changes
