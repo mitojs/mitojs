@@ -1,13 +1,5 @@
 # @mitojs/web
 
-## 4.0.0-beta.1
-
-### Patch Changes
-
-- ed27a4c: Support standard Provider JSX with React 19 types and use the application's React instance in ESM and CommonJS builds. Emit classic JSX to preserve the React 16.8 peer baseline, and verify packed consumers against React 16.8, 17 and 19. Keep the existing self-contained CDN bundles.
-- Updated dependencies [ed27a4c]
-  - @mitojs/react@4.0.0-beta.1
-
 ## 4.0.0-beta.0
 
 ### Major Changes
