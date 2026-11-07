@@ -12,6 +12,7 @@ import ts from 'typescript-4-4'
 import { TraceMap, originalPositionFor } from '@jridgewell/trace-mapping'
 import { packPackages, root } from './pack.mjs'
 import { registerReactConsumerTests } from './verify-react-consumers.mjs'
+import { registerVueConsumerTests } from './verify-vue-consumers.mjs'
 
 const contracts = JSON.parse(readFileSync(resolve(root, 'e2e/contracts.json'), 'utf8'))
 const fixture = mkdtempSync(join(tmpdir(), 'mito-sdk-consumer-'))
@@ -175,3 +176,4 @@ test('packed source maps resolve generated functions back to the original TypeSc
 })
 
 registerReactConsumerTests(() => packages)
+registerVueConsumerTests(() => packages)
