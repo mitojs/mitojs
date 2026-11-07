@@ -9,10 +9,7 @@
 # 🛠️ Install
 
 ```bash
-# using npm
-npm i @mitojs/vue @mitojs/browser
-# using yarn
-yarn add @mitojs/vue @mitojs/browser
+pnpm add @mitojs/vue @mitojs/browser
 ```
 
 read the [mito-doc](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction) to konw more info

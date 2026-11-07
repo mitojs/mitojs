@@ -7,10 +7,7 @@ The following three packages are integrated
 
 ## Install
 ```bash
-# using npm
-npm i @mitojs/web
-# using yarn
-yarn add @mitojs/web
+pnpm add @mitojs/web
 ```
 
 read the [mito-doc](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction) to konw more info

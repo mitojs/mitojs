@@ -46,10 +46,7 @@ here is [document](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction).B
 ### browser
 #### 🛠️ Install
 ```bash
-# using npm
-npm i @mitojs/browser
-# using yarn
-yarn add @mitojs/browser
+pnpm add @mitojs/browser
 ```
 
 #### 🥳 Usage

@@ -26,7 +26,7 @@ wxPerformance.customPaint()
 #### 使用npm
 
 ```bash
-npm i @mitojs/wx-mini-performance
+pnpm add @mitojs/wx-mini-performance
 ```
 
 ### 使用cdn

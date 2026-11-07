@@ -24,12 +24,14 @@ before(() => {
     const match = path.match(/mitojs-(.+)-\d/)
     return [`@mitojs/${match[1]}`, `file:${path}`]
   }))
+  const overrides = { ...dependencies }
   dependencies.react = '17.0.2'
   dependencies['@types/react'] = '17.0.90'
   dependencies['@types/react-dom'] = '17.0.26'
   dependencies['@types/wechat-miniprogram'] = '3.4.8'
-  writeFileSync(join(fixture, 'package.json'), JSON.stringify({ name: 'sdk-consumer', private: true, dependencies }))
-  run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: fixture, stdio: 'pipe' })
+  const { packageManager } = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
+  writeFileSync(join(fixture, 'package.json'), JSON.stringify({ name: 'sdk-consumer', private: true, packageManager, dependencies, pnpm: { overrides } }))
+  run('pnpm', ['install', '--ignore-scripts', '--no-frozen-lockfile'], { cwd: fixture, stdio: 'pipe' })
 })
 after(() => rmSync(fixture, { recursive: true, force: true }))
 
@@ -94,7 +96,7 @@ test('installed packages load with CommonJS and legacy deep imports outside the 
   run(process.execPath, ['-e', script], { cwd: fixture, stdio: 'pipe' })
 })
 
-test('downloaded wx-mini CommonJS file initializes and reports without npm or browser globals', async () => {
+test('downloaded wx-mini CommonJS file initializes and reports without a package manager or browser globals', async () => {
   const code = readFileSync(join(fixture, 'node_modules/@mitojs/wx-mini/dist/wx-mini.js'), 'utf8')
   const result = evaluate(code, true, true)
   const requests = []

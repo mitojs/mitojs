@@ -1,13 +1,8 @@
 # 性能监控
 
 ## 一、安装
-使用npm
 ```bash
-npm i @mitojs/web-mini-performance
-```
-使用yarn
-```bash
-yarn add @mitojs/web-mini-performance
+pnpm add @mitojs/wx-mini-performance
 ```
 
 <br/>

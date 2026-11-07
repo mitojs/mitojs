@@ -36,10 +36,7 @@
 ### browser
 #### 🛠️ 安装
 ```bash
-# 使用 npm
-npm i @mitojs/browser
-# 使用 yarn
-yarn add @mitojs/browser
+pnpm add @mitojs/browser
 ```
 
 

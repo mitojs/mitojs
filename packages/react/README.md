@@ -7,10 +7,7 @@
 ## 🛠️ Install
 
 ``` bash
-# using npm
-npm install @mitojs/react @mitojs/browser
-# using yarn
-yarn add @mitojs/react @mitojs/browser
+pnpm add @mitojs/react @mitojs/browser
 ```
 
 read the [mito-doc](https://mitojs.github.io/mito-doc/#/sdk/guide/introduction) to konw more info
@@ -128,7 +125,7 @@ If you want to use in Weixin miniprogram,just replace `@mitojs/browser` to `@mit
 
 **install**
 ```bash
-yarn add @mitojs/react @mitojs/wx-mini
+pnpm add @mitojs/react @mitojs/wx-mini
 ```
 
 ```typescript

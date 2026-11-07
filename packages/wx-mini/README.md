@@ -3,10 +3,7 @@
 ## 🛠️ 安装
 
 ```bash
-# 使用Npm
-npm i @mitojs/wx-mini
-# 使用Yarn
-yarn add @mitojs/wx-mini
+pnpm add @mitojs/wx-mini
 ```
 
 ### 🥳 使用
@@ -52,7 +49,7 @@ const MitoInstance = init({
 
 ### 🛠️ 安装
 ```bash
-npm i @mitojs/wx-mini @mitojs/vue
+pnpm add @mitojs/wx-mini @mitojs/vue
 ```
 
 
@@ -88,7 +85,7 @@ const MitoInstance = init({
 ### 🛠️ 安装
 
 ```bash
-npm i @mitojs/wx-mini @mitojs/react
+pnpm add @mitojs/wx-mini @mitojs/react
 ```
 
 更多关于`@mitojs/react`的用法[click here](../react/README.md)

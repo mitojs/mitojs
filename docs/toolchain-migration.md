@@ -9,7 +9,8 @@
 ```sh
 nvm install
 nvm use
-npm install --global --allow-scripts=pnpm pnpm@12.16.1
+corepack enable pnpm
+corepack prepare pnpm@12.16.1 --activate
 pnpm install --frozen-lockfile
 pnpm build                 # 全部 10 个包
 pnpm build --projects=@mitojs/browser,@mitojs/web  # 指定包，自动准备编译产物
@@ -50,7 +51,7 @@ Vite 模板的 index.* 文件名、_GLOBAL_ 和 React 19 demo 不适用于现有
 
 `pnpm verify` 包含 Biome、SDK/测试源码类型检查、Vitest/V8 覆盖率、全部构建、真实安装包消费、CDN 浏览器测试、本地发版演练和原体积门槛。
 
-`test:packages` 在仓库外用 npm 安装 `.tgz`，验证入口、文件清单、公开 JS/类型导出、CommonJS 深层路径、ES2015 语法和 TypeScript 4.1/4.4 消费。ESM 文件直接按 ES2015 module 解析，不再剥离 import/export。旧 TypeScript 编译器仅作为声明消费兼容性基线，与 SDK 的运行时语法目标独立。`test:e2e` 从解包产物加载 CDN 脚本，验证错误、Promise、XHR、Fetch、Vue2/Vue3 插件和 React ErrorBoundary；没有用源码 alias 替代发布包。
+`test:packages` 在仓库外用 pnpm 安装 `.tgz`，验证入口、文件清单、公开 JS/类型导出、CommonJS 深层路径、ES2015 语法和 TypeScript 4.1/4.4 消费。ESM 文件直接按 ES2015 module 解析，不再剥离 import/export。旧 TypeScript 编译器仅作为声明消费兼容性基线，与 SDK 的运行时语法目标独立。`test:e2e` 从解包产物加载 CDN 脚本，验证错误、Promise、XHR、Fetch、Vue2/Vue3 插件和 React ErrorBoundary；没有用源码 alias 替代发布包。
 
 安装包检查同时验证微信单个 CommonJS 文件可在没有 window/require 的微信 API 替身环境中初始化和上报、IIFE 没有泄漏编译 helper，以及 sourcemap 能定位回原始 TypeScript。运行测试使用正常的 ES2015 环境，不再模拟缺失 Symbol 的旧环境。
 
@@ -61,11 +62,11 @@ SDK_CONSUMER_NODE=/path/to/node-v14.21.3/bin/node \
   pnpm test:consumers
 ```
 
-脚本固定 react-sdk-demo、vue2-sdk-demo、vue3-sdk-demo 的提交，沿用其原始 Yarn 锁文件和 CRA4/Vue CLI3/Vite2 工具链，仅把 SDK 依赖换成本次 `.tgz`。旧项目的 node-sass4 使用 Node 14；这与 SDK 仓库使用 Node 24 分开。每个项目都校验 src 相对原提交没有修改，并比较安装的 SDK 字节与打包文件；随后构建并验证 React Provider/ErrorBoundary、Vue2 错误处理与取消上报 hook、Vue3 插件注册。证据写入 `artifacts/consumer-validation.json`。
+脚本固定 react-sdk-demo、vue2-sdk-demo、vue3-sdk-demo 的提交，将原锁文件导入 pnpm 后统一安装；保留 CRA4/Vue CLI3/Vite2 工具链，把 SDK 依赖换成本次 `.tgz`。旧项目的 node-sass4 使用 Node 14；这与 SDK 仓库使用 Node 24 分开。每个项目都校验 src 相对原提交没有修改，并比较安装的 SDK 字节与打包文件；随后构建并验证 React Provider/ErrorBoundary、Vue2 错误处理与取消上报 hook、Vue3 插件注册。证据写入 `artifacts/consumer-validation.json`。
 
-可设置 SDK_CONSUMER_ROOT 复用测试检出目录。不要把它指向有未提交源码修改的工作目录。Yarn 仅用于重现历史消费项目，不用于 SDK workspace。
+可设置 SDK_CONSUMER_ROOT 复用测试检出目录。不要把它指向有未提交源码修改的工作目录。仓库及消费项目的安装、打包、构建和发布演练均使用 pnpm。
 
-本地候选包沿用尚未发布的新版本前的版本号，所以测试脚本使用内容哈希路径和仅用于测试的 Yarn resolutions，确保全部直接/传递 SDK 依赖都来自本次候选包，避免旧 npm 同号包或 Yarn 文件缓存造成假通过。正式发布采用新的 semver 版本，消费项目无需这些本地测试设置。
+本地候选包沿用尚未发布的新版本前的版本号，所以测试脚本使用内容哈希路径和仅用于测试的 pnpm overrides，确保全部直接/传递 SDK 依赖都来自本次候选包，避免 registry 同号包或文件缓存造成假通过。正式发布采用新的 semver 版本，消费项目无需这些本地测试设置。
 
 微信开发者工具/真机运行仍需要对应环境，现代 Chromium 与语法检查不能代替真机验证。不再支持 Internet Explorer 或仅具备 ES5 能力的运行环境。原 test/e2e/Mini* 历史用例未接入本次浏览器门禁；安装包检查覆盖全部小程序包的文件和公开导出，单文件微信环境检查使用明确的 API 替身。
 

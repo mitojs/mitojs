@@ -61,7 +61,6 @@
     "vite": "catalog:",
     "vitest": "catalog:",
     "tslib": "catalog:",
-    "yarn": "catalog:",
     "@jridgewell/trace-mapping": "catalog:",
     "rolldown": "catalog:"
   },
