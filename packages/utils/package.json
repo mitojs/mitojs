@@ -24,7 +24,10 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/shared": "3.0.1",
-    "@mitojs/types": "3.0.1"
+    "@mitojs/shared": "workspace:*",
+    "@mitojs/types": "workspace:*"
+  },
+  "scripts": {
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

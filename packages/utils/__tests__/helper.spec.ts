@@ -60,7 +60,7 @@ describe('helper.ts', () => {
     expect(getFunctionName(null)).toBe(defaultFunctionName)
   })
 
-  it('should throttle func work', (done) => {
+  it('should throttle func work', () => new Promise<void>((done) => {
     let count = 0
     function add() {
       count++
@@ -75,7 +75,7 @@ describe('helper.ts', () => {
       expect(count).toBe(2)
       done()
     }, 1000)
-  })
+  }))
 
   it('should getTimestamp func work', () => {
     expect(typeof getTimestamp() === 'number').toBeTruthy()

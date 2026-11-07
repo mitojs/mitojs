@@ -1,14 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "declarationDir": "./dist/packages/", // 类型声明文件的输出目录
-  },
-  "include": [
-    "packages/*/src/"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/company"
-  ]
+    "noEmit": false,
+    "declaration": true,
+    "sourceMap": true,
+    "rootDir": ".",
+    "outDir": ".cache/emit",
+    "importHelpers": true
+  }
 }

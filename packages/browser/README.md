@@ -4,10 +4,7 @@
 ## Install
 
 ```bash
-# using npm
-npm i @mitojs/browser
-# using yarn
-yarn add @mitojs/browser
+pnpm add @mitojs/browser
 ```
 
 ### usage

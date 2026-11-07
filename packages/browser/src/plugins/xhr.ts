@@ -1,6 +1,7 @@
 import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes, ErrorTypes, globalVar, HttpTypes, HTTP_CODE } from '@mitojs/shared'
 import {
   getTimestamp,
+  generateUUID,
   replaceOld,
   Severity,
   _global,
@@ -34,9 +35,11 @@ function monitorXhr(this: BrowserClient, notify: (eventName: BrowserEventTypes, 
     return
   }
   const originalXhrProto = XMLHttpRequest.prototype
+  const contextKey = `__mito_xhr_${generateUUID()}`
   replaceOld(originalXhrProto, 'open', (originalOpen: voidFun): voidFun => {
     return function (this: MITOXMLHttpRequest, ...args: any[]): void {
-      this.httpCollect = {
+      this.__mitoTraceHeaders = Object.create(null)
+      this.httpCollect = this[contextKey] = {
         request: {
           httpType: HttpTypes.XHR,
           method: variableTypeDetection.isString(args[0]) ? args[0].toUpperCase() : args[0],
@@ -50,26 +53,36 @@ function monitorXhr(this: BrowserClient, notify: (eventName: BrowserEventTypes, 
   })
   replaceOld(originalXhrProto, 'send', (originalSend: voidFun): voidFun => {
     return function (this: MITOXMLHttpRequest, ...args: any[]): void {
-      const { request } = this.httpCollect
+      const httpCollect: HttpCollectedType = this[contextKey]
+      // Requests opened before instrumentation must keep working.
+      if (!httpCollect) return originalSend.apply(this, args)
+      const { request } = httpCollect
       const { method, url } = request
       options.setTraceId(url, (headerFieldName: string, traceId: string) => {
-        request.traceId = traceId
-        this.setRequestHeader(headerFieldName, traceId)
+        const field = headerFieldName.toLowerCase()
+        const headers = this.__mitoTraceHeaders
+        if (!headers[field]) {
+          headers[field] = traceId
+          this.setRequestHeader(headerFieldName, traceId)
+        }
+        request.traceId = headers[field]
       })
       options.beforeAppAjaxSend && options.beforeAppAjaxSend({ method, url }, this)
-      on(this, 'loadend', function (this: MITOXMLHttpRequest) {
+      const onLoadEnd = function (this: MITOXMLHttpRequest) {
+        this.removeEventListener('loadend', onLoadEnd)
         const isBlock = transport.isSelfDsn(url) || options.isFilterHttpUrl(url)
         if (isBlock) return
         const { responseType, response, status } = this
         request.data = args[0]
         const eTime = getTimestamp()
         if (['', 'json', 'text'].indexOf(responseType) !== -1) {
-          this.httpCollect.response.data = typeof response === 'object' ? JSON.stringify(response) : response
+          httpCollect.response.data = typeof response === 'object' ? JSON.stringify(response) : response
         }
-        this.httpCollect.response.status = status
-        this.httpCollect.elapsedTime = eTime - this.httpCollect.time
-        notify(BrowserEventTypes.XHR, this.httpCollect)
-      })
+        httpCollect.response.status = status
+        httpCollect.elapsedTime = eTime - httpCollect.time
+        notify(BrowserEventTypes.XHR, httpCollect)
+      }
+      on(this, 'loadend', onLoadEnd)
       originalSend.apply(this, args)
     }
   })

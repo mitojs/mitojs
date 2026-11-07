@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { BrowserBreadcrumbTypes } from '@mitojs/shared'
 import { getBreadcrumbCategoryInBrowser, Severity, sleepRun } from '@mitojs/utils'
 import { BrowserClient } from '../../browserClient'
@@ -7,12 +8,12 @@ describe('domPlugin', () => {
   const browserInstance = new BrowserClient({
     dsn: 'http://test.com/upload'
   })
-  domPlugin.monitor = jest.fn(domPlugin.monitor)
-  domPlugin.transform = jest.fn(domPlugin.transform)
-  domPlugin.consumer = jest.fn(domPlugin.consumer)
+  domPlugin.monitor = vi.fn(domPlugin.monitor)
+  domPlugin.transform = vi.fn(domPlugin.transform)
+  domPlugin.consumer = vi.fn(domPlugin.consumer)
   browserInstance.use([domPlugin])
-  it("domPlugin's func should be called by browserClient", (done) => {
-    expect((domPlugin.monitor as jest.Mock).mock.calls.length).toBe(1)
+  it("domPlugin's func should be called by browserClient", () => new Promise<void>((done) => {
+    expect((domPlugin.monitor as Mock).mock.calls.length).toBe(1)
     // don't simulate dom click in node,so pass in param in domPlugin.transform
     // should test in e2e
     const mockHtmlElement = {
@@ -41,5 +42,5 @@ describe('domPlugin', () => {
       expect(item.level).toBe(Severity.Info)
       done()
     })
-  })
+  }))
 })

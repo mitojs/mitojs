@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest'
 import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, ErrorTypes } from '@mitojs/shared'
 import { ReportDataType } from '@mitojs/types'
 import { Severity, sleepRun } from '@mitojs/utils'
@@ -8,16 +9,16 @@ describe('errorPlugin', () => {
   const browserInstance = new BrowserClient({
     dsn: 'http://test.com/upload'
   })
-  errorPlugin.monitor = jest.fn(errorPlugin.monitor)
-  errorPlugin.transform = jest.fn(errorPlugin.transform)
-  errorPlugin.consumer = jest.fn(errorPlugin.consumer)
+  errorPlugin.monitor = vi.fn(errorPlugin.monitor)
+  errorPlugin.transform = vi.fn(errorPlugin.transform)
+  errorPlugin.consumer = vi.fn(errorPlugin.consumer)
   browserInstance.use([errorPlugin])
   it("errorPlugin's func should be called by browserClient", () => {
-    expect((errorPlugin.monitor as jest.Mock).mock.calls.length).toBe(1)
+    expect((errorPlugin.monitor as Mock).mock.calls.length).toBe(1)
     // don't simulate code error in node,so pass in param in errorPlugin.transform
     // should test in e2e
   })
-  it('mock code error data to test errorPlugin.transform and errorPlugin.consumer', (done) => {
+  it('mock code error data to test errorPlugin.transform and errorPlugin.consumer', () => new Promise<void>((done) => {
     const message = 'Uncaught TypeError: a.split is not a function'
     const name = 'TypeError'
     const error = new Error(message)
@@ -48,9 +49,9 @@ describe('errorPlugin', () => {
       expect((item.data as ReportDataType).level).toBe(Severity.Normal)
       done()
     })
-  })
+  }))
 
-  it('mock resource load error data to test errorPlugin.transform and errorPlugin.consumer', (done) => {
+  it('mock resource load error data to test errorPlugin.transform and errorPlugin.consumer', () => new Promise<void>((done) => {
     const src = 'https://files.catbox.moe/g1xhnsssh.jpg'
     const mockResourceErrorData = {
       target: {
@@ -71,5 +72,5 @@ describe('errorPlugin', () => {
       expect((item.data as ReportDataType).level).toBe(Severity.Low)
       done()
     })
-  })
+  }))
 })

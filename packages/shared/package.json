@@ -22,5 +22,8 @@
     "mitojs",
     "sdk",
     "monitor"
-  ]
+  ],
+  "scripts": {
+    "build": "vite build --config ../../vite.config.mjs --app"
+  }
 }

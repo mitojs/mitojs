@@ -24,9 +24,12 @@
     "monitor"
   ],
   "dependencies": {
-    "@mitojs/core": "3.0.1",
-    "@mitojs/utils": "3.0.1",
-    "@mitojs/shared": "3.0.1",
+    "@mitojs/core": "workspace:*",
+    "@mitojs/utils": "workspace:*",
+    "@mitojs/shared": "workspace:*",
     "@types/wechat-miniprogram": "^3.1.0"
+  },
+  "scripts": {
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

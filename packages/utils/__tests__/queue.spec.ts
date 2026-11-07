@@ -1,7 +1,7 @@
 import { Queue } from '../src/index'
 
 describe('queue.ts', () => {
-  it('should queue class work', (done) => {
+  it('should queue class work', () => new Promise<void>((done) => {
     const queue = new Queue()
     expect(queue.getStack().length).toBe(0)
     queue.addTask(() => {
@@ -18,5 +18,5 @@ describe('queue.ts', () => {
       }, 2000)
     })
     expect(queue.getStack().length).toBe(2)
-  })
+  }))
 })

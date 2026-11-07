@@ -28,8 +28,11 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@mitojs/core": "3.0.1",
-    "@mitojs/utils": "3.0.1",
-    "@mitojs/shared": "3.0.1"
+    "@mitojs/core": "workspace:*",
+    "@mitojs/utils": "workspace:*",
+    "@mitojs/shared": "workspace:*"
+  },
+  "scripts": {
+    "build": "vite build --config ../../vite.config.mjs --app"
   }
 }

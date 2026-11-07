@@ -188,7 +188,7 @@ export function unknownToString(target: unknown): string {
   if (variableTypeDetection.isUndefined(target)) {
     return 'undefined'
   }
-  return JSON.stringify(target)
+  return safeStringify(target as object)
 }
 
 export function getBigVersion(version: string) {
@@ -273,15 +273,14 @@ export function firstStrtoLowerCase(str: string): string {
  * @return {*}  {string}
  */
 export function safeStringify(obj: object): string {
-  const set = new Set()
+  const ancestors: object[] = []
   const str = JSON.stringify(obj, function (_key, value) {
-    if (set.has(value)) {
-      return 'Circular'
-    }
-    typeof value === 'object' && set.add(value)
+    if (value === null || typeof value !== 'object') return value
+    while (ancestors.length && ancestors[ancestors.length - 1] !== this) ancestors.pop()
+    if (ancestors.indexOf(value) !== -1) return 'Circular'
+    ancestors.push(value)
     return value
   })
-  set.clear()
   return str
 }
 
