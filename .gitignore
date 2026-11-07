@@ -15,3 +15,9 @@ analyzer.html
 
 packages/*/dist
 packages/*/node_modules
+
+.cache/
+.nx/
+playwright-report/
+test-results/
+artifacts/

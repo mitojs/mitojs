@@ -1,5 +1,5 @@
 import { ToStringTypes } from '@mitojs/shared'
-import { toStringValidateOption, _support } from '@mitojs/utils'
+import { safeStringify, toStringValidateOption, _support } from '@mitojs/utils'
 import { ReportDataType } from '@mitojs/types'
 import { BaseTransport } from '@mitojs/core'
 import { WxOptionsFieldsTypes } from './types'
@@ -22,7 +22,7 @@ export class WxTransport extends BaseTransport<WxOptionsFieldsTypes> {
       }
       requestOptions = {
         ...requestOptions,
-        data: JSON.stringify(data),
+        data: safeStringify(data),
         url
       }
       wx.request(requestOptions)

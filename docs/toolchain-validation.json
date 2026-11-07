@@ -1,0 +1,71 @@
+{
+  "validatedDate": "2026-11-06",
+  "workspaceBranch": "chore/modern-sdk-toolchain",
+  "buildTarget": "ES2015 (ES6)",
+  "environment": {
+    "node": "v24.22.2",
+    "pnpm": "12.16.1"
+  },
+  "verify": {
+    "command": "pnpm verify",
+    "result": "passed",
+    "unitSuites": 29,
+    "unitTests": 109,
+    "packedConsumerTests": 14,
+    "cdnBrowserTests": 10,
+    "originalConsumerBrowserTestsSkipped": 3,
+    "releaseRehearsal": "stable, repeated publish, beta.0, beta.1, exit beta; localhost registry only",
+    "lint": "passed",
+    "sdkAndTestTypecheck": "passed",
+    "sourceMaps": "original TypeScript positions verified; source-free bundles do not emit empty maps",
+    "sizeLimits": "unchanged, all passed",
+    "selectedBuild": "passed: native Nx --projects selected browser/web and the shared compiler",
+    "watch": "passed: initial build, root Vite configuration change, and restored-configuration rebuild"
+  },
+  "minifiedBytes": {
+    "browser": 19955,
+    "vue": 3713,
+    "react": 12324,
+    "wx-mini": 24317
+  },
+  "candidateArchives": {
+    "mitojs-browser-3.0.1.tgz": {
+      "sha256": "15f36f9a1f9ad8bcc93d9b8fb43dd4db6613b3ce3298c3df0a6bb2ff7d8ae5bb"
+    },
+    "mitojs-core-3.0.1.tgz": {
+      "sha256": "b105c95cce9774827823813e89f24abd1d76ad11d5d226de065b203f970bf904"
+    },
+    "mitojs-react-3.0.1.tgz": {
+      "sha256": "ad57c2952de917b255073fafb349f1ef3e7620b6d227e11f56d5b24eedace0c6"
+    },
+    "mitojs-shared-3.0.1.tgz": {
+      "sha256": "8a8e783c19b3ba1acfbbd6581d2b7a327808f1a18bb40598c7f671c9f570b5d9"
+    },
+    "mitojs-types-3.0.1.tgz": {
+      "sha256": "c03cbb5c669fa6b4c548d08917a122da3493d1aa78f2b309fa342d4413f4c7bd"
+    },
+    "mitojs-utils-3.0.1.tgz": {
+      "sha256": "0df166217e260f486003a6d17fbac8ada3a1e467b7b8292068749d55269f598c"
+    },
+    "mitojs-vue-3.0.1.tgz": {
+      "sha256": "c1dbf099f32deecf1e5a2780aa211fcf2b0deeba46407e129ec7960efed7d07f"
+    },
+    "mitojs-web-3.0.1.tgz": {
+      "sha256": "81621b809d961cb12303106112c999cf0b12fc336583f8d70e5da8166b861088"
+    },
+    "mitojs-wx-mini-3.1.0.tgz": {
+      "sha256": "65b4a6e829a407196376b2da237ad07dddf8961f5a11c06e26525a7f4b196a3c"
+    },
+    "mitojs-wx-mini-performance-3.0.1.tgz": {
+      "sha256": "0eb7dd1bdcadea9e6b6f88d3ccc96b7ae28406fa796dbd610b8df054a099d608"
+    }
+  },
+  "notes": [
+    "SDK source checking and declarations use TypeScript 7; native Nx commands orchestrate packages that share vite.config.mjs. Vite/Rolldown builds ES2015 environments and Oxc minifies the IIFE output; API Extractor runs after all JavaScript outputs.",
+    "The pending Changeset records major releases because the minimum runtime is now ES2015. Local candidate versions remain 3.0.1 (wx-mini 3.1.0).",
+    "TypeScript 4.1/4.4 declaration-consumer tests passed with an ES2015 target; these tests do not require ES5 runtime output.",
+    "The three original demo browser tests were skipped by the default verify command. The separate Node 14 original-consumer workflow was not rerun locally for this change.",
+    "WeChat API substitutes were exercised; WeChat developer tools/device testing was not performed.",
+    "No production npm release or remote deployment was performed."
+  ]
+}

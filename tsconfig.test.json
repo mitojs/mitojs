@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "wechat-miniprogram", "vitest/globals"],
+    "paths": { "@mitojs/*": ["./packages/*/src"], "packages/*": ["./packages/*"] }
+  },
+  "include": ["packages/**/*.spec.ts", "e2e/**/*.ts", "test/setup.ts", "vitest.config.mts", "playwright.config.ts"],
+  "exclude": []
+}

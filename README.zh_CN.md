@@ -22,11 +22,13 @@
 - ✔️ 🔨 监控代码报错、资源加载错误
 - ✔️ 🔨 监控click、wx:tab、touchmove
 - ✔️ 👌 丰富的hooks与配置项支持可高定制化 [基础配置](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/basic-configuration)
-- ✔️ 👌 支持Web(>= IE8) [@mitojs/browser](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/browser)
+- ✔️ 👌 支持具备 ES2015（ES6）能力的现代 Web 环境 [@mitojs/browser](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/browser)
 - ✔️ 👌 支持框架Vue3、Vue2.6[@mitojs/vue](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/vue)、React@latest[@mitojs/react](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/react)
 - ✔️ 👌 支持原生微信小程序、支持uni-app等微信小程序框架 [@mitojs/wx-mini](https://mitojs.github.io/mito-doc/#/zh-CN/sdk/guide/wx-mini)
 
 ## 文档
+
+[代码结构、源码阅读顺序与使用 FAQ](./docs/architecture.md)
 
 ## 😎 快速开始
 
@@ -77,3 +79,7 @@ const MitoInstance = init({
 1. [杭州岗位](https://jobs.bytedance.com/experienced/position?keywords=%E5%89%8D%E7%AB%AF&category=6704215862603155720%2C6704215862557018372%2C6704215886108035339%2C6704215888985327886%2C6704215897130666254%2C6704215956018694411%2C6704215957146962184%2C6704215958816295181%2C6704215963966900491%2C6704216109274368264%2C6704216296701036811%2C6704216635923761412%2C6704217321877014787%2C6704219452277262596%2C6704219534724696331%2C6938376045242353957&location=CT_52&project=&type=&job_hot_flag=&current=1&limit=10)（web infra、平台架构、电商、商业变现等等）
 
 
+
+## SDK workspace development
+
+[工具链迁移、构建与兼容性验收](./docs/toolchain-migration.md)

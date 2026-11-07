@@ -1,46 +1,26 @@
-import { BREADCRUMBCATEGORYS, BrowserBreadcrumbTypes, BrowserEventTypes } from '@mitojs/shared'
-import { getBreadcrumbCategoryInBrowser } from '@mitojs/utils'
+import { vi } from 'vitest'
+import { Response } from 'node-fetch'
+import { BrowserBreadcrumbTypes, BrowserEventTypes, BREADCRUMBCATEGORYS } from '@mitojs/shared'
 import { BrowserClient } from '../../browserClient'
 import fetchPlugin from '../../plugins/fetch'
-import fetch from 'node-fetch'
 
 describe('fetchPlugin', () => {
-  // eslint-disable-next-line @typescript-eslint/no-extra-semi
-  ;(window as any).fetch = fetch
-  fetchPlugin.monitor = jest.fn(fetchPlugin.monitor)
-  fetchPlugin.transform = jest.fn(fetchPlugin.transform)
-  fetchPlugin.consumer = jest.fn(fetchPlugin.consumer)
-  const browserInstance = new BrowserClient({
-    dsn: 'http://test.com/upload'
-  })
-  browserInstance.use([fetchPlugin])
-  it("fetchPlugin's func should be called by browserClient", (done) => {
+  it('installs the monitor and collects a successful response without external network access', async () => {
+    const response = new Response('OK', { status: 200 })
+    const nativeFetch = vi.fn(() => Promise.resolve(response))
+    ;(window as any).fetch = nativeFetch
+    const monitor = vi.spyOn(fetchPlugin, 'monitor')
+    const transform = vi.spyOn(fetchPlugin, 'transform')
+    const consumer = vi.spyOn(fetchPlugin, 'consumer')
+    const client = new BrowserClient({ dsn: 'http://localhost/upload' })
+    client.use([fetchPlugin])
     expect(fetchPlugin.name).toBe(BrowserEventTypes.FETCH)
-    expect((fetchPlugin.monitor as jest.Mock).mock.calls.length).toBe(1)
-    // jest is run in node, so fetch is undefined
-    window
-      .fetch('https://www.baidu.com')
-      .then(() => {
-        setTimeout(() => {
-          // not work in travis
-          // expect((fetchPlugin.transform as jest.Mock).mock.calls.length).toBe(1)
-          // expect((fetchPlugin.consumer as jest.Mock).mock.calls.length).toBe(1)
-          // const stack = browserInstance.breadcrumb.getStack()
-          // expect(stack[0].category).toBe(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.FETCH))
-          // expect(stack.length).toBe(1)
-          done()
-        }, 2000)
-      })
-      .catch(() => {
-        setTimeout(() => {
-          expect((fetchPlugin.transform as jest.Mock).mock.calls.length).toBe(1)
-          expect((fetchPlugin.consumer as jest.Mock).mock.calls.length).toBe(1)
-          const stack = browserInstance.breadcrumb.getStack()
-          expect(stack[0].category).toBe(getBreadcrumbCategoryInBrowser(BrowserBreadcrumbTypes.FETCH))
-          expect(stack[1].category).toBe(BREADCRUMBCATEGORYS.EXCEPTION)
-          expect(stack.length).toBe(2)
-          done()
-        }, 2000)
-      })
+    expect(monitor).toHaveBeenCalledTimes(1)
+    expect(await window.fetch('/normal')).toBe(response)
+    await vi.waitFor(() => expect(consumer).toHaveBeenCalledTimes(1))
+    expect(nativeFetch).toHaveBeenCalledTimes(1)
+    expect(transform).toHaveBeenCalledTimes(1)
+    expect(client.breadcrumb.getStack()).toHaveLength(1)
+    expect(client.breadcrumb.getStack()[0]).toMatchObject({ type: BrowserBreadcrumbTypes.FETCH, category: BREADCRUMBCATEGORYS.HTTP })
   })
 })

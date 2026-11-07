@@ -16,6 +16,8 @@
 
 [中文文档](./README.zh_CN.md)
 
+[Code structure and development FAQ / 代码结构与使用 FAQ](./docs/architecture.md)
+
 
 ## 👋 Features
 
@@ -31,7 +33,7 @@
 
 ✔️ 👌 rich hooks and options [configuration doc](https://mitojs.github.io/mito-doc/#/sdk/guide/basic-configuration)
 
-✔️ 👌 support web(>= IE8)[@mitojs/browser](https://mitojs.github.io/mito-doc/#/sdk/guide/browser)
+✔️ 👌 support modern web environments with ES2015 (ES6) support [@mitojs/browser](https://mitojs.github.io/mito-doc/#/sdk/guide/browser)
 
 ✔️ 👌 support framework with Vue3、Vue2.6[@mitojs/vue](https://mitojs.github.io/mito-doc/#/sdk/guide/vue)、React@latest[@mitojs/react](https://mitojs.github.io/mito-doc/#/sdk/guide/react)
 
@@ -87,3 +89,7 @@ welcome to raise issue, you can contact me on wx or email if you have some good 
 * bytedance introduce：(Hanghou、Beijing、Shanghai、Shenzhen、Guangzhou)
 1. [hangzhou-jobs](https://jobs.bytedance.com/experienced/position?keywords=%E5%89%8D%E7%AB%AF&category=6704215862603155720%2C6704215862557018372%2C6704215886108035339%2C6704215888985327886%2C6704215897130666254%2C6704215956018694411%2C6704215957146962184%2C6704215958816295181%2C6704215963966900491%2C6704216109274368264%2C6704216296701036811%2C6704216635923761412%2C6704217321877014787%2C6704219452277262596%2C6704219534724696331%2C6938376045242353957&location=CT_52&project=&type=&job_hot_flag=&current=1&limit=10)（web infrastructure、platform architecture etc.）
 
+
+## SDK workspace development
+
+[工具链迁移、构建与兼容性验收](./docs/toolchain-migration.md)

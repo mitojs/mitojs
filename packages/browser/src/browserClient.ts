@@ -46,6 +46,7 @@ export class BrowserClient extends BaseClient<BrowserOptionsFieldsTypes, EventTy
     return !this.options[silentField]
   }
   log(data: LogTypes) {
+    if (this.options.disabled) return
     const { message = MitoLogEmptyMsg, tag = MitoLogEmptyTag, level = Severity.Critical, ex = '' } = data
     let errorInfo = {}
     if (isError(ex)) {

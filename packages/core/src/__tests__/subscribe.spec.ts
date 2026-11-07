@@ -1,17 +1,18 @@
+import { vi, type Mock } from 'vitest'
 import { Subscribe } from '@mitojs/core'
 import { BrowserEventTypes } from 'packages/shared/src'
 
 describe('core/subscribe.ts', () => {
   it('should watch and notify work', () => {
     const mockData = { mockData: 'mock' }
-    const watchCallback = jest.fn((data) => {
+    const watchCallback = vi.fn((data) => {
       expect(data).toBe(mockData)
     })
-    const watchCallbackTwo = jest.fn((data) => {
+    const watchCallbackTwo = vi.fn((data) => {
       expect(data).toBe(mockData)
     })
     // throw error
-    // const watchCallbackThree = jest.fn((data) => {
+    // const watchCallbackThree = vi.fn((data) => {
     //   throw new Error('call back error')
     // })
     const subscribe = new Subscribe<BrowserEventTypes>()
@@ -33,13 +34,13 @@ describe('core/subscribe.ts', () => {
   it('should subscribe multiple times', () => {
     // one
     const mockData_one = { mockData: 'mock' }
-    const watchCallback_one = jest.fn((data) => {
+    const watchCallback_one = vi.fn((data) => {
       expect(data).toBe(mockData_one)
     })
     const targetEventName_one = BrowserEventTypes.CUSTOMER
     // two
     const mockData_two = { mockData: 'mock_two' }
-    const watchCallback_two = jest.fn((data) => {
+    const watchCallback_two = vi.fn((data) => {
       expect(data).toBe(mockData_two)
     })
     const targetEventName_two = BrowserEventTypes.CONSOLE
