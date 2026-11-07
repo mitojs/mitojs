@@ -23,7 +23,7 @@ export abstract class BaseClient<
   SDK_NAME: string
   SDK_VERSION = SDK_VERSION
   options: BaseOptionsFieldsIntegrationType
-  private readonly installedPlugins = new Set<BasePluginType<E>>()
+  private readonly installedPlugins = new Set<BasePluginType<E, this>>()
   abstract breadcrumb: Breadcrumb
   abstract transport: BaseTransport
   constructor(options: O) {
@@ -34,10 +34,10 @@ export abstract class BaseClient<
   /**
    * 引用插件
    *
-   * @param {BasePluginType<E>[]} plugins
+   * @param {BasePluginType<E, this>[]} plugins
    * @memberof BaseClient
    */
-  use(plugins: BasePluginType<E>[]) {
+  use(plugins: BasePluginType<E, this>[]) {
     if (this.options.disabled) return
     const subscribe = new Subscribe<E>()
     plugins.forEach((item) => {

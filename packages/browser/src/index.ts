@@ -10,7 +10,8 @@ import historyRoutePlugin from './plugins/historyRoute'
 import consolePlugin from './plugins/console'
 import unhandledrejectionPlugin from './plugins/unhandledrejection'
 import { BasePluginType } from '@mitojs/types'
-function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins: BasePluginType[] = []) {
+import { EventTypes } from '@mitojs/shared'
+function createBrowserInstance(options: BrowserOptionsFieldsTypes = {}, plugins: BasePluginType<EventTypes, BrowserClient>[] = []) {
   const browserClient = new BrowserClient(options)
   const browserPlugins = [
     fetchPlugin,
