@@ -1,9 +1,8 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { defineConfig, perEnvironmentPlugin } from 'vite'
+import { defineConfig } from 'vite'
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor'
-import { esmExternalRequirePlugin } from 'rolldown/plugins'
 
 const root = fileURLToPath(new URL('./', import.meta.url))
 const directory = process.cwd()
@@ -18,8 +17,6 @@ export default defineConfig({
   resolve: { alias: aliases },
   define: { 'process.env.NODE_ENV': JSON.stringify('production') },
   plugins: [
-    perEnvironmentPlugin('sdk-esm-require', (environment) => environment.name === 'es'
-      ? esmExternalRequirePlugin({ external: ['react'] }) : false),
     {
       name: 'sdk-emitted-source-maps',
       load(id) {
@@ -40,7 +37,8 @@ export default defineConfig({
       },
       rolldownOptions: {
         // External package imports are preserved before aliases are resolved.
-        external: format === 'es' ? (id) => id.startsWith('@mitojs/') : [],
+        external: (id) => (format === 'es' && id.startsWith('@mitojs/')) ||
+          (format !== 'iife' && (id === 'react' || id.startsWith('react/'))),
         output: {
           // Keep strict mode inside the IIFE for safe script concatenation.
           exports: 'named', strict: false, intro: format === 'es' ? '' : '"use strict";',
