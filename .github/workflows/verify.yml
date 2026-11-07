@@ -36,13 +36,13 @@ jobs:
         with:
           node-version: 14.21.3
       - run: node -e "require('fs').appendFileSync(process.env.GITHUB_ENV, 'SDK_CONSUMER_NODE=' + process.execPath + '\n')"
-      - uses: pnpm/action-setup@v6.1.1
-        with:
-          version: 12.16.1
       - uses: actions/setup-node@v7.1.0
         with:
           node-version-file: .node-version
-          cache: pnpm
+      - uses: pnpm/action-setup@v6.1.1
+        with:
+          version: 12.16.1
+          cache: true
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
