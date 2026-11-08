@@ -1,6 +1,6 @@
 {
   "name": "@mitojs/web",
-  "version": "4.0.0-beta.1",
+  "version": "4.0.0-beta.2",
   "description": "A SDK For Monitoring Web(React\u3001Vue) Errors",
   "author": "cjinhuo(https://github.com/cjinhuo)",
   "license": "MIT",
