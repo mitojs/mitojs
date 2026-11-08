@@ -73,7 +73,7 @@ pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-Playwright 自动管理本地测试服务的启动与关闭；运行前需释放 2021 端口。手动浏览示例时，可在打包后单独启动：
+Playwright 自动管理本地测试服务的启动与关闭，默认使用 2021 端口。端口已被其他工作区使用时，可通过 `SDK_TEST_PORT=2023 pnpm test:e2e` 指定空闲端口；示例上报地址跟随页面所在源。手动浏览示例时，可在打包后单独启动（同样支持 `SDK_TEST_PORT`）：
 
 ```sh
 node scripts/serve-tests.mjs
