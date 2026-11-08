@@ -6,6 +6,12 @@
       "sourceType": "github",
       "skillPath": ".agents/skills/changeset-generator/SKILL.md",
       "computedHash": "117abf2959c910344db9ef01e3acca9923406ae017f4055e9cf78fdb979b3a14"
+    },
+    "git-auto-commit": {
+      "source": "cjinhuo/blazwitcher",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/git-auto-commit/SKILL.md",
+      "computedHash": "7908963884bec00d36a35cf51aef8d1c3fba98d87fdf4d1eb782ad0b9828bfa2"
     }
   }
 }
