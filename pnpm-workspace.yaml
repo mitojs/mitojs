@@ -32,6 +32,7 @@ catalog:
   "@jridgewell/trace-mapping": "0.3.31"
 
   "rolldown": "1.2.16"
+  changesets-toolkit: 0.1.0
 
 allowBuilds:
   nx: true
