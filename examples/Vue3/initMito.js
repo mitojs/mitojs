@@ -4,7 +4,7 @@ const instance = MITO.init(
     vue: RootVue,
     silentConsole: true,
     maxBreadcrumbs: 10,
-    dsn: 'http://localhost:2021/errors/upload'
+    dsn: '/errors/upload'
   },
   [MITO.vuePlugin]
 )

@@ -4,7 +4,7 @@ const instance = MITO.init(
     debug: true,
     silentConsole: true,
     maxBreadcrumbs: 10,
-    dsn: 'http://localhost:2021/errors/upload'
+    dsn: '/errors/upload'
   },
   [MITO.vuePlugin]
 )
@@ -17,7 +17,7 @@ const instance2 = MITO.init(
     debug: true,
     silentConsole: true,
     maxBreadcrumbs: 10,
-    dsn: 'http://localhost:2021/errors/upload'
+    dsn: '/errors/upload'
   },
   [MITO.vuePlugin]
 )
