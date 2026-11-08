@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用 Changeset 生成器"
+  short_description: "接入 Changesets 3 与 toolkit，生成并校验项目变更记录"
+  default_prompt: "使用 $changeset-generator，根据当前项目的包管理器、发布包和基础分支接入 Changesets 3 与 changesets-toolkit，或生成并校验符合仓库规范的 changeset。"

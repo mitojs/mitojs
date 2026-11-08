@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "changeset-generator": {
+      "source": "cjinhuo/blazwitcher",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/changeset-generator/SKILL.md",
+      "computedHash": "117abf2959c910344db9ef01e3acca9923406ae017f4055e9cf78fdb979b3a14"
+    }
+  }
+}
