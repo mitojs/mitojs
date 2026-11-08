@@ -11,16 +11,19 @@ import { parse } from 'acorn'
 import ts from 'typescript-4-4'
 import { TraceMap, originalPositionFor } from '@jridgewell/trace-mapping'
 import { packPackages, root } from './pack.mjs'
+import { registerReactConsumerTests } from './verify-react-consumers.mjs'
+import { registerVueConsumerTests } from './verify-vue-consumers.mjs'
 
 const contracts = JSON.parse(readFileSync(resolve(root, 'e2e/contracts.json'), 'utf8'))
 const fixture = mkdtempSync(join(tmpdir(), 'mito-sdk-consumer-'))
 const names = Object.keys(contracts)
+let packages
 function run(command, args, options) {
   try { return execFileSync(command, args, { encoding: 'utf8', ...options }) }
   catch (error) { throw new Error(`${error.message}\n${error.stdout ?? ''}\n${error.stderr ?? ''}`) }
 }
 before(() => {
-  const packages = packPackages()
+  packages = packPackages()
   const dependencies = Object.fromEntries(packages.map((path) => {
     const match = basename(path).match(/mitojs-(.+)-\d/)
     return [`@mitojs/${match[1]}`, `file:${path}`]
@@ -50,6 +53,10 @@ function evaluate(code, cjs = false, wx = false) {
   }
   context.exports = {}
   context.module = { exports: context.exports }
+  if (cjs && !wx) context.require = (name) => {
+    assert.equal(name, 'react')
+    return createRequire(join(fixture, 'package.json'))(name)
+  }
   vm.runInContext(cjs ? `(function (exports, module) { ${code}\n}).call(module.exports, exports, module)` : code, context)
   return { api: cjs ? context.module.exports : context.MITO ?? {}, context, close: () => dom?.window.close() }
 }
@@ -167,3 +174,6 @@ test('packed source maps resolve generated functions back to the original TypeSc
   const source = readFileSync(join(root, 'packages/browser/src/index.ts'), 'utf8')
   assert.equal(position.line, source.slice(0, source.indexOf('function createBrowserInstance')).split('\n').length)
 })
+
+registerReactConsumerTests(() => packages)
+registerVueConsumerTests(() => packages)

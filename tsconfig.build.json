@@ -1,6 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "createElement",
     "noEmit": false,
     "declaration": true,
     "sourceMap": true,

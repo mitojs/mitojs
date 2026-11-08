@@ -2,7 +2,7 @@ import { BaseClient } from '@mitojs/core'
 import { BaseBreadcrumbTypes, BREADCRUMBCATEGORYS, ErrorTypes } from '@mitojs/shared'
 import { ReportDataType } from '@mitojs/types'
 import { extractErrorStack, Severity } from '@mitojs/utils'
-import { PureComponent, ReactNode, ErrorInfo, ComponentType, FC } from 'react'
+import { PureComponent, ReactNode, ErrorInfo, ComponentType, FC, createElement } from 'react'
 import { MitoContext } from './provider'
 
 interface ErrorBoundaryProps {
