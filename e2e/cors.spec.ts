@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test'
 import { createServer, type Server } from 'node:http'
 import type { AddressInfo } from 'node:net'
 
-// Load the packed CDN bundle without initializing the example's own client.
+// Use a real same-origin document without routing: request interception can suppress CORS preflights.
 test.beforeEach(async ({ page }) => {
-  await page.route('**/initMito.js', (route) => route.fulfill({ contentType: 'application/javascript', body: '' }))
-  await page.goto('/JS/index.html')
+  await page.goto('/normal')
+  await page.addScriptTag({ url: '/browserDist/browser.min.js' })
 })
 
 test.describe('#34: real cross-origin XHR reports', () => {
