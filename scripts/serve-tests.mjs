@@ -4,6 +4,7 @@ import { resolve, extname, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
+const port = Number(process.env.SDK_TEST_PORT ?? 2021)
 const consumers = process.env.SDK_CONSUMER_ROOT ?? resolve(root, '.cache/consumers')
 const routes = {
   '/browserDist': resolve(root, 'artifacts/unpacked/browser/dist'),
@@ -52,5 +53,5 @@ const server = createServer(async (request, response) => {
   response.statusCode = 404
   response.end('Not found')
 })
-server.listen(2021, '127.0.0.1', () => console.log('SDK test server: http://localhost:2021'))
+server.listen(port, '127.0.0.1', () => console.log(`SDK test server: http://127.0.0.1:${port}`))
 for (const signal of ['SIGTERM', 'SIGINT']) process.on(signal, () => server.close(() => process.exit()))
