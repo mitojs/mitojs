@@ -55,18 +55,9 @@ Vite 模板的 index.* 文件名、_GLOBAL_ 和 React 19 demo 不适用于现有
 
 安装包检查同时验证微信单个 CommonJS 文件可在没有 window/require 的微信 API 替身环境中初始化和上报、IIFE 没有泄漏编译 helper，以及 sourcemap 能定位回原始 TypeScript。运行测试使用正常的 ES2015 环境，不再模拟缺失 Symbol 的旧环境。
 
-真实历史项目另用以下命令验证：
+消费验证统一使用当前 SDK 工作区的 Node 24。`pnpm test:packages` 校验真实安装包、直接与传递 SDK 字节、React 16/17/19 的 ESM/CommonJS 渲染及 Vue3 严格类型消费；`pnpm test:e2e` 验证本仓库 React、Vue2、Vue3 示例的真实浏览器上报。两者均属于默认 `pnpm verify` 门禁。
 
-```sh
-SDK_CONSUMER_NODE=/path/to/node-v14.21.3/bin/node \
-  pnpm test:consumers
-```
-
-脚本固定 react-sdk-demo、vue2-sdk-demo、vue3-sdk-demo 的提交，将原锁文件导入 pnpm 后统一安装；保留 CRA4/Vue CLI3/Vite2 工具链，把 SDK 依赖换成本次 `.tgz`。旧项目的 node-sass4 使用 Node 14；这与 SDK 仓库使用 Node 24 分开。每个项目都校验 src 相对原提交没有修改，并比较安装的 SDK 字节与打包文件；随后构建并验证 React Provider/ErrorBoundary、Vue2 错误处理与取消上报 hook、Vue3 插件注册。证据写入 `artifacts/consumer-validation.json`。
-
-可设置 SDK_CONSUMER_ROOT 复用测试检出目录。不要把它指向有未提交源码修改的工作目录。仓库及消费项目的安装、打包、构建和发布演练均使用 pnpm。
-
-Vue2 的 node-sass 4 安装先在消费项目的 Node 14 进程中执行实际 Sass 渲染，验证原生 binding；缺失或损坏时，最多重试原安装器 3 次，再从 GitHub 官方 Release API 获取同名资产作为备用通道。自定义 `SASS_BINARY_SITE` 不会被绕过。下载结果必须通过大小与实际渲染校验，再写入专用缓存；两条通道都失败时保留诊断，在进入依赖 Python 2 的源码编译前明确失败。原生文件按 node-sass 版本、系统、架构和 Node ABI 放入 `.cache/node-sass`，CI 复用缓存后仍执行渲染校验。`pnpm test:consumers:setup` 覆盖下载静默失败、损坏文件、官方 API 恢复和缓存复用，并纳入 `pnpm verify`。
+旧外部示例仓库的固定提交回放任务已移除，CI 不再安装其历史工具链或原生样式编译器。仓库及消费验证的安装、打包、构建和发布演练均使用 pnpm。
 
 本地候选包沿用尚未发布的新版本前的版本号，所以测试脚本使用内容哈希路径和仅用于测试的 pnpm overrides，确保全部直接/传递 SDK 依赖都来自本次候选包，避免 registry 同号包或文件缓存造成假通过。正式发布采用新的 semver 版本，消费项目无需这些本地测试设置。
 
@@ -94,4 +85,4 @@ release 工作流仅手动触发，由 Changesets action 创建版本 PR/发布�
 
 ## 本次验收记录
 
-[当前 ES2015 构建的本地验收结果](./toolchain-validation.json)。
+[工具链迁移时的历史验收记录](./toolchain-validation.json)。其中外部历史示例任务已退役，当前门禁以本文命令与 CI 配置为准。
