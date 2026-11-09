@@ -5,15 +5,11 @@ import { fileURLToPath } from 'node:url'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const port = Number(process.env.SDK_TEST_PORT ?? 2021)
-const consumers = process.env.SDK_CONSUMER_ROOT ?? resolve(root, '.cache/consumers')
 const routes = {
   '/browserDist': resolve(root, 'artifacts/unpacked/browser/dist'),
   '/webDist': resolve(root, 'artifacts/unpacked/web/dist'),
   '/JS': resolve(root, 'examples/JS'), '/Vue': resolve(root, 'examples/Vue'),
   '/Vue3': resolve(root, 'examples/Vue3'), '/React': resolve(root, 'examples/React'),
-  '/react-sdk-demo': resolve(consumers, 'react-sdk-demo/docs'),
-  '/vue2-sdk-demo': resolve(consumers, 'vue2-sdk-demo/docs'),
-  '/vue3-sdk-demo': resolve(consumers, 'vue3-sdk-demo/docs'),
   '/vendor/react.js': resolve(root, 'node_modules/react/umd/react.production.min.js'),
   '/vendor/react-dom.js': resolve(root, 'node_modules/react-dom/umd/react-dom.production.min.js')
 }
