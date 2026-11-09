@@ -6,8 +6,7 @@ import { basename, join } from 'node:path'
 import { createHash } from 'node:crypto'
 import { after, before, test } from 'node:test'
 import { rolldown } from 'rolldown'
-import ts from 'typescript-4-4'
-import { root } from './pack.mjs'
+import { root } from '../../scripts/pack.mjs'
 
 function run(command, args, cwd) {
   try { return execFileSync(command, args, { cwd, encoding: 'utf8', stdio: 'pipe' }) }
@@ -82,20 +81,19 @@ export function registerReactConsumerTests(getArchives) {
     for (const name of ['react', 'web']) {
       for (const format of ['esm', 'cjs']) {
         test(`packed @mitojs/${name} ${format} renders with host React ${version}`, async () => {
-          const input = join(fixture, `${name}-${format}.js`)
-          // The classic consumer transform also exercises the advertised React 16.8 peer floor.
-          writeFileSync(input, ts.transpileModule(consumerSource(name), {
-            compilerOptions: { target: ts.ScriptTarget.ES2015, module: format === 'esm' ? ts.ModuleKind.ESNext : ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.React, esModuleInterop: true }
-          }).outputText)
-          let entry = input
-          if (format === 'esm') {
-            const bundle = await rolldown({
-              input, platform: 'node', resolve: { mainFields: ['module', 'main'] },
-              external: (id) => id === 'react' || id.startsWith('react/') || id.startsWith('react-dom/')
-            })
-            // Consume the SDK's module entry through a bundler, as frontend and SSR apps do.
-            entry = join(fixture, `${name}-bundled.cjs`)
+          const entry = join(fixture, `${name}-${format}.cjs`)
+          // Classic JSX supports the React 16.8 peer floor. ESM consumes module
+          // entries through a bundler; CJS leaves SDK imports for Node's loader.
+          const bundle = await rolldown({
+            input: join(fixture, `${name}.tsx`), platform: 'node',
+            transform: { jsx: { runtime: 'classic' } },
+            resolve: { mainFields: format === 'esm' ? ['module', 'main'] : ['main'] },
+            external: (id) => id === 'react' || id.startsWith('react/') || id.startsWith('react-dom/') ||
+              (format === 'cjs' && id.startsWith('@mitojs/'))
+          })
+          try {
             await bundle.write({ file: entry, format: 'cjs' })
+          } finally {
             await bundle.close()
           }
           const output = run(process.execPath, ['-e', `const { render } = require(${JSON.stringify(entry)}); console.log(JSON.stringify(render()))`], fixture)

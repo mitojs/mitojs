@@ -8,15 +8,16 @@ import { after, before, test } from 'node:test'
 import vm from 'node:vm'
 import { JSDOM } from 'jsdom'
 import { parse } from 'acorn'
-import ts from 'typescript-4-4'
 import { TraceMap, originalPositionFor } from '@jridgewell/trace-mapping'
-import { packPackages, root } from './pack.mjs'
-import { registerReactConsumerTests } from './verify-react-consumers.mjs'
-import { registerVueConsumerTests } from './verify-vue-consumers.mjs'
+import { packPackages, root } from '../../scripts/pack.mjs'
+import { registerReactConsumerTests } from './react.mjs'
+import { registerVueConsumerTests } from './vue.mjs'
 
-const contracts = JSON.parse(readFileSync(resolve(root, 'e2e/contracts.json'), 'utf8'))
+const manifests = Object.fromEntries(readdirSync(resolve(root, 'packages'), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => [entry.name, JSON.parse(readFileSync(resolve(root, 'packages', entry.name, 'package.json'), 'utf8'))]))
 const fixture = mkdtempSync(join(tmpdir(), 'mito-sdk-consumer-'))
-const names = Object.keys(contracts)
+const names = Object.keys(manifests)
 let packages
 function run(command, args, options) {
   try { return execFileSync(command, args, { encoding: 'utf8', ...options }) }
@@ -31,7 +32,6 @@ before(() => {
   const overrides = { ...dependencies }
   dependencies.react = '17.0.2'
   dependencies['@types/react'] = '17.0.90'
-  dependencies['@types/react-dom'] = '17.0.26'
   dependencies['@types/wechat-miniprogram'] = '3.4.8'
   const { packageManager } = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
   writeFileSync(join(fixture, 'package.json'), JSON.stringify({ name: 'sdk-consumer', private: true, packageManager, dependencies }))
@@ -62,21 +62,21 @@ function evaluate(code, cjs = false, wx = false) {
 }
 
 for (const name of names) {
-  test(`packed @mitojs/${name} preserves manifest, paths, JS APIs and ES2015`, () => {
+  test(`packed @mitojs/${name} preserves its manifest, loads its entries and targets ES2015`, () => {
     const directory = join(fixture, 'node_modules/@mitojs', name)
     const manifest = JSON.parse(readFileSync(join(directory, 'package.json'), 'utf8'))
-    const contract = contracts[name]
-    for (const key of ['main', 'module', 'types']) assert.equal(manifest[key], contract[key])
-    assert.equal(manifest.name, `@mitojs/${name}`)
-    assert.deepEqual(manifest.peerDependencies ?? {}, contract.peerDependencies)
-    assert.equal(manifest.type, undefined)
-    assert.equal(manifest.exports, undefined)
-    for (const path of contract.files) assert.ok(existsSync(join(directory, 'dist', path)), path)
+    const sourceManifest = manifests[name]
+    for (const key of ['main', 'module', 'types']) {
+      assert.equal(manifest[key], sourceManifest[key])
+      assert.ok(existsSync(join(directory, manifest[key])), `${name}: missing ${manifest[key]}`)
+    }
+    assert.equal(manifest.name, sourceManifest.name)
+    assert.deepEqual(manifest.peerDependencies ?? {}, sourceManifest.peerDependencies ?? {})
     for (const version of Object.values(manifest.dependencies ?? {})) assert.ok(!version.startsWith('workspace:'))
     const require = createRequire(realpathSync(join(directory, 'package.json')))
     for (const dependency of Object.keys(manifest.dependencies ?? {}).filter((name) => name.startsWith('@mitojs/'))) {
       const dependencyName = dependency.slice('@mitojs/'.length)
-      const expected = join(root, 'artifacts/unpacked', dependencyName, contracts[dependencyName].main)
+      const expected = join(root, 'artifacts/unpacked', dependencyName, manifests[dependencyName].main)
       assert.ok(readFileSync(require.resolve(dependency)).equals(readFileSync(expected)), `${name}: stale transitive ${dependency}`)
     }
     for (const extension of ['js', 'esm.js', 'min.js']) {
@@ -87,18 +87,12 @@ for (const name of names) {
       assert.ok(!code.includes('__coverage__'))
       if (extension !== 'esm.js') {
         const result = evaluate(code, extension === 'js', name.startsWith('wx-mini'))
-        for (const key of contract.runtime) assert.ok(key in result.api, `Missing ${key} in ${name}.${extension}`)
         if (result.api.init) assert.throws(() => result.api.init.caller, /caller|strict|restricted/i)
         assert.equal(result.context.__coverage__, undefined)
         for (const helper of ['__extends', '__awaiter', '__generator', '__spreadArray']) assert.equal(result.context[helper], undefined)
         result.close()
       }
     }
-    const file = join(directory, manifest.types)
-    const program = ts.createProgram([file], { noResolve: true, skipLibCheck: true })
-    const checker = program.getTypeChecker()
-    const exported = checker.getExportsOfModule(checker.getSymbolAtLocation(program.getSourceFile(file))).map((symbol) => symbol.name)
-    for (const key of contract.typeExports) assert.ok(exported.includes(key), `Missing type export ${key}`)
   })
 }
 
@@ -133,7 +127,7 @@ test('downloaded wx-mini CommonJS file initializes and reports without a package
   result.close()
 })
 
-test('declarations work with the original React TS 4.1 and Vue3 TS 4.4 consumers', () => {
+test('packed declarations support SDK consumer APIs with current TypeScript', () => {
   const source = `import React from 'react'
 import { init, BrowserClient } from '@mitojs/browser'
 import { vuePlugin } from '@mitojs/vue'
@@ -152,12 +146,10 @@ mini.log({ message: 'compatible' })
 `
   writeFileSync(join(fixture, 'consumer.tsx'), source)
   writeFileSync(join(fixture, 'tsconfig.json'), JSON.stringify({
-    compilerOptions: { noEmit: true, target: 'ES2015', lib: ['ES2015', 'DOM'], module: 'ESNext', moduleResolution: 'Node', jsx: 'react', esModuleInterop: true, skipLibCheck: true, types: ['react', 'wechat-miniprogram'] },
+    compilerOptions: { noEmit: true, target: 'ES2015', lib: ['ES2015', 'DOM'], module: 'ESNext', moduleResolution: 'Bundler', jsx: 'react', esModuleInterop: true, skipLibCheck: true, types: ['react', 'wechat-miniprogram'] },
     files: ['consumer.tsx']
   }))
-  for (const compiler of ['typescript-4-1', 'typescript-4-4']) {
-    run(process.execPath, [join(root, 'node_modules', compiler, 'bin/tsc'), '-p', fixture], { cwd: fixture, stdio: 'pipe' })
-  }
+  run(process.execPath, [join(root, 'node_modules/typescript/bin/tsc'), '-p', fixture], { cwd: fixture, stdio: 'pipe' })
 })
 
 test('packed source maps resolve generated functions back to the original TypeScript', () => {

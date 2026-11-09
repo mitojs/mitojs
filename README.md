@@ -89,4 +89,4 @@ welcome to raise issue, you can contact me on wx or email if you have some good 
 
 ## SDK workspace development
 
-[工具链迁移、构建与兼容性验收](./docs/toolchain-migration.md)
+[Development, testing and release](./docs/development.md)
