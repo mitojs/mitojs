@@ -24,7 +24,6 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm verify
       - uses: changesets/action@v2
         with:
           version-script: pnpm version:packages

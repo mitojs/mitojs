@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os'
 import { basename, join } from 'node:path'
 import { createHash } from 'node:crypto'
 import { after, before, test } from 'node:test'
-import { root } from './pack.mjs'
+import { root } from '../../scripts/pack.mjs'
 
 export function registerVueConsumerTests(getArchives) {
   const fixture = mkdtempSync(join(tmpdir(), 'mito-sdk-vue3-consumer-'))
@@ -19,14 +19,14 @@ export function registerVueConsumerTests(getArchives) {
     const { packageManager } = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
     writeFileSync(join(fixture, 'package.json'), JSON.stringify({
       name: 'vue3-sdk-consumer', private: true, packageManager,
-      dependencies: { ...packages, vue: '3.5.45', typescript: '6.0.3' }
+      dependencies: { ...packages, vue: '3.5.45' }
     }))
     writeFileSync(join(fixture, 'pnpm-workspace.yaml'), JSON.stringify({ packages: ['.'], nodeLinker: 'isolated', overrides: packages }))
     execFileSync('pnpm', ['install', '--ignore-scripts', '--no-frozen-lockfile'], { cwd: fixture, stdio: 'pipe' })
   })
   after(() => rmSync(fixture, { recursive: true, force: true }))
 
-  test('packed Vue3 plugins accept their actual browser client under strict TypeScript 6', () => {
+  test('packed Vue3 plugins accept their actual browser client under current strict TypeScript', () => {
     writeFileSync(join(fixture, 'consumer.ts'), `import { createApp } from 'vue'
 import { init, createBrowserInstance, BrowserClient } from '@mitojs/browser'
 import { init as webInit } from '@mitojs/web'
@@ -62,7 +62,7 @@ client.use([incompatible])
       files: ['consumer.ts']
     }))
     try {
-      execFileSync(process.execPath, [join(fixture, 'node_modules/typescript/bin/tsc'), '-p', fixture], { cwd: fixture, stdio: 'pipe' })
+      execFileSync(process.execPath, [join(root, 'node_modules/typescript/bin/tsc'), '-p', fixture], { cwd: fixture, stdio: 'pipe' })
     } catch (error) {
       throw new Error(`${error.message}\n${error.stdout ?? ''}\n${error.stderr ?? ''}`)
     }

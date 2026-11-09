@@ -17,7 +17,7 @@
 | `packages/wx-mini-performance` | 独立的小程序性能、网络、内存和电池信息采集入口 |
 | `scripts` / `tools` / `e2e` / `test` / `examples` | 构建发布脚本与配置、浏览器 E2E、测试辅助及示例页面与服务 |
 
-这是 pnpm workspace 多包仓库，使用 Nx 编排、TypeScript 7 检查、Vite/Rolldown 打包，API Extractor 汇总声明。所有 SDK 产物以 ES2015（ES6）为最低语法目标，详见[工具链迁移与验收](./toolchain-migration.md)。
+这是 pnpm workspace 多包仓库，使用 Nx 编排、TypeScript 7 检查、Vite/Rolldown 打包，API Extractor 汇总声明。所有 SDK 产物以 ES2015（ES6）为最低语法目标，详见[开发、测试与发布](./development.md)。
 
 ## 采集与上报流程
 
@@ -133,4 +133,4 @@ init({
 
 按业务需求选择。SDK 将页面、手势、请求和错误关联到行为栈，支持手动日志、业务钩子和指定接收地址，方便 Web 与小程序使用相近的上报流程。它与微信后台日志用途存在差别，并不要求项目同时使用两者。
 
-`examples/server` 只演示静态资源和数据接收接口，没有持久化、错误查询或告警能力。本仓库未包含完整监控平台，本文不承诺平台开源时间。
+`scripts/serve-tests.mjs` 提供本地示例资源和测试接收接口，没有持久化、错误查询或告警能力。本仓库未包含完整监控平台，本文不承诺平台开源时间。

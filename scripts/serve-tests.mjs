@@ -13,7 +13,6 @@ const routes = {
   '/vendor/react.js': resolve(root, 'node_modules/react/umd/react.production.min.js'),
   '/vendor/react-dom.js': resolve(root, 'node_modules/react-dom/umd/react-dom.production.min.js')
 }
-const reports = []
 const mime = { '.js': 'application/javascript', '.css': 'text/css', '.html': 'text/html', '.json': 'application/json', '.svg': 'image/svg+xml' }
 const server = createServer(async (request, response) => {
   const url = new URL(request.url, 'http://localhost')
@@ -24,16 +23,9 @@ const server = createServer(async (request, response) => {
     return response.end('{"data":"test response"}')
   }
   if (request.method === 'POST') {
-    let body = ''
-    for await (const chunk of request) body += chunk
-    if (path === '/__reset') reports.length = 0
-    else { try { reports.push(JSON.parse(body)) } catch { /* Non-SDK request. */ } }
+    request.resume()
     response.setHeader('Content-Type', 'application/json')
     return response.end('{"ok":true}')
-  }
-  if (path === '/__reports') {
-    response.setHeader('Content-Type', 'application/json')
-    return response.end(JSON.stringify(reports))
   }
   for (const [prefix, directory] of Object.entries(routes)) {
     if (path !== prefix && !path.startsWith(`${prefix}/`)) continue

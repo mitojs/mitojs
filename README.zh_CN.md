@@ -79,4 +79,4 @@ const MitoInstance = init({
 
 ## SDK workspace development
 
-[工具链迁移、构建与兼容性验收](./docs/toolchain-migration.md)
+[开发、测试与发布](./docs/development.md)
