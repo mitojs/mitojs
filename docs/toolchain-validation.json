@@ -1,4 +1,6 @@
 {
+  "archived": true,
+  "archiveNote": "Historical migration snapshot. The fixed external-demo replay checks were retired on 2026-11-09; their recorded commands and results below are historical, not current CI requirements.",
   "validatedDate": "2026-11-07",
   "workspaceBranch": "chore/modern-sdk-toolchain",
   "buildTarget": "ES2015 (ES6)",

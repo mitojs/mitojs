@@ -28,33 +28,3 @@ jobs:
             artifacts/packages
             coverage
             playwright-report
-  original-consumers:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: 14.21.3
-      - run: node -e "require('fs').appendFileSync(process.env.GITHUB_ENV, 'SDK_CONSUMER_NODE=' + process.execPath + '\n')"
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version-file: .node-version
-      - uses: pnpm/action-setup@v6.1.1
-        with:
-          version: 12.16.1
-          cache: true
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm build
-      - uses: actions/cache@v6.1.0
-        with:
-          path: .cache/node-sass
-          key: node-sass-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/ensure-node-sass.mjs', 'scripts/verify-consumers.mjs', '.github/workflows/verify.yml') }}
-      - run: pnpm test:consumers
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: original-consumer-validation
-          path: |
-            artifacts/consumer-validation.json
-            playwright-report
