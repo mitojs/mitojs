@@ -46,6 +46,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
+      - uses: actions/cache@v6.1.0
+        with:
+          path: .cache/node-sass
+          key: node-sass-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/ensure-node-sass.mjs', 'scripts/verify-consumers.mjs', '.github/workflows/verify.yml') }}
       - run: pnpm test:consumers
       - uses: actions/upload-artifact@v7
         if: always()
