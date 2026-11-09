@@ -23,15 +23,15 @@
 
 ```mermaid
 flowchart LR
-  Init[init 创建客户端] --> Use[BaseClient.use 安装插件]
-  Use --> Monitor[monitor 监听或包装原生方法]
-  Monitor --> Notify[Subscribe.notify]
-  Notify --> Transform[transform 转换数据]
-  Transform --> Consumer[consumer 消费事件]
-  Consumer --> Breadcrumb[记录行为栈]
-  Consumer --> Transport[transport.send]
-  Transport --> Filter[去重、上报钩子和地址配置]
-  Filter --> Queue[队列与平台传输]
+  Init["init 创建客户端"] --> Use["BaseClient.use 安装插件"]
+  Use --> Monitor["monitor 监听或包装原生方法"]
+  Monitor --> Notify["Subscribe.notify"]
+  Notify --> Transform["transform 转换数据"]
+  Transform --> Consumer["consumer 消费事件"]
+  Consumer --> Breadcrumb["记录行为栈"]
+  Consumer --> Transport["transport.send"]
+  Transport --> Filter["去重、上报钩子和地址配置"]
+  Filter --> Queue["队列与平台传输"]
 ```
 
 - 客户端构造时创建配置、行为栈和平台传输对象。`monitor` 获得 `notify`；`transform` 转换事件；`consumer` 记录行为或提交报告。
