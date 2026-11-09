@@ -66,6 +66,8 @@ SDK_CONSUMER_NODE=/path/to/node-v14.21.3/bin/node \
 
 可设置 SDK_CONSUMER_ROOT 复用测试检出目录。不要把它指向有未提交源码修改的工作目录。仓库及消费项目的安装、打包、构建和发布演练均使用 pnpm。
 
+Vue2 的 node-sass 4 安装先在消费项目的 Node 14 进程中执行实际 Sass 渲染，验证原生 binding；缺失或损坏时，最多重试原安装器 3 次，再从 GitHub 官方 Release API 获取同名资产作为备用通道。自定义 `SASS_BINARY_SITE` 不会被绕过。下载结果必须通过大小与实际渲染校验，再写入专用缓存；两条通道都失败时保留诊断，在进入依赖 Python 2 的源码编译前明确失败。原生文件按 node-sass 版本、系统、架构和 Node ABI 放入 `.cache/node-sass`，CI 复用缓存后仍执行渲染校验。`pnpm test:consumers:setup` 覆盖下载静默失败、损坏文件、官方 API 恢复和缓存复用，并纳入 `pnpm verify`。
+
 本地候选包沿用尚未发布的新版本前的版本号，所以测试脚本使用内容哈希路径和仅用于测试的 pnpm overrides，确保全部直接/传递 SDK 依赖都来自本次候选包，避免 registry 同号包或文件缓存造成假通过。正式发布采用新的 semver 版本，消费项目无需这些本地测试设置。
 
 微信开发者工具/真机运行仍需要对应环境，现代 Chromium 与语法检查不能代替真机验证。不再支持 Internet Explorer 或仅具备 ES5 能力的运行环境。原 test/e2e/Mini* 历史用例未接入本次浏览器门禁；安装包检查覆盖全部小程序包的文件和公开导出，单文件微信环境检查使用明确的 API 替身。

@@ -5,6 +5,7 @@ import { resolve, dirname, delimiter, join, basename } from 'node:path'
 import { createHash } from 'node:crypto'
 import { createRequire } from 'node:module'
 import { packPackages, root } from './pack.mjs'
+import { ensureNodeSass } from './ensure-node-sass.mjs'
 
 const repositories = {
   'react-sdk-demo': '68057a602e32f33c616762488d9a6e3f16fbf7c1',
@@ -79,7 +80,10 @@ for (const [name, commit] of Object.entries(repositories)) {
   run('pnpm', ['import'], project)
   rmSync(resolve(project, 'yarn.lock'))
   run('pnpm', ['install', '--frozen-lockfile', '--ignore-scripts', '--force', `--cpu=${architecture}`], project)
-  if (name === 'vue2-sdk-demo') run('pnpm', ['rebuild', 'node-sass'], project)
+  if (name === 'vue2-sdk-demo') {
+    await ensureNodeSass({ project, node, cacheDirectory: resolve(root, '.cache/node-sass'), env: environment })
+    run('pnpm', ['rebuild', 'node-sass'], project)
+  }
   if (name === 'vue3-sdk-demo') run('pnpm', ['rebuild', 'esbuild'], project)
   // Compare installed bytes to the actual packed files, not only version strings.
   for (const archive of archives) {
